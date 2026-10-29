@@ -70,15 +70,22 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
       return;
     }
 
-    try {
-      if (typeof window !== 'undefined' && window.location.hostname.endsWith('github.io')) {
-        setMessages([
-          ...newMessages,
-          { role: 'model', text: getLocalTutorReply(decision, userMsg) },
-        ]);
-        return;
-      }
+    const isStaticHost =
+      typeof window !== 'undefined' &&
+      (window.location.hostname.endsWith('.github.io') ||
+        window.location.protocol === 'file:' ||
+        window.location.hostname === 'localhost' && window.location.port === '');
 
+    if (isStaticHost) {
+      setMessages([
+        ...newMessages,
+        { role: 'model', text: getLocalTutorReply(decision, userMsg) },
+      ]);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
       const res = await fetch('/api/tutor', {
         method: 'POST',
         headers: {

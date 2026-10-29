@@ -13,6 +13,15 @@ const normalize = (text: string) =>
 
 export function getLocalTutorReply(decision: DecisionNode, message: string): string {
   const text = normalize(message);
+  const normalizedHint = normalize(decision.initialHint);
+
+  if (text === normalizedHint || normalizedHint.includes(text) || text.includes(normalizedHint)) {
+    return decision.id === 'K1'
+      ? 'Bu soru saldırganın neden kapıyı da görebileceğine işaret ediyor. İzleme ile izolasyon arasındaki seçimde hangisi kesintiye daha az izin verir?'
+      : decision.id === 'K3'
+        ? 'Kayıtları korumanın müdahaleni kanıtlamaya nasıl yarayacağını düşündün mü? Sonra bu kayıtların kim tarafından okunacağını nasıl sınırlandırırsın?'
+        : 'Bu işlem geri döndürülebilir mi? Geri dönerken kaybedilebilecek son veri ve hastalara etkisi hangisi olabilir?';
+  }
 
   if (/neden|ne demek|acikla/.test(text)) {
     if (/imza/.test(text)) {
