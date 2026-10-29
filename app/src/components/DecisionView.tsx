@@ -6,6 +6,7 @@
 import React, { useState, useEffect } from 'react';
 import { Bot, ChevronDown, ChevronUp, Send, Loader2, AlertCircle } from 'lucide-react';
 import { DecisionNode, Choice, UserLevel, UserRole } from '../story';
+import { getLocalTutorReply } from '../tutor';
 
 interface DecisionViewProps {
   decision: DecisionNode;
@@ -70,6 +71,14 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
     }
 
     try {
+      if (typeof window !== 'undefined' && window.location.hostname.endsWith('github.io')) {
+        setMessages([
+          ...newMessages,
+          { role: 'model', text: getLocalTutorReply(decision, userMsg) },
+        ]);
+        return;
+      }
+
       const res = await fetch('/api/tutor', {
         method: 'POST',
         headers: {
@@ -104,8 +113,10 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
       setMessages([...newMessages, { role: 'model', text: reply }]);
     } catch (err) {
       console.error('Tutor fetch error:', err);
-      // Spec §7 & §10: If the API fails, show only the starting hint for that decision
-      setMessages([...newMessages, { role: 'model', text: decision.initialHint }]);
+      setMessages([
+        ...newMessages,
+        { role: 'model', text: getLocalTutorReply(decision, userMsg) },
+      ]);
     } finally {
       setIsLoading(false);
     }
