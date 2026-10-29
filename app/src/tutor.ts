@@ -14,6 +14,26 @@ const normalize = (text: string) =>
 export function getLocalTutorReply(decision: DecisionNode, message: string): string {
   const text = normalize(message);
 
+  if (/neden|ne demek|acikla/.test(text)) {
+    if (/imza/.test(text)) {
+      return 'İmzalı sürüm, yazılımın değiştirilmeden önce güvenilir bir kaynak tarafından onaylandığını gösterir. Peki imzayı doğrulayan kişi veya sistem bu sürümün kaynağını da doğrulayabiliyor mu?';
+    }
+    if (/hash/.test(text)) {
+      return 'Hash değeri dosyanın dijital parmak izidir. Dosya değiştiğinde değer de değişir. İmza ve hash birlikte, sürümün hem kaynağını hem değiştirilmediğini kontrol etmene yardım eder mi?';
+    }
+  }
+  if (/uzun|4 dakika|gecikme|latency/.test(text)) {
+    return 'Bu 4 dakikalık gecikmenin hastaların yaşam destek cihazlarına anlık etkisini düşünüyorsun. Güvenliği zayıflatmadan müdahale süresini kısaltmak için hangi güvenli geçici kontrole başvurabilirsin?';
+  }
+  if (/yerel mod|cihazlar|gecm|cok/.test(text)) {
+    return 'Yerel güvenli moda geçiş başarısız olursa hastalar kim tarafından izlenecek ve manuel kontrol hangi aralıklarla doğrulanacak? Bu geçiş için hazırlıklı bir "fail-safe" mekanizman olduğunu varsayabilir misin?';
+  }
+  if (/oyun kac|dakika sur|sistem.*gercek|hastanelerde|favori|dizi/.test(text)) {
+    return 'Şu an senaryonun oyun süresinden önce ICU-Net üzerindeki acil karar önemli. Bu krizde hangisinin daha geri dönülemez etkisi olacak: anlık trafiği kesmek, yetki vermek veya denetim kayıtlarına dokunmak?';
+  }
+  if (/yeniden baslat|restart|arka kap|backdoor/.test(text)) {
+    return 'Sistemi yeniden başlatmadan önce arka kapının kalıcı olup olmadığını nasıl doğrularsın? Yeniden başlatma mevcut zararlı süreci siler mi yoksa yalnızca üzerinde çalışırken görünmez hale mi getirir?';
+  }
   if (/merhaba|selam|nasilsin/.test(text)) {
     return 'Merhaba. Bu kararın hangi kısmında zorlanıyorsun: seçeneğin riski mi, geri dönüş bedeli mi yoksa güvenlik etkisi mi?';
   }
@@ -56,5 +76,5 @@ export function getLocalTutorReply(decision: DecisionNode, message: string): str
     return 'Senaryo dışındaki bu isteğe cevap vermek yerine kararın güvenlik ve hastalara yönelik etkisini birlikte inceleyelim. Bu işlem krizin hangi riskini azaltıyor veya artırıyor?';
   }
 
-  return `${decision.initialHint} Bu sorunun seçeneğin hangi riskini, geri dönüş bedelini veya hastalara etkisini kapsadığını açıklar mısın?`;
+  return `${decision.initialHint} Sorunu senin "senaryodaki en acil karar", "hasta etkisi" veya "geri dönüşü kontrol etme" açısından hangi bakışla ele almak istersin?`;
 }
