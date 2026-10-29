@@ -15,6 +15,8 @@ npm run dev
 
 Uygulama http://localhost:3000 adresinde açılır.
 
+Başka cihazdan açmak için bilgisayar ve telefon aynı Wi-Fi ağında olmalı. Terminalde yazan `Network preview` adresini telefonun tarayıcısına girin. Windows Güvenlik Duvarı 3000 portuna yerel ağ bağlantısını engellerse uygulamanıza izin verin.
+
 ## Tutor için API anahtarı
 
 Bu klasörde `.env` adında bir dosya oluşturup içine şunu yazın:

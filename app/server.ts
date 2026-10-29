@@ -7,6 +7,7 @@ import express, { Request, Response } from 'express';
 import { createServer as createViteServer } from 'vite';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import os from 'os';
 import dotenv from 'dotenv';
 import { GoogleGenAI, ThinkingLevel } from '@google/genai';
 
@@ -273,6 +274,14 @@ async function startServer() {
 
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server listening on http://0.0.0.0:${PORT}`);
+    const networkAddresses = Object.values(os.networkInterfaces())
+      .flatMap((interfaces = []) => interfaces)
+      .filter((network) => network && network.family === 'IPv4' && !network.internal)
+      .map((network) => network.address);
+
+    for (const address of networkAddresses) {
+      console.log(`Network preview: http://${address}:${PORT}`);
+    }
   });
 }
 
