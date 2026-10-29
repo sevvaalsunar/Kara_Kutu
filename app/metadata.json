@@ -1,0 +1,6 @@
+{
+  "name": "KARA KUTU: Otonom Yaşam Destek Krizi",
+  "description": "Otonom yoğun bakım ağında yaşanan siber saldırı krizi simülasyonu. Yazılım mühendisliği kararları, olay müdahalesi ve AI tutor rehberliği.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
