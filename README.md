@@ -6,7 +6,7 @@ Saat 03:14. Yapay zekâ destekli yoğun bakım ağı ICU-Net siber saldırı alt
 
 ## Linkler
 
-- **Uygulama (telefonda açılır):** https://ai.studio/apps/0d3c42eb-7942-4398-a0f7-80546707e3c9
+- **Canlı uygulama (telefonda açılır):** [KARA KUTU — AI Studio](https://ai.studio/apps/0d3c42eb-7942-4398-a0f7-80546707e3c9)
 - **Demo videosu (60 sn):** [app/cypress/videos/00-demo.cy.js.mp4](app/cypress/videos/00-demo.cy.js.mp4)
 
 ## Repo yapısı
