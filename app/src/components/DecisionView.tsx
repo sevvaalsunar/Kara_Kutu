@@ -115,7 +115,12 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
       }
 
       const data = await res.json();
-      const reply = data.reply || decision.initialHint;
+      // Sunucuda API anahtarı yoksa veya Gemini hata verdiyse sunucu hep aynı başlangıç ipucunu döner;
+      // bu durumda yerel tutor cevabını kullan.
+      const reply =
+        data.model === 'fallback' || !data.reply
+          ? getLocalTutorReply(decision, userMsg)
+          : data.reply;
 
       setMessages([...newMessages, { role: 'model', text: reply }]);
     } catch (err) {
