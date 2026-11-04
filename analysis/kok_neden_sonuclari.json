@@ -1,0 +1,192 @@
+{
+  "yayin_test": {
+    "ba": 0.5266,
+    "f1": 0.2449,
+    "recall": 0.1714,
+    "auc": 0.6512,
+    "pozitif_tahmin_orani": 0.1364
+  },
+  "etiket_dagilimi": {
+    "pozitif_oran": 0.3814,
+    "n": 1610,
+    "sonraki_sahneye_gore": {
+      "K1": {
+        "n": 270,
+        "pozitif_oran": 0.2963
+      },
+      "K2_1A": {
+        "n": 251,
+        "pozitif_oran": 0.4781
+      },
+      "K2_1B": {
+        "n": 419,
+        "pozitif_oran": 0.2936
+      },
+      "K3": {
+        "n": 670,
+        "pozitif_oran": 0.4343
+      }
+    }
+  },
+  "ozellik_ayristiriciligi": {
+    "decision_time_sec": {
+      "ort_0": 22.046,
+      "ort_1": 26.686,
+      "cohen_d": 0.272
+    },
+    "hesitation_count": {
+      "ort_0": 1.967,
+      "ort_1": 2.43,
+      "cohen_d": 0.283
+    },
+    "wrong_attempts_current_concept": {
+      "ort_0": 0.514,
+      "ort_1": 0.656,
+      "cohen_d": 0.226
+    },
+    "wrong_attempts_recent": {
+      "ort_0": 0.785,
+      "ort_1": 1.047,
+      "cohen_d": 0.304
+    },
+    "hint_usage_rate": {
+      "ort_0": 0.412,
+      "ort_1": 0.509,
+      "cohen_d": 0.268
+    },
+    "retry_count": {
+      "ort_0": 0.493,
+      "ort_1": 0.397,
+      "cohen_d": -0.151
+    },
+    "difficulty_level": {
+      "ort_0": 1.017,
+      "ort_1": 1.073,
+      "cohen_d": 0.068
+    },
+    "concept_mastery_rate": {
+      "ort_0": 0.648,
+      "ort_1": 0.522,
+      "cohen_d": -0.287
+    },
+    "recent_success_rate": {
+      "ort_0": 0.657,
+      "ort_1": 0.511,
+      "cohen_d": -0.384
+    },
+    "branch_risk_score": {
+      "ort_0": 0.473,
+      "ort_1": 0.615,
+      "cohen_d": 0.35
+    },
+    "consecutive_errors": {
+      "ort_0": 0.491,
+      "ort_1": 0.783,
+      "cohen_d": 0.293
+    }
+  },
+  "olasilik_dagilimi_test": {
+    "0.1": 0.3354,
+    "0.25": 0.3909,
+    "0.5": 0.4758,
+    "0.75": 0.5798,
+    "0.9": 0.6762,
+    "p>=0.65_orani": 0.1364
+  },
+  "esik_teshisi_KAPI_DEGIL": {
+    "0.40": {
+      "ba": 0.5865,
+      "f1": 0.5366,
+      "recall": 0.8381,
+      "auc": 0.6512,
+      "pozitif_tahmin_orani": 0.724
+    },
+    "0.50": {
+      "ba": 0.6346,
+      "f1": 0.5394,
+      "recall": 0.619,
+      "auc": 0.6512,
+      "pozitif_tahmin_orani": 0.4416
+    },
+    "0.55": {
+      "ba": 0.6126,
+      "f1": 0.4828,
+      "recall": 0.4667,
+      "auc": 0.6512,
+      "pozitif_tahmin_orani": 0.3182
+    },
+    "0.60": {
+      "ba": 0.557,
+      "f1": 0.3415,
+      "recall": 0.2667,
+      "auc": 0.6512,
+      "pozitif_tahmin_orani": 0.1916
+    },
+    "0.65": {
+      "ba": 0.5266,
+      "f1": 0.2449,
+      "recall": 0.1714,
+      "auc": 0.6512,
+      "pozitif_tahmin_orani": 0.1364
+    }
+  },
+  "test_ba_bootstrap_95": [
+    0.477,
+    0.5716
+  ],
+  "ogrenme_egrisi_bagimsiz_test": {
+    "400": {
+      "ba": 0.5671,
+      "f1": 0.3436,
+      "recall": 0.2437,
+      "auc": 0.6693,
+      "pozitif_tahmin_orani": 0.1612
+    },
+    "1600": {
+      "ba": 0.5609,
+      "f1": 0.3164,
+      "recall": 0.2162,
+      "auc": 0.6701,
+      "pozitif_tahmin_orani": 0.1413
+    },
+    "6400": {
+      "ba": 0.567,
+      "f1": 0.3393,
+      "recall": 0.2382,
+      "auc": 0.6711,
+      "pozitif_tahmin_orani": 0.1559
+    }
+  },
+  "model_sinifi_bagimsiz_test": {
+    "lojistik_6400": {
+      "ba": 0.567,
+      "f1": 0.3393,
+      "recall": 0.2382,
+      "auc": 0.6711,
+      "pozitif_tahmin_orani": 0.1559
+    },
+    "gradient_boosting_6400": {
+      "ba": 0.583,
+      "f1": 0.3765,
+      "recall": 0.2705,
+      "auc": 0.6821,
+      "pozitif_tahmin_orani": 0.1685
+    }
+  },
+  "bayes_tavani": {
+    "n": 1610,
+    "roc_auc_tavan": 0.7357,
+    "esik_0.65": {
+      "esik": 0.65,
+      "balanced_accuracy": 0.5855,
+      "f1": 0.3299,
+      "recall": 0.2101
+    },
+    "en_iyi_esik": {
+      "esik": 0.37,
+      "balanced_accuracy": 0.6756,
+      "f1": 0.6163,
+      "recall": 0.6906
+    }
+  }
+}

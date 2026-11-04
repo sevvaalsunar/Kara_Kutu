@@ -23,13 +23,18 @@ export function newSessionId(): string {
   return Array.from(bytes, (b) => ALPHABET[b % ALPHABET.length]).join('');
 }
 
+export type Kaynak = 'gercek' | 'test';
+
 export class SessionLog {
   readonly id: string;
+  /** ?test=1 ile oynanan oturumlar 'test' yazar; birleştirici ve eğitim bunları asla kabul etmez. */
+  readonly kaynak: Kaynak;
   readonly events: DecisionEvent[] = [];
   readonly modelP: (number | null)[] = [];
 
-  constructor(id: string = newSessionId()) {
+  constructor(id: string = newSessionId(), kaynak: Kaynak = 'gercek') {
     this.id = id;
+    this.kaynak = kaynak;
   }
 
   /** Kararı ekler ve indeksini döndürür. */
@@ -63,7 +68,7 @@ export class SessionLog {
         destek_verildi: e.destek_verildi ? 1 : 0,
         model_p: p === null ? '' : p.toFixed(6),
         needs_learning_support: label === null ? '' : label,
-        kaynak: 'gercek',
+        kaynak: this.kaynak,
       } as Record<(typeof CSV_COLUMNS)[number], string | number>;
     });
   }
@@ -78,7 +83,7 @@ export class SessionLog {
     const blob = new Blob([this.toCsv()], { type: 'text/csv;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `kara-kutu-oturum-${this.id}.csv`;
+    a.download = `kara-kutu-${this.kaynak === 'test' ? 'TEST-' : ''}oturum-${this.id}.csv`;
     document.body.appendChild(a);
     a.click();
     a.remove();

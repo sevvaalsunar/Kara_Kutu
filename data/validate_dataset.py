@@ -53,7 +53,7 @@ def validate(df: pd.DataFrame) -> list[str]:
             errors.append(f"{msg}: CSV satır {rows}{more}")
 
     report(~df["oturum_id"].str.match(SESSION_RE), "oturum_id 12 karakter [a-z0-9] olmalı")
-    report(~df["kaynak"].isin(SOURCES), "kaynak 'gercek' veya 'sentetik' olmalı")
+    report(~df["kaynak"].isin(SOURCES), "kaynak 'gercek', 'sentetik' veya 'test' olmalı")
     report(~df["sahne_id"].isin(CONCEPT_BY_SCENE.keys()), "Bilinmeyen sahne_id")
     report(~df["secim_id"].isin(RISK_SCORE.keys()), "Bilinmeyen secim_id")
     report(~df["riskli"].isin({"0", "1"}), "riskli 0/1 olmalı")

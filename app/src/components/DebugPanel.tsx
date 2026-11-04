@@ -34,7 +34,8 @@ const STATUS_LABEL: Record<ModelState['status'], string> = {
 };
 
 export const DebugPanel: React.FC<Props> = ({ model, rollout, last, sessionId, decisions, onExport }) => {
-  const [open, setOpen] = useState(true);
+  // Varsayılan kapalı: açık panel 390 px ekranda oyun kontrollerinin üstüne biniyordu (FINAL_AUDIT, hata #1).
+  const [open, setOpen] = useState(false);
   const cfg = model.config;
   const statusColor =
     model.status === 'hazir' ? 'text-sky-400' : model.status === 'devre-disi' ? 'text-red-400' : 'text-amber-400';
@@ -42,15 +43,16 @@ export const DebugPanel: React.FC<Props> = ({ model, rollout, last, sessionId, d
   return (
     <aside
       data-testid="debug-panel"
-      className="fixed bottom-3 right-3 z-50 w-[min(92vw,340px)] rounded-lg border border-slate-700 bg-slate-950/95 font-mono text-[10px] text-slate-300 shadow-2xl backdrop-blur"
+      className={`fixed bottom-3 right-3 z-50 rounded-lg border ${open ? 'w-[min(92vw,340px)] max-h-[70vh] overflow-y-auto' : 'w-auto'} border-slate-700 bg-slate-950/95 font-mono text-[10px] text-slate-300 shadow-2xl backdrop-blur`}
     >
       <button
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between px-3 py-2 text-sky-400"
+        data-testid="debug-toggle"
+        className="flex w-full items-center justify-between gap-3 px-3 py-2 text-sky-400"
         aria-expanded={open}
       >
         <span className="flex items-center gap-1.5 font-bold tracking-wider">
-          <Cpu className="h-3.5 w-3.5" /> GELİŞTİRİCİ // MODEL
+          <Cpu className="h-3.5 w-3.5" /> {open ? 'GELİŞTİRİCİ // MODEL' : 'DEV'}
         </span>
         <span className="flex items-center gap-1">
           <span data-testid="model-status" data-status={model.status} className={statusColor}>
@@ -60,8 +62,9 @@ export const DebugPanel: React.FC<Props> = ({ model, rollout, last, sessionId, d
         </span>
       </button>
 
-      {open && (
-        <div className="space-y-2 border-t border-slate-800 px-3 py-2">
+      {/* İçerik kapalıyken de DOM'da kalır (testler ve olasılık okuması için), yalnızca gizlenir */}
+      {(
+        <div className={`space-y-2 border-t border-slate-800 px-3 py-2 ${open ? '' : 'hidden'}`}>
           <dl className="grid grid-cols-[auto,1fr] gap-x-2 gap-y-0.5">
             <dt className="text-slate-500">sürüm</dt>
             <dd data-testid="model-version">{cfg ? `${cfg.model_version} (${cfg.release_tag})` : '—'}</dd>

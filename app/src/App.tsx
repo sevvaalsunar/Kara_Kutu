@@ -66,7 +66,7 @@ export default function App() {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // v2.0: anonim oturum kaydı, model ve uyarlama (spec §11–§20)
-  const logRef = useRef<SessionLog>(new SessionLog());
+  const logRef = useRef<SessionLog>(new SessionLog(undefined, PARAMS.get('test') === '1' ? 'test' : 'gercek'));
   const gameNoRef = useRef(1);
   const decisionStartRef = useRef(Date.now());
   const hesitationRef = useRef(0);

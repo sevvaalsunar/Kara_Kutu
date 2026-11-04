@@ -96,6 +96,8 @@ export async function loadModel(opts: LoadOptions = {}): Promise<ModelState> {
   try {
     const cfgRes = await fetch(`${BASE}model/config.json`, { cache: 'no-cache' });
     if (!cfgRes.ok) throw new Error(`config.json alınamadı (HTTP ${cfgRes.status})`);
+    if ((cfgRes.headers.get('content-type') ?? '').includes('text/html'))
+      throw new Error('config.json alınamadı (sunucu HTML sayfası döndürdü)');
     const cfg = (await cfgRes.json()) as ModelConfig;
     const cfgErr = checkConfig(cfg);
     if (cfgErr) throw new Error(cfgErr);
@@ -105,6 +107,9 @@ export async function loadModel(opts: LoadOptions = {}): Promise<ModelState> {
     const url = opts.broken ? `${BASE}model/bulunamayan-model.onnx` : pinned ?? `${BASE}model/model.onnx`;
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Model indirilemedi (HTTP ${res.status})`);
+    // SPA sunucuları (Vite dev, Express fallback) olmayan dosya için 200 + index.html döndürür.
+    if ((res.headers.get('content-type') ?? '').includes('text/html'))
+      throw new Error('Model indirilemedi (sunucu model yerine HTML sayfası döndürdü)');
     const bytes = await res.arrayBuffer();
     const digest = await sha256Hex(bytes);
     if (digest !== cfg.artifact.sha256) throw new Error('Model özeti config.json ile uyuşmuyor; dosya reddedildi.');

@@ -67,9 +67,14 @@ def log(msg: str) -> None:
 
 
 # ---------------------------------------------------------------- veri
-def load_dataset(path: Path) -> tuple[pd.DataFrame, dict]:
+def load_dataset(path: Path, n_folds: int) -> tuple[pd.DataFrame, dict]:
+    if not path.exists():
+        log(f"VERİ YOK: {path} bulunamadı. Önce `python data/birlestir.py` çalıştırın.")
+        sys.exit(1)
     raw = load_csv(path)
     errs = validate(raw)
+    if not errs and (raw["kaynak"] == "test").any():
+        errs = ["kaynak=test satırları (doğrulama oturumları) eğitime giremez"]
     if errs:
         log("VERİ GEÇERSİZ:\n  - " + "\n  - ".join(errs))
         sys.exit(1)
@@ -78,6 +83,13 @@ def load_dataset(path: Path) -> tuple[pd.DataFrame, dict]:
         df[c] = df[c].astype(np.float32)
     labeled = df[df[LABEL] != ""].copy()
     labeled[LABEL] = labeled[LABEL].astype(int)
+    # Değerlendirme kurulabilir mi? Her sınıf, en az kat sayısı kadar farklı oturumda bulunmalı.
+    for cls in (0, 1):
+        n_sess = labeled.loc[labeled[LABEL] == cls, "oturum_id"].nunique()
+        if n_sess < n_folds:
+            log(f"VERİ YETERSİZ: sınıf {cls} yalnızca {n_sess} oturumda var; gruplu {n_folds} katlı "
+                f"değerlendirme kurulamaz. Kapılar değerlendirilemedi, model yazılmadı.")
+            sys.exit(1)
     info = {
         "toplam_satir": int(len(df)),
         "etiketli_satir": int(len(labeled)),
@@ -317,7 +329,7 @@ def main() -> int:
     np.random.seed(seed)
 
     log("1/7 Veri yükleniyor ve doğrulanıyor")
-    df, info = load_dataset(Path(a.veri))
+    df, info = load_dataset(Path(a.veri), settings["bolme"]["kat"])
     log(f"    {info}")
 
     log("2/7 Oturum gruplu bölme")

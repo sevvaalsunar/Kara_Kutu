@@ -78,7 +78,9 @@ CSV_COLUMNS = [
     "destek_verildi", "model_p", LABEL, "kaynak",
 ]
 
-SOURCES = frozenset({"gercek", "sentetik"})
+SOURCES = frozenset({"gercek", "sentetik", "test"})
+# "test": ?test=1 ile oynanan doğrulama oturumları. Geçerli biçimdedir ama birleştirici ve eğitim reddeder.
+TRAINABLE_SOURCES = frozenset({"gercek", "sentetik"})
 
 # Kişisel veri olabilecek sütun adları: bu adlardan biri görülürse veri reddedilir.
 FORBIDDEN_COLUMNS = frozenset({

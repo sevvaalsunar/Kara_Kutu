@@ -1,0 +1,16 @@
+{
+  "name": "kara-kutu-browser-e2e",
+  "private": true,
+  "type": "module",
+  "description": "app/cypress testlerinin gerçek Chromium üzerinde puppeteer portları ve demo kaydı",
+  "scripts": {
+    "test": "node run.mjs",
+    "demo": "node demo.mjs"
+  },
+  "dependencies": {
+    "puppeteer-core": "25.15.0"
+  },
+  "optionalDependencies": {
+    "@sparticuz/chromium": "153.0.0"
+  }
+}
