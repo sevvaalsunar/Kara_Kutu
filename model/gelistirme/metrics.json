@@ -1,0 +1,99 @@
+{
+  "test": {
+    "esik": 0.65,
+    "balanced_accuracy": 0.5266,
+    "f1": 0.2449,
+    "recall": 0.1714,
+    "precision": 0.4286,
+    "roc_auc": 0.6512,
+    "karisiklik_matrisi": {
+      "tn": 179,
+      "fp": 24,
+      "fn": 87,
+      "tp": 18
+    },
+    "n": 308,
+    "pozitif": 105
+  },
+  "test_yalnizca_gercek": null,
+  "capraz_dogrulama": {
+    "balanced_accuracy_ort": 0.5425,
+    "balanced_accuracy_std": 0.0323,
+    "kat": 4
+  },
+  "tek_ozellik_auc": {
+    "decision_time_sec": 0.6018,
+    "hesitation_count": 0.5795,
+    "wrong_attempts_current_concept": 0.5643,
+    "wrong_attempts_recent": 0.5806,
+    "hint_usage_rate": 0.5734,
+    "retry_count": 0.5439,
+    "difficulty_level": 0.5295,
+    "concept_mastery_rate": 0.579,
+    "recent_success_rate": 0.605,
+    "branch_risk_score": 0.5798,
+    "consecutive_errors": 0.5731
+  },
+  "onnx_parite": {
+    "n": 2308,
+    "max_abs_fark": 2.625423445312691e-07,
+    "ortalama_abs_fark": 3.4464478157020086e-08,
+    "ciktilar": [
+      "label",
+      "probabilities"
+    ]
+  },
+  "kapilar": {
+    "balanced_accuracy": {
+      "deger": 0.5266,
+      "kosul": ">= 0.7",
+      "gecti": false
+    },
+    "f1": {
+      "deger": 0.2449,
+      "kosul": ">= 0.65",
+      "gecti": false
+    },
+    "recall": {
+      "deger": 0.1714,
+      "kosul": ">= 0.7",
+      "gecti": false
+    },
+    "sizinti_grup": {
+      "deger": "ayrık",
+      "kosul": "eğitim/test oturumları ayrık",
+      "gecti": true
+    },
+    "sizinti_tek_ozellik": {
+      "deger": 0.605,
+      "kosul": "<= 0.98",
+      "gecti": true
+    },
+    "veri_gecerliligi": {
+      "deger": "geçerli",
+      "kosul": "eksik/aralık dışı satır yok",
+      "gecti": true
+    },
+    "onnx_parite": {
+      "deger": 2.625e-07,
+      "kosul": "< 0.0001",
+      "gecti": true
+    },
+    "gercek_veri": {
+      "deger": 0,
+      "kosul": ">= 15 gerçek oturum",
+      "gecti": false
+    }
+  },
+  "veri": {
+    "toplam_satir": 2010,
+    "etiketli_satir": 1610,
+    "etiketsiz_satir (oturumun son kararı)": 400,
+    "gercek_oturum": 0,
+    "sentetik_oturum": 400,
+    "gercek_etiketli_satir": 0,
+    "sentetik_etiketli_satir": 1610,
+    "pozitif_oran": 0.3814,
+    "veri_seti_surumu": "7dae87520a30"
+  }
+}

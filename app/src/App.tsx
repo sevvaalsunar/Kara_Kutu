@@ -9,6 +9,12 @@ import { GirisView } from './components/GirisView';
 import { DecisionView } from './components/DecisionView';
 import { ResultView } from './components/ResultView';
 import { EndingView } from './components/EndingView';
+import { DebugPanel, LastPrediction } from './components/DebugPanel';
+import { SessionLog } from './ml/telemetry';
+import { computeFeatures, LEVEL_TO_DIFFICULTY, FeatureVector } from './ml/features';
+import { loadModel, predict, getModelState, subscribeModel, ModelState } from './ml/modelRuntime';
+import { decideRollout } from './ml/rollout';
+import { SUPPORT_COUNTDOWN_SECONDS, STANDARD_COUNTDOWN_SECONDS } from './ml/adaptive';
 import {
   UserLevel,
   UserRole,
@@ -19,6 +25,12 @@ import {
 } from './story';
 
 type ScreenState = 'GIRIS' | 'DECISION' | 'RESULT' | 'ENDING';
+
+const PARAMS = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
+const DEBUG = PARAMS.get('debug') === '1';
+const DATA_MODE = PARAMS.get('veri') === '1';
+const MODEL_OFF = PARAMS.get('model') === 'off';
+const MODEL_BROKEN = PARAMS.get('model') === 'bozuk';
 
 export default function App() {
   // Player Configuration (§4: no option preselected)
@@ -49,9 +61,90 @@ export default function App() {
   // In-Game Clock (§3)
   const [gameClock, setGameClock] = useState<string>('03:14');
 
-  // Countdown timer for "Deneyimliyim" (60 seconds)
+  // Countdown timer for "Deneyimliyim" (60 seconds; 90 when adaptive support is active, spec §14)
   const [countdown, setCountdown] = useState<number | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // v2.0: anonim oturum kaydı, model ve uyarlama (spec §11–§20)
+  const logRef = useRef<SessionLog>(new SessionLog());
+  const gameNoRef = useRef(1);
+  const decisionStartRef = useRef(Date.now());
+  const hesitationRef = useRef(0);
+  const hintUsedRef = useRef(false);
+  const [decisionCount, setDecisionCount] = useState(0);
+  const [consent, setConsent] = useState(false);
+  const [modelState, setModelState] = useState<ModelState>(getModelState());
+  const [lastPrediction, setLastPrediction] = useState<LastPrediction | null>(null);
+  // Sonuç ekranındaki kavram özeti: hangi kararın (indeks) sonucunda gösterileceği
+  const [recapIndex, setRecapIndex] = useState<number | null>(null);
+  // Bir sonraki karar ekranında destek verilecek mi
+  const [supportNext, setSupportNext] = useState(false);
+  const supportNextRef = useRef(false);
+  const currentIndexRef = useRef(-1);
+
+  useEffect(() => {
+    const unsubscribe = subscribeModel(setModelState);
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+  useEffect(() => {
+    if (!MODEL_OFF) loadModel({ broken: MODEL_BROKEN });
+  }, []);
+
+  const rollout = decideRollout({
+    params: PARAMS,
+    sessionId: logRef.current.id,
+    releaseStatus: modelState.config?.release_status ?? null,
+    configMode: modelState.config?.rollout.mode ?? null,
+    canaryPercent: modelState.config?.rollout.canary_percent ?? 0,
+  });
+  const rolloutRef = useRef(rollout);
+  rolloutRef.current = rollout;
+
+  const setSupport = (v: boolean) => {
+    supportNextRef.current = v;
+    setSupportNext(v);
+  };
+
+  /** Karar kaydedildikten sonra çıkarım yapar; eşik geçilir ve kol "on" ise uyarlamayı açar. */
+  const runInference = useCallback(async (index: number, sahne: string) => {
+    const r = rolloutRef.current;
+    const st = getModelState();
+    if (r.mode === 'off' || st.status !== 'hazir' || !st.config) return;
+    let features: FeatureVector | null = null;
+    try {
+      features = computeFeatures(logRef.current.events, index);
+      const { p, ms } = await predict(features);
+      logRef.current.setModelP(index, p);
+      const applied = r.mode === 'on' && p >= st.config.support_threshold;
+      setLastPrediction({ index, sahne, p, ms, applied, features, error: null });
+      if (applied) {
+        if (currentIndexRef.current === index) setRecapIndex(index);
+        setSupport(true);
+      }
+    } catch (err) {
+      // spec §18: çıkarım hatasında uyarlama yok, oyun devam eder
+      setLastPrediction({
+        index, sahne, p: null, ms: null, applied: false,
+        features: features ?? ({} as FeatureVector),
+        error: err instanceof Error ? err.message : String(err),
+      });
+    }
+  }, []);
+
+  // Test ve debug için gerçek modele erişim (parite testleri; sahte olasılık yok)
+  useEffect(() => {
+    if (!(DEBUG || PARAMS.get('test') === '1')) return;
+    (window as any).__KK_MODEL__ = {
+      state: () => getModelState(),
+      predict: async (f: FeatureVector) => {
+        const { p } = await predict(f);
+        setLastPrediction({ index: -1, sahne: 'parite', p, ms: null, applied: false, features: f, error: null });
+        return p;
+      },
+    };
+  }, []);
 
   const clearDecisionTimer = useCallback(() => {
     if (timerRef.current) {
@@ -64,6 +157,23 @@ export default function App() {
   const handleSelectChoice = useCallback(
     (choice: Choice, isAutomaticTimeout: boolean = false) => {
       clearDecisionTimer();
+      // v2.0: kararı anonim olarak kaydet (spec §13, §15)
+      const index = logRef.current.add({
+        sahne_id: currentDecisionKey,
+        secim_id: choice.id,
+        zaman_asimi: isAutomaticTimeout,
+        decision_time_sec: Math.round(((Date.now() - decisionStartRef.current) / 1000) * 100) / 100,
+        hesitation_count: hesitationRef.current,
+        ipucu_kullandi: hintUsedRef.current,
+        oyun_no: gameNoRef.current,
+        difficulty_level: LEVEL_TO_DIFFICULTY[level ?? 'new'],
+        destek_verildi: supportNextRef.current,
+      });
+      currentIndexRef.current = index;
+      setDecisionCount(index + 1);
+      setRecapIndex(null);
+      setSupport(false);
+      runInference(index, currentDecisionKey);
       setWasTimeout(isAutomaticTimeout);
       setLastChoice(choice);
       const newPath = [...selectedPath, choice.id];
@@ -75,18 +185,23 @@ export default function App() {
       // Move to Result screen (S1, S2, or S3)
       setScreen('RESULT');
     },
-    [clearDecisionTimer, selectedPath]
+    [clearDecisionTimer, selectedPath, currentDecisionKey, level, runInference]
   );
 
   // Setup countdown timer when entering DECISION screen if level is expert
   useEffect(() => {
+    if (screen === 'DECISION') {
+      decisionStartRef.current = Date.now();
+      hesitationRef.current = 0;
+      hintUsedRef.current = false;
+    }
     if (screen === 'DECISION' && level === 'expert') {
-      setCountdown(60);
+      setCountdown(supportNextRef.current ? SUPPORT_COUNTDOWN_SECONDS : STANDARD_COUNTDOWN_SECONDS);
       clearDecisionTimer();
 
       timerRef.current = setInterval(() => {
         setCountdown((prev) => {
-          if (prev === null) return 60;
+          if (prev === null) return STANDARD_COUNTDOWN_SECONDS;
           return Math.max(prev - 1, 0);
         });
       }, 1000);
@@ -114,6 +229,7 @@ export default function App() {
   // Start game from Giriş
   const handleStartGame = () => {
     if (!level || !role || !goal) return;
+    if (DATA_MODE && !consent) return;
     setSelectedPath([]);
     setLastChoice(null);
     setWasTimeout(false);
@@ -148,6 +264,8 @@ export default function App() {
   // Restart game
   const handleRestart = () => {
     clearDecisionTimer();
+    gameNoRef.current += 1; // aynı oturum, yeni oyun (retry_count)
+    setRecapIndex(null);
     setScreen('GIRIS');
     setSelectedPath([]);
     setLastChoice(null);
@@ -192,6 +310,9 @@ export default function App() {
             setRole={setRole}
             setGoal={setGoal}
             onStart={handleStartGame}
+            requireConsent={DATA_MODE}
+            consent={consent}
+            setConsent={setConsent}
           />
         )}
 
@@ -202,6 +323,13 @@ export default function App() {
             role={role || 'ops'}
             isTestMode={isTestMode}
             onSelectChoice={(choice) => handleSelectChoice(choice, false)}
+            adaptiveSupport={supportNext}
+            onHesitation={() => {
+              hesitationRef.current += 1;
+            }}
+            onHintUsed={() => {
+              hintUsedRef.current = true;
+            }}
           />
         )}
 
@@ -213,6 +341,7 @@ export default function App() {
             goal={goal || 'learn'}
             wasTimeout={wasTimeout}
             onNext={handleNextFromResult}
+            adaptiveRecap={recapIndex !== null && recapIndex === currentIndexRef.current}
           />
         )}
 
@@ -221,9 +350,21 @@ export default function App() {
             path={selectedPath}
             clock={gameClock}
             onRestart={handleRestart}
+            onExport={DATA_MODE ? () => logRef.current.download() : undefined}
           />
         )}
       </main>
+
+      {DEBUG && (
+        <DebugPanel
+          model={modelState}
+          rollout={rollout}
+          last={lastPrediction}
+          sessionId={logRef.current.id}
+          decisions={decisionCount}
+          onExport={() => logRef.current.download()}
+        />
+      )}
     </div>
   );
 }

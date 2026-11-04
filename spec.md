@@ -2,7 +2,8 @@
 
 > YZM301 · SE Primer ödevi · spec.md
 > Bu belge uygulamanın tek doğruluk kaynağıdır. Burada yazmayan özellik yapılmaz.
-> **v2.0 (Adaptif Primer):** §11–§20 eklendi. Bu bölümler model eğitilmeden önce yazıldı (2026-11-04); eşikler ve kabul kapıları eğitimden sonra değiştirilmez.
+> **v2.0 (Adaptif Primer):** §11–§20 eklendi. Eğitim sonrası tek düzeltme: §14 madde 3'teki K1 açıklaması netleştirildi (kural değişmedi).
+> Önceki not: Bu bölümler model eğitilmeden önce yazıldı (2026-11-04); eşikler ve kabul kapıları eğitimden sonra değiştirilmez.
 
 ## 1. Problem
 
@@ -316,7 +317,7 @@ Risk puanları: `1A` 1.0, `1B` 0.2, `2A1` 1.0, `2A2` 0.8, `2B1` 0.1, `2B2` 1.0, 
 
 1. Sonuç ekranında "Neden oldu"nun altına seçimin kavramına ait **Kavram özeti** kartı eklenir (`adaptive-recap`).
 2. Bir sonraki karar ekranında tutor paneli seviye ne olursa olsun açık gelir ve başlangıç ipucunun ardından karara özel ek bir destek sorusu gösterir (`adaptive-support`). Destek sorusu da §7 kurallarına uyar: doğru seçeneği söylemez, soruyla biter.
-3. "Deneyimliyim" seviyesinde bir sonraki kararın geri sayımı 60 yerine **90** saniyedir. (§4'ün tek istisnası; K1'de henüz tahmin olmadığı için K1 her zaman 60 saniyedir.)
+3. "Deneyimliyim" seviyesinde bir sonraki kararın geri sayımı 60 yerine **90** saniyedir. (§4'ün tek istisnası. Oturumun ilk kararında henüz tahmin olmadığı için ilk oyunun K1'i her zaman 60 saniyedir; "Baştan oyna" sonrası K1, önceki oyunun K3'ündeki tahmine göre 90 olabilir.)
 
 p < 0.65 ise oyun §4 kurallarıyla devam eder. Oyuncuya "model", "olasılık" gibi terimler gösterilmez; yalnızca "Önceki kararlarına göre ek açıklama eklendi." notu görünür. Teknik bilgi `?debug=1` panelindedir.
 

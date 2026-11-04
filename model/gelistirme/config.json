@@ -1,0 +1,205 @@
+{
+  "model_name": "kara-kutu-destek",
+  "model_version": "2.0.0",
+  "release_tag": "v2.0",
+  "model_type": "sklearn Pipeline(StandardScaler, LogisticRegression) → ONNX",
+  "input": {
+    "tensor_name": "features",
+    "dtype": "float32",
+    "shape": [
+      null,
+      11
+    ],
+    "feature_order": [
+      "decision_time_sec",
+      "hesitation_count",
+      "wrong_attempts_current_concept",
+      "wrong_attempts_recent",
+      "hint_usage_rate",
+      "retry_count",
+      "difficulty_level",
+      "concept_mastery_rate",
+      "recent_success_rate",
+      "branch_risk_score",
+      "consecutive_errors"
+    ],
+    "features": {
+      "decision_time_sec": {
+        "unit": "saniye",
+        "min": 0.0,
+        "max": 300.0,
+        "type": "float32",
+        "required": true
+      },
+      "hesitation_count": {
+        "unit": "adet",
+        "min": 0.0,
+        "max": 50.0,
+        "type": "float32",
+        "required": true
+      },
+      "wrong_attempts_current_concept": {
+        "unit": "adet",
+        "min": 0.0,
+        "max": 20.0,
+        "type": "float32",
+        "required": true
+      },
+      "wrong_attempts_recent": {
+        "unit": "adet",
+        "min": 0.0,
+        "max": 3.0,
+        "type": "float32",
+        "required": true
+      },
+      "hint_usage_rate": {
+        "unit": "oran",
+        "min": 0.0,
+        "max": 1.0,
+        "type": "float32",
+        "required": true
+      },
+      "retry_count": {
+        "unit": "adet",
+        "min": 0.0,
+        "max": 20.0,
+        "type": "float32",
+        "required": true
+      },
+      "difficulty_level": {
+        "unit": "seviye (0=yeni,1=orta,2=deneyimli)",
+        "min": 0.0,
+        "max": 2.0,
+        "type": "float32",
+        "required": true
+      },
+      "concept_mastery_rate": {
+        "unit": "oran",
+        "min": 0.0,
+        "max": 1.0,
+        "type": "float32",
+        "required": true
+      },
+      "recent_success_rate": {
+        "unit": "oran",
+        "min": 0.0,
+        "max": 1.0,
+        "type": "float32",
+        "required": true
+      },
+      "branch_risk_score": {
+        "unit": "puan",
+        "min": 0.0,
+        "max": 1.0,
+        "type": "float32",
+        "required": true
+      },
+      "consecutive_errors": {
+        "unit": "adet",
+        "min": 0.0,
+        "max": 20.0,
+        "type": "float32",
+        "required": true
+      }
+    },
+    "defaults": null,
+    "missing_policy": "Eksik veya aralık dışı özellik varsa çıkarım yapılmaz (spec.md §18)."
+  },
+  "output": {
+    "tensor_name": "probabilities",
+    "shape": [
+      null,
+      2
+    ],
+    "class_labels": [
+      0,
+      1
+    ],
+    "positive_index": 1,
+    "semantics": "P(needs_learning_support = 1): oyuncunun bir sonraki kararında riskli seçeneği seçme olasılığı (spec.md §12)."
+  },
+  "support_threshold": 0.65,
+  "evaluation": {
+    "esik": 0.65,
+    "balanced_accuracy": 0.5266,
+    "f1": 0.2449,
+    "recall": 0.1714,
+    "precision": 0.4286,
+    "roc_auc": 0.6512,
+    "karisiklik_matrisi": {
+      "tn": 179,
+      "fp": 24,
+      "fn": 87,
+      "tp": 18
+    },
+    "n": 308,
+    "pozitif": 105
+  },
+  "random_seed": 20261104,
+  "dataset_version": "7dae87520a30",
+  "onnx_opset": {
+    "ai.onnx": 17,
+    "ai.onnx.ml": 3
+  },
+  "runtime": {
+    "browser": "onnxruntime-web 1.30.0 (wasm)",
+    "python": "onnxruntime 1.20.1"
+  },
+  "artifact": {
+    "file": "model.onnx",
+    "sha256": "b91ba53e820ef6b5a5bdbce17746b13fde3d44051b4a8dbfbadc781738411640"
+  },
+  "source": {
+    "hf_repo": null,
+    "hf_commit": null,
+    "pinned_url": null
+  },
+  "rollout": {
+    "mode": "shadow",
+    "canary_percent": 0,
+    "_not": "Statü 'reddedildi': oyunu değiştiremez, yalnızca gölge modda çalışır."
+  },
+  "coefficients_for_audit": {
+    "scaler_mean": [
+      23.690837,
+      2.119048,
+      0.582181,
+      0.900922,
+      0.45404,
+      0.456989,
+      1.026114,
+      0.589478,
+      0.59447,
+      0.533794,
+      0.614439
+    ],
+    "scaler_scale": [
+      16.686974,
+      1.617053,
+      0.640844,
+      0.868558,
+      0.366367,
+      0.641074,
+      0.838362,
+      0.445141,
+      0.384115,
+      0.412583,
+      0.984694
+    ],
+    "coef": [
+      0.165895,
+      0.165524,
+      0.281468,
+      -0.153623,
+      0.222157,
+      -0.227619,
+      0.152663,
+      0.33818,
+      -0.513684,
+      -0.020503,
+      0.000784
+    ],
+    "intercept": -0.030067
+  },
+  "release_status": "reddedildi"
+}

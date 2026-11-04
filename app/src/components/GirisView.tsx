@@ -15,6 +15,10 @@ interface GirisViewProps {
   setRole: (r: UserRole) => void;
   setGoal: (g: UserGoal) => void;
   onStart: () => void;
+  /** v2.0 veri toplama modu (spec §15) */
+  requireConsent?: boolean;
+  consent?: boolean;
+  setConsent?: (v: boolean) => void;
 }
 
 export const GirisView: React.FC<GirisViewProps> = ({
@@ -25,12 +29,15 @@ export const GirisView: React.FC<GirisViewProps> = ({
   setRole,
   setGoal,
   onStart,
+  requireConsent = false,
+  consent = false,
+  setConsent,
 }) => {
   const roleText = role
     ? INITIAL_BRIEFING.roleDescriptions[role]
     : INITIAL_BRIEFING.roleDescriptions.default;
 
-  const isReady = Boolean(level && role && goal);
+  const isReady = Boolean(level && role && goal) && (!requireConsent || consent);
 
   return (
     <div className="max-w-md mx-auto px-4 py-4 space-y-4 pb-20">
@@ -248,6 +255,33 @@ export const GirisView: React.FC<GirisViewProps> = ({
           </div>
         </div>
       </div>
+
+      {/* v2.0 Veri toplama modu: gizlilik notu ve onay (spec §15) */}
+      {requireConsent && (
+        <div className="p-3.5 rounded-lg bg-slate-900/90 border border-amber-500/30 space-y-2">
+          <div className="font-mono text-[10px] font-bold text-amber-400 uppercase tracking-wider">
+            Veri toplama modu · Gizlilik notu
+          </div>
+          <p className="font-body text-xs leading-relaxed text-slate-300">
+            Bu oturumda kararlarının süresi, ipucu kullanımı ve seçimlerin rastgele bir oturum numarasıyla kaydedilir.
+            Adın, e-postan, cihaz bilgin, konumun ve tutor'a yazdığın mesajlar kaydedilmez. Veri yalnızca bu sekmede
+            tutulur, hiçbir sunucuya gönderilmez; son ekranındaki düğmeyle CSV olarak kendin indirir ve paylaşırsın.
+            Sayfayı kapatırsan veri silinir.
+          </p>
+          <label className="flex items-start gap-2 cursor-pointer min-h-[44px] pt-1">
+            <input
+              data-testid="consent"
+              type="checkbox"
+              checked={consent}
+              onChange={(e) => setConsent?.(e.target.checked)}
+              className="mt-0.5 h-4 w-4 accent-sky-500"
+            />
+            <span className="font-body text-xs text-slate-200">
+              Okudum; anonim oyun verimin ders projesi için kullanılmasını kabul ediyorum.
+            </span>
+          </label>
+        </div>
+      )}
 
       {/* Start Button & System Note */}
       <div className="pt-2 space-y-2">

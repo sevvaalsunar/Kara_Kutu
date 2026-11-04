@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/sync-model.mjs",
     "dev": "tsx server.ts",
+    "prebuild": "node scripts/sync-model.mjs",
     "build": "vite build",
     "start": "node server.ts",
     "preview": "vite preview",
@@ -14,7 +16,10 @@
     "cy:open": "cypress open",
     "cy:demo": "cypress run --spec cypress/e2e/00-demo.cy.js",
     "eval:1": "tsx scripts/run-eval.ts 1",
-    "eval:2": "tsx scripts/run-eval.ts 2"
+    "eval:2": "tsx scripts/run-eval.ts 2",
+    "test:features": "tsx scripts/check-features.ts",
+    "test:parity-web": "node scripts/parity-web.mjs",
+    "test:rollout": "tsx scripts/rollout-sim.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
@@ -24,6 +29,7 @@
     "express": "^4.21.2",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",
+    "onnxruntime-web": "1.30.0",
     "react": "^19.0.1",
     "react-dom": "^19.0.1",
     "vite": "^8.3.0"

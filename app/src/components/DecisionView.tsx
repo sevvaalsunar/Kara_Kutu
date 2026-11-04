@@ -3,8 +3,9 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
-import { Bot, ChevronDown, ChevronUp, Send, Loader2, AlertCircle } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Bot, ChevronDown, ChevronUp, Send, Loader2, AlertCircle, Sparkles } from 'lucide-react';
+import { ADAPTIVE_NOTE, SUPPORT_BY_DECISION } from '../ml/adaptive';
 import { DecisionNode, Choice, UserLevel, UserRole } from '../story';
 import { getLocalTutorReply } from '../tutor';
 
@@ -14,6 +15,12 @@ interface DecisionViewProps {
   role: UserRole;
   isTestMode: boolean;
   onSelectChoice: (choice: Choice) => void;
+  /** v2.0: önceki kararlara göre ek destek (spec §14) */
+  adaptiveSupport?: boolean;
+  /** v2.0: kartlar arası geçiş veya ipucu panelini açıp kapama (spec §13 hesitation_count) */
+  onHesitation?: () => void;
+  /** v2.0: oyuncunun ipucu panelini kendisi açması veya tutor'a mesaj göndermesi */
+  onHintUsed?: () => void;
 }
 
 interface ChatMessage {
@@ -27,7 +34,21 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
   role,
   isTestMode,
   onSelectChoice,
+  adaptiveSupport = false,
+  onHesitation,
+  onHintUsed,
 }) => {
+  const lastCardRef = useRef<'a' | 'b' | null>(null);
+  const noteCard = (card: 'a' | 'b') => {
+    if (lastCardRef.current && lastCardRef.current !== card) onHesitation?.();
+    lastCardRef.current = card;
+  };
+  const toggleHint = () => {
+    onHesitation?.();
+    if (!isHintOpen) onHintUsed?.();
+    setIsHintOpen(!isHintOpen);
+  };
+
   // Spec §4: "Yeni başladım": tutor ipucu kutusu otomatik açık gelir.
   // "Biraz deneyimim var" & "Deneyimliyim": ipucu butonla açılır.
   const [isHintOpen, setIsHintOpen] = useState(level === 'new');
@@ -39,10 +60,16 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
 
   // Reset or update tutor hint when decision changes
   useEffect(() => {
-    setIsHintOpen(level === 'new');
+    setIsHintOpen(level === 'new' || adaptiveSupport);
     setMessages([{ role: 'model', text: decision.initialHint }]);
     setInputText('');
+    lastCardRef.current = null;
   }, [decision.id, level]);
+
+  // Destek kararı ekran açıldıktan sonra gelirse paneli yine aç
+  useEffect(() => {
+    if (adaptiveSupport) setIsHintOpen(true);
+  }, [adaptiveSupport]);
 
   const handleSendTutor = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
@@ -50,6 +77,7 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
     if (!trimmed || isLoading) return;
 
     const userMsg = trimmed;
+    onHintUsed?.();
     setInputText('');
     const newMessages: ChatMessage[] = [...messages, { role: 'user', text: userMsg }];
     setMessages(newMessages);
@@ -180,6 +208,8 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
         <button
           data-testid="choice-a"
           onClick={() => onSelectChoice(decision.choiceA)}
+          onMouseOver={() => noteCard('a')}
+          onFocus={() => noteCard('a')}
           className="w-full text-left p-4 rounded-lg bg-slate-900/70 hover:bg-slate-850 border border-slate-800 hover:border-sky-500/50 transition-all cursor-pointer group shadow-md"
         >
           <div className="flex items-start gap-3">
@@ -201,6 +231,8 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
         <button
           data-testid="choice-b"
           onClick={() => onSelectChoice(decision.choiceB)}
+          onMouseOver={() => noteCard('b')}
+          onFocus={() => noteCard('b')}
           className="w-full text-left p-4 rounded-lg bg-slate-900/70 hover:bg-slate-850 border border-slate-800 hover:border-sky-500/50 transition-all cursor-pointer group shadow-md"
         >
           <div className="flex items-start gap-3">
@@ -224,7 +256,8 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
         {/* Toggle Header / Button */}
         <button
           data-testid="hint-btn"
-          onClick={() => setIsHintOpen(!isHintOpen)}
+          onClick={toggleHint}
+          aria-expanded={isHintOpen}
           className="w-full px-3.5 py-2.5 flex items-center justify-between bg-slate-900/90 hover:bg-slate-850 font-mono text-xs transition-colors cursor-pointer"
         >
           <div className="flex items-center gap-2 text-sky-400">
@@ -250,8 +283,8 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
             {/* Conversation Flow */}
             <div className="space-y-2.5 max-h-56 overflow-y-auto pr-1">
               {messages.map((msg, idx) => (
+                <React.Fragment key={idx}>
                 <div
-                  key={idx}
                   className={`flex items-start gap-2.5 ${
                     msg.role === 'user' ? 'justify-end' : 'justify-start'
                   }`}
@@ -283,6 +316,25 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
                     </div>
                   </div>
                 </div>
+                {idx === 0 && adaptiveSupport && SUPPORT_BY_DECISION[decision.id] && (
+                  <div className="flex items-start gap-2.5">
+                    <div className="w-6 h-6 rounded bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0 mt-0.5">
+                      <Sparkles className="w-3.5 h-3.5" />
+                    </div>
+                    <div className="max-w-[88%] p-2.5 rounded text-xs leading-relaxed bg-slate-900 border border-amber-500/30 text-slate-200">
+                      <div className="font-mono text-[10px] text-amber-400 font-bold mb-1 tracking-wider uppercase">
+                        TUTOR // EK DESTEK
+                      </div>
+                      <div data-testid="adaptive-support" className="italic font-body">
+                        "{SUPPORT_BY_DECISION[decision.id]}"
+                      </div>
+                      <div data-testid="adaptive-note" className="mt-1.5 font-mono text-[10px] text-slate-500 not-italic">
+                        {ADAPTIVE_NOTE}
+                      </div>
+                    </div>
+                  </div>
+                )}
+                </React.Fragment>
               ))}
 
               {isLoading && (

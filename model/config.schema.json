@@ -1,0 +1,196 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "KARA KUTU model çıkarım sözleşmesi",
+  "type": "object",
+  "required": [
+    "model_name",
+    "model_version",
+    "release_tag",
+    "model_type",
+    "input",
+    "output",
+    "support_threshold",
+    "evaluation",
+    "random_seed",
+    "dataset_version",
+    "onnx_opset",
+    "runtime",
+    "artifact",
+    "source",
+    "rollout",
+    "release_status"
+  ],
+  "properties": {
+    "model_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "release_tag": {
+      "type": "string",
+      "pattern": "^v\\d+\\.\\d+$"
+    },
+    "input": {
+      "type": "object",
+      "required": [
+        "tensor_name",
+        "dtype",
+        "feature_order",
+        "features"
+      ],
+      "properties": {
+        "tensor_name": {
+          "const": "features"
+        },
+        "dtype": {
+          "const": "float32"
+        },
+        "feature_order": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "features": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "unit",
+              "min",
+              "max",
+              "type",
+              "required"
+            ],
+            "properties": {
+              "min": {
+                "type": "number"
+              },
+              "max": {
+                "type": "number"
+              },
+              "type": {
+                "const": "float32"
+              },
+              "required": {
+                "type": "boolean"
+              },
+              "unit": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": [
+        "tensor_name",
+        "class_labels",
+        "positive_index",
+        "semantics"
+      ],
+      "properties": {
+        "tensor_name": {
+          "const": "probabilities"
+        },
+        "positive_index": {
+          "const": 1
+        },
+        "class_labels": {
+          "const": [
+            0,
+            1
+          ]
+        },
+        "semantics": {
+          "type": "string"
+        }
+      }
+    },
+    "support_threshold": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "exclusiveMaximum": 1
+    },
+    "random_seed": {
+      "type": "integer"
+    },
+    "dataset_version": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{12}$"
+    },
+    "artifact": {
+      "type": "object",
+      "required": [
+        "file",
+        "sha256"
+      ],
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "hf_repo",
+        "hf_commit",
+        "pinned_url"
+      ],
+      "properties": {
+        "hf_commit": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "pinned_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^https://huggingface\\.co/[^/]+/[^/]+/resolve/[0-9a-f]{40}/model\\.onnx$"
+        }
+      }
+    },
+    "rollout": {
+      "type": "object",
+      "required": [
+        "mode",
+        "canary_percent"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "off",
+            "shadow",
+            "canary",
+            "on"
+          ]
+        },
+        "canary_percent": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "release_status": {
+      "enum": [
+        "kabul",
+        "aday",
+        "reddedildi"
+      ]
+    }
+  }
+}

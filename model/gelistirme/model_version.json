@@ -1,0 +1,23 @@
+{
+  "model_version": "2.0.0",
+  "release_tag": "v2.0",
+  "release_status": "reddedildi",
+  "previous_version": "1.x (modelsiz, kural tabanlı)",
+  "dataset_version": "7dae87520a30",
+  "onnx_sha256": "b91ba53e820ef6b5a5bdbce17746b13fde3d44051b4a8dbfbadc781738411640",
+  "random_seed": 20261104,
+  "libraries": {
+    "python": "3.12.3",
+    "scikit-learn": "1.5.2",
+    "skl2onnx": "1.17.0",
+    "onnx": "1.17.0",
+    "onnxruntime": "1.20.1",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6"
+  },
+  "hf": {
+    "repo": null,
+    "commit": null,
+    "pinned_url": null
+  }
+}

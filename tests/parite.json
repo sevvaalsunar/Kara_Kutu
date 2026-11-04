@@ -1,0 +1,120 @@
+{
+  "model_version": "2.0.0",
+  "release_status": "reddedildi",
+  "model_sha256": "b91ba53e820ef6b5a5bdbce17746b13fde3d44051b4a8dbfbadc781738411640",
+  "model_dosyasi": "model/gelistirme/model.onnx",
+  "feature_order": [
+    "decision_time_sec",
+    "hesitation_count",
+    "wrong_attempts_current_concept",
+    "wrong_attempts_recent",
+    "hint_usage_rate",
+    "retry_count",
+    "difficulty_level",
+    "concept_mastery_rate",
+    "recent_success_rate",
+    "branch_risk_score",
+    "consecutive_errors"
+  ],
+  "output_semantics": "P(needs_learning_support = 1): oyuncunun bir sonraki kararında riskli seçeneği seçme olasılığı (spec.md §12).",
+  "support_threshold": 0.65,
+  "tolerans": 0.0001,
+  "uretici": "onnxruntime 1.20.1 (Python)",
+  "referanslar": [
+    {
+      "ad": "akici_ilk_karar",
+      "aciklama": "K1, Biraz deneyimim var; 3 sn'de, tereddütsüz, ipucusuz 1B seçti (spec §20 KÖ7).",
+      "girdi": {
+        "decision_time_sec": 3,
+        "hesitation_count": 0,
+        "wrong_attempts_current_concept": 0,
+        "wrong_attempts_recent": 0,
+        "hint_usage_rate": 0,
+        "retry_count": 0,
+        "difficulty_level": 1,
+        "concept_mastery_rate": 1,
+        "recent_success_rate": 1,
+        "branch_risk_score": 0.2,
+        "consecutive_errors": 0
+      },
+      "beklenen_p": 0.29293033480644226,
+      "destek": false
+    },
+    {
+      "ad": "zorlanan_ilk_karar",
+      "aciklama": "K1, Biraz deneyimim var; 40 sn bekledi, ipucunu açtı (1 tereddüt), 1A seçti (spec §20 KÖ6).",
+      "girdi": {
+        "decision_time_sec": 40,
+        "hesitation_count": 1,
+        "wrong_attempts_current_concept": 1,
+        "wrong_attempts_recent": 1,
+        "hint_usage_rate": 1,
+        "retry_count": 0,
+        "difficulty_level": 1,
+        "concept_mastery_rate": 0,
+        "recent_success_rate": 0,
+        "branch_risk_score": 1.0,
+        "consecutive_errors": 1
+      },
+      "beklenen_p": 0.730345606803894,
+      "destek": true
+    },
+    {
+      "ad": "ikinci_oyunda_toparlanan",
+      "aciklama": "2. oyun K2_1B, Yeni başladım; ilk oyunda 2 riskli seçim, şimdi 12 sn'de 2B1 seçti.",
+      "girdi": {
+        "decision_time_sec": 12,
+        "hesitation_count": 2,
+        "wrong_attempts_current_concept": 1,
+        "wrong_attempts_recent": 1,
+        "hint_usage_rate": 0.6,
+        "retry_count": 1,
+        "difficulty_level": 0,
+        "concept_mastery_rate": 0.5,
+        "recent_success_rate": 0.6666667,
+        "branch_risk_score": 0.1,
+        "consecutive_errors": 0
+      },
+      "beklenen_p": 0.3948200047016144,
+      "destek": false
+    },
+    {
+      "ad": "deneyimli_zaman_asimi",
+      "aciklama": "K3, Deneyimliyim; süre doldu (60 sn), üç kararın üçü de riskli.",
+      "girdi": {
+        "decision_time_sec": 60,
+        "hesitation_count": 4,
+        "wrong_attempts_current_concept": 1,
+        "wrong_attempts_recent": 3,
+        "hint_usage_rate": 0,
+        "retry_count": 0,
+        "difficulty_level": 2,
+        "concept_mastery_rate": 0,
+        "recent_success_rate": 0,
+        "branch_risk_score": 1.0,
+        "consecutive_errors": 3
+      },
+      "beklenen_p": 0.6738961935043335,
+      "destek": true
+    },
+    {
+      "ad": "uc_deger",
+      "aciklama": "Aralık sınırı: tüm sayaçlar üst sınırda (sözleşme sınır testi).",
+      "girdi": {
+        "decision_time_sec": 300,
+        "hesitation_count": 50,
+        "wrong_attempts_current_concept": 20,
+        "wrong_attempts_recent": 3,
+        "hint_usage_rate": 1,
+        "retry_count": 20,
+        "difficulty_level": 2,
+        "concept_mastery_rate": 0,
+        "recent_success_rate": 0,
+        "branch_risk_score": 1.0,
+        "consecutive_errors": 20
+      },
+      "beklenen_p": 0.9999377131462097,
+      "destek": true
+    }
+  ]
+}

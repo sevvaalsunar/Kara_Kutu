@@ -7,3 +7,7 @@ coverage/
 .env*
 !.env.example
 cypress/screenshots/
+
+# v2.0: sync-model.mjs üretir
+public/model/
+public/ort/

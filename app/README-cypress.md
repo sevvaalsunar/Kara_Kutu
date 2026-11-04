@@ -34,6 +34,13 @@ Testleri tarayıcıda adım adım izlemek için `npx cypress open`.
 | `cypress/e2e/yollar.cy.js` | 8 yolun hepsi: doğru son, doğru neden metni, doğru saat; "Baştan oyna" |
 | `cypress/e2e/kabul.cy.js` | spec.md §8'deki 5 kabul örneği, giriş ve kişiselleştirme kuralları, oyun içi saat |
 | `cypress/e2e/00-demo.cy.js` | Yaklaşık 60 saniyelik yavaş oynanış (demo videosu için) |
+| `cypress/e2e/adaptif.cy.js` | v2.0 KÖ6–KÖ7: zorlanan oyuncuya kavram özeti ve ek destek, akıcı oyuncuya standart akış, 90 sn sayaç, destek metinlerinin cevap vermemesi |
+| `cypress/e2e/model.cy.js` | v2.0 KÖ8: model yükleme, gölge mod, model indirilemezse oyunun bozulmaması, `?model=off`, aralık dışı girdinin reddi |
+| `cypress/e2e/parite.cy.js` | v2.0 KÖ9: `tests/parite.json`'daki 5 referans girdide tarayıcı ↔ Python farkı < 1e-4 |
+| `cypress/e2e/veri.cy.js` | v2.0 veri toplama modu: onay, gölge mod, CSV dışa aktarma |
+| `cypress/e2e/01-adaptif-demo.cy.js` | v2.0 demo: aynı sahnede iki oyuncu, iki farklı deneyim |
+
+v2.0 testleri model yüklenmesini debug panelinden (`?debug=1`) bekler. `npm run dev` model dosyalarını `public/model/` altına otomatik kopyalar (`scripts/sync-model.mjs`).
 
 ## Demo videosu
 

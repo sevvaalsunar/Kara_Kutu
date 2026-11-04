@@ -1,0 +1,10 @@
+# Eğitim, Oracle ve testler. Sürümler, v2.0 yapıtlarının üretildiği ve testlerin geçtiği ortamla aynıdır.
+numpy==2.5.4
+pandas==3.0.6
+scikit-learn==1.5.2
+skl2onnx==1.17.0
+onnx==1.17.0
+onnxruntime==1.20.1
+jsonschema==4.26.0
+pytest==9.2.0
+huggingface_hub==2.4.0

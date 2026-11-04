@@ -4,8 +4,9 @@
  */
 
 import React from 'react';
-import { ArrowRight, CheckCircle2, AlertTriangle, BookOpen } from 'lucide-react';
+import { ArrowRight, CheckCircle2, AlertTriangle, BookOpen, Lightbulb } from 'lucide-react';
 import { Choice, UserGoal, TIMEOUT_NOTE } from '../story';
+import { ADAPTIVE_NOTE, RECAP_BY_CONCEPT } from '../ml/adaptive';
 
 interface ResultViewProps {
   choice: Choice;
@@ -14,6 +15,8 @@ interface ResultViewProps {
   goal: UserGoal;
   wasTimeout: boolean;
   onNext: () => void;
+  /** v2.0: önceki kararlara göre kavram özeti (spec §14) */
+  adaptiveRecap?: boolean;
 }
 
 export const ResultView: React.FC<ResultViewProps> = ({
@@ -23,7 +26,9 @@ export const ResultView: React.FC<ResultViewProps> = ({
   goal,
   wasTimeout,
   onNext,
+  adaptiveRecap = false,
 }) => {
+  const recap = RECAP_BY_CONCEPT[choice.concept];
   return (
     <div className="max-w-md mx-auto px-4 py-4 space-y-4 pb-20">
       {/* Top Header Tag */}
@@ -144,6 +149,23 @@ export const ResultView: React.FC<ResultViewProps> = ({
           </div>
         )}
       </div>
+
+      {/* v2.0 Kavram özeti: yalnızca destek gerektiğinde (spec §14) */}
+      {adaptiveRecap && recap && (
+        <div
+          data-testid="adaptive-recap"
+          className="p-4 rounded-lg bg-slate-900/90 border border-sky-500/30 space-y-2 shadow-md"
+        >
+          <div className="flex items-center gap-2">
+            <Lightbulb className="w-4 h-4 text-sky-400 shrink-0" />
+            <h2 className="font-heading font-bold text-sm text-sky-300">Kavram özeti · {recap.title}</h2>
+          </div>
+          <p className="font-body text-xs leading-relaxed text-slate-200">{recap.text}</p>
+          <p data-testid="adaptive-note" className="font-mono text-[10px] text-slate-500">
+            {ADAPTIVE_NOTE}
+          </p>
+        </div>
+      )}
 
       {/* Action Button */}
       <div className="pt-2 space-y-2">

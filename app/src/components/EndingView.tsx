@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { RotateCcw, CheckCircle2, AlertOctagon, ShieldCheck, ShieldAlert, Check, X } from 'lucide-react';
+import { RotateCcw, Download, CheckCircle2, AlertOctagon, ShieldCheck, ShieldAlert, Check, X } from 'lucide-react';
 import {
   GOOD_ENDING,
   getBadEndingReason,
@@ -16,9 +16,11 @@ interface EndingViewProps {
   path: string[]; // e.g. ['1B', '2B1', 'A']
   clock: string;
   onRestart: () => void;
+  /** v2.0: yalnızca veri toplama modunda (spec §15) */
+  onExport?: () => void;
 }
 
-export const EndingView: React.FC<EndingViewProps> = ({ path, clock, onRestart }) => {
+export const EndingView: React.FC<EndingViewProps> = ({ path, clock, onRestart, onExport }) => {
   const pathKey = path.join(' -> ');
   const isGood = pathKey === '1B -> 2B1 -> A';
   const endingType = isGood ? 'good' : 'bad';
@@ -218,6 +220,17 @@ export const EndingView: React.FC<EndingViewProps> = ({ path, clock, onRestart }
           <RotateCcw className="w-4 h-4" />
           <span>BAŞTAN OYNA</span>
         </button>
+
+        {onExport && (
+          <button
+            data-testid="export-btn"
+            onClick={onExport}
+            className="w-full py-3 px-4 rounded-lg border border-slate-700 hover:border-sky-500 text-slate-200 font-mono font-bold text-xs tracking-wider uppercase flex items-center justify-center gap-2 transition-colors cursor-pointer"
+          >
+            <Download className="w-4 h-4" />
+            <span>Oturum verisini indir (CSV)</span>
+          </button>
+        )}
 
         <p className="text-center font-mono text-[10px] text-slate-500">
           KARA KUTU ARŞİV KİMLİĞİ: #KK-2026-{clock.replace(':', '')}-{isGood ? 'SUCCESS' : 'FAILURE'}
