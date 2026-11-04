@@ -2,6 +2,7 @@
 
 > YZM301 · SE Primer ödevi · spec.md
 > Bu belge uygulamanın tek doğruluk kaynağıdır. Burada yazmayan özellik yapılmaz.
+> **v2.0 (Adaptif Primer):** §11–§20 eklendi. Bu bölümler model eğitilmeden önce yazıldı (2026-11-04); eşikler ve kabul kapıları eğitimden sonra değiştirilmez.
 
 ## 1. Problem
 
@@ -18,6 +19,8 @@ SE Primer, oyuncuyu kurgusal bir hastanenin yoğun bakım ağında yaşanan bir 
 - 1 sağlık senaryosu, 3 karar, 2 farklı son
 - Her seçimden sonra iki bölümlü sonuç ekranı: "Ne oldu" ve "Neden oldu"
 - AI tutor: ipucu verir, doğru seçeneği asla söylemez
+- (v2.0) Oyuncu davranışından öğrenme desteği ihtiyacını tahmin eden küçük bir tablo modeli ve bu tahmine göre değişen oynanış (§11–§20)
+- (v2.0) Anonim veri toplama modu ve CSV dışa aktarma (§15)
 
 **Kapsam dışı**
 
@@ -246,3 +249,141 @@ Her karar ekranında `choice-a` her zaman ilk seçeneği (1A, 2A1, 2B1, A), `cho
 - Oyun içi saat (§3) yalnızca kararlarla ilerler. "Deneyimliyim" modundaki 60 saniyelik geri sayım gerçek zamanlıdır ve oyun içi saati değiştirmez.
 - Uygulama 360 px genişliğindeki telefon ekranında yatay kaydırma olmadan okunur.
 - Tutor API'sine ulaşılamazsa ipucu kutusu yalnızca karar başına başlangıç ipucunu gösterir ve oyun devam eder.
+
+---
+
+# v2.0 · Adaptif Primer
+
+## 11. Ürün problemi (v2.0)
+
+§4'teki uyarlama yalnızca girişteki üç cevaba dayanır ve oyun boyunca değişmez. "Biraz deneyimim var" diyen ama iki karardır zorlanan bir oyuncu, ipucu kutusu kapalı ve kavram özeti olmadan devam eder. v2.0, oyuncunun oyun içi davranışından bir sonraki kararda zorlanma olasılığını tahmin eder ve desteği o anda artırır.
+
+Model oyuncunun zekâsını, kişiliğini, ruh hâlini veya gerçek mesleki yetkinliğini ölçmez ve böyle bir iddiada bulunmaz. Tahmin edilen şey gözlenebilir bir oyun olayıdır: oyuncunun **bir sonraki kararında** riskli seçeneği seçmesi.
+
+## 12. Model hedefi ve etiketleme
+
+**Hedef:** `needs_learning_support` (ikili). `support_probability = P(needs_learning_support = 1)`.
+
+**Riskli seçim:** §4'te süre dolduğunda ICU-Net'in uyguladığı seçenekler: `1A`, `2A1`, `2B2`, `B`. Süre dolması da riskli seçim sayılır.
+
+**Etiket kuralı (deterministik):** Bir oturumdaki `t`. kararın satırı için
+
+- `needs_learning_support = 1`, oturumdaki `t+1`. karar riskli ise,
+- `needs_learning_support = 0`, `t+1`. karar riskli değilse,
+- boş, `t+1`. karar yoksa (oturumun son kararı). Boş etiketli satırlar kaydedilir ama eğitime girmez.
+
+"Baştan oyna" oturumu bitirmez; K3'ten sonraki karar yeni oyunun K1'idir.
+
+Bu etiket oyuncunun öğrenme yeteneğini temsil etmez; yalnızca bir sonraki kararda riskli seçimi gösterir. Özellikler `t` anına kadarki olaylardan, etiket `t+1`'den gelir; bu yüzden etiket özelliklere sızamaz.
+
+**Çıkarım anı:** Oyuncu `t`. kararı verdiği anda (sonuç ekranı açılırken).
+
+## 13. Girdi özellikleri (çıkarım sözleşmesi)
+
+Sıra modelin girdi sırasıdır ve değişmez. Tümü `float32`. "Bu karar dahil" ifadesi `t`. kararı kapsar.
+
+| # | Özellik | Birim / aralık | Tanım |
+|---|---|---|---|
+| 1 | `decision_time_sec` | sn, 0–300 (üstü 300'e kırpılır) | Karar ekranının açılmasından seçime kadar geçen süre. Süre dolduysa 60. |
+| 2 | `hesitation_count` | adet, 0–50 | A ve B kartları arasında fare/odak geçişi sayısı + ipucu panelini açıp kapama sayısı |
+| 3 | `wrong_attempts_current_concept` | adet, 0–20 | Oturumda bu kavramda (bu karar dahil) riskli seçim sayısı |
+| 4 | `wrong_attempts_recent` | adet, 0–3 | Son 3 kararda (bu karar dahil) riskli seçim sayısı |
+| 5 | `hint_usage_rate` | oran, 0–1 | Oturumdaki kararlardan (bu dahil) oyuncunun ipucu panelini kendisi açtığı veya tutor'a mesaj gönderdiği kararların oranı |
+| 6 | `retry_count` | adet, 0–20 | Oturumdaki "Baştan oyna" sayısı |
+| 7 | `difficulty_level` | 0, 1, 2 | Seviye: Yeni başladım = 0, Biraz deneyimim var = 1, Deneyimliyim = 2 |
+| 8 | `concept_mastery_rate` | oran, 0–1 | Bu kavramdaki kararlarda (bu dahil) riskli olmayan seçim oranı |
+| 9 | `recent_success_rate` | oran, 0–1 | Son 3 kararda (bu dahil) riskli olmayan seçim oranı |
+| 10 | `branch_risk_score` | 0–1 | Seçilen seçeneğin yazar tanımlı risk puanı (aşağıda) |
+| 11 | `consecutive_errors` | adet, 0–20 | Bu karardan geriye doğru kesintisiz riskli seçim sayısı |
+
+Kavramlar: `K1` → `mimari`; `K2_1A`, `K2_1B` → `veri_test`; `K3` → `guvenlik_kvkk`.
+
+Risk puanları: `1A` 1.0, `1B` 0.2, `2A1` 1.0, `2A2` 0.8, `2B1` 0.1, `2B2` 1.0, `A` 0.1, `B` 1.0.
+
+**Kaydedilen ama modele girmeyen sütunlar:** `decision_change_count` (§2 kararı geri almayı yasakladığı için oyunda her zaman 0; sütun şema uyumu için tutulur), `previous_support_effectiveness` (destek verilen kararlardan sonraki riskli olmayan seçim oranı, destek yoksa 0.5). İkincisi v2.0'da modele girmez: müdahale verisi henüz yok ve modelin kendi çıktısını girdi olarak kullanması geri besleme döngüsü yaratır. v2.1'de gerçek veriyle değerlendirilecek.
+
+**Eksik değer:** Eğitimde eksik özellikli satır reddedilir (doldurma yapılmaz). Tarayıcıda eksik veya aralık dışı özellik varsa çıkarım yapılmaz ve oyun §4 kurallarıyla devam eder.
+
+## 14. Çıktı, model ve uyarlama
+
+**Çıktı:** `probabilities` tensörü `[N, 2]`; sütun 1 = `support_probability`. `label` çıktısı (0.5 eşiği) kullanılmaz.
+
+**Model:** scikit-learn `Pipeline(StandardScaler, LogisticRegression(class_weight="balanced", C=1.0))`, sabit tohum `20261104`. ONNX'e skl2onnx ile, ZipMap olmadan aktarılır.
+
+**Eşik:** `support_threshold = 0.65`. Eğitimden önce verilmiş bir ürün kararıdır; `model/config.json` içinde tutulur ve test sonuçlarına bakılarak değiştirilmez.
+
+**Uyarlama (p ≥ 0.65 ve oturum uyarlama kolunda ise):**
+
+1. Sonuç ekranında "Neden oldu"nun altına seçimin kavramına ait **Kavram özeti** kartı eklenir (`adaptive-recap`).
+2. Bir sonraki karar ekranında tutor paneli seviye ne olursa olsun açık gelir ve başlangıç ipucunun ardından karara özel ek bir destek sorusu gösterir (`adaptive-support`). Destek sorusu da §7 kurallarına uyar: doğru seçeneği söylemez, soruyla biter.
+3. "Deneyimliyim" seviyesinde bir sonraki kararın geri sayımı 60 yerine **90** saniyedir. (§4'ün tek istisnası; K1'de henüz tahmin olmadığı için K1 her zaman 60 saniyedir.)
+
+p < 0.65 ise oyun §4 kurallarıyla devam eder. Oyuncuya "model", "olasılık" gibi terimler gösterilmez; yalnızca "Önceki kararlarına göre ek açıklama eklendi." notu görünür. Teknik bilgi `?debug=1` panelindedir.
+
+## 15. Veri toplama ve gizlilik
+
+- `?veri=1` veri toplama modunu açar. Giriş ekranında gizlilik notu ve onay kutusu (`consent`) gösterilir; onay verilmeden "Nöbeti devral" pasiftir.
+- Her karar bir satırdır (§13 + `data/SOZLUK.md`). `oturum_id` sayfa açılışında üretilen rastgele 12 karakterlik kimliktir.
+- Kaydedilmez: ad, e-posta, cihaz kimliği, IP, konum, parola, serbest metin (tutor'a yazılan mesajların içeriği dahil).
+- Veri yalnızca bellekte tutulur; sunucuya gönderilmez, tarayıcı depolamasına yazılmaz. Oyuncu son ekranındaki "Oturum verisini indir" (`export-btn`) ile CSV'yi kendisi indirir ve araştırmacıya verir.
+- Veri toplama modunda uyarlama **gölge** modda çalışır: olasılık `model_p` sütununa yazılır, oyun değişmez.
+- `kaynak` sütunu `gercek` veya `sentetik`tir. Sentetik satır hiçbir koşulda `gercek` olarak etiketlenmez.
+
+## 16. Veri seti ve değerlendirme
+
+- Ödev en az **15 gerçek oturum** ister. Sentetik veri izinlidir ve `data/generate_synthetic.py` (tohum `20261104`) ile üretilir.
+- Bölme: oturum gruplu ve katmanlı (`StratifiedGroupKFold`, 5 kat; ilk kat test). Aynı oturumun kararları hem eğitimde hem testte olamaz.
+- Metrikler eşik 0.65'te hesaplanır: dengeli doğruluk, F1, destek sınıfı duyarlılığı (recall), kesinlik, karışıklık matrisi, ROC-AUC.
+
+## 17. Kabul kapıları (eğitimden önce sabit)
+
+| Kapı | Koşul |
+|---|---|
+| Dengeli doğruluk | ≥ 0.70 |
+| F1 (sınıf 1) | ≥ 0.65 |
+| Recall (sınıf 1) | ≥ 0.70 |
+| Sızıntı | Eğitim/test oturumları ayrık; tek bir özelliğin tek başına ROC-AUC'u ≤ 0.98 |
+| Veri geçerliliği | Zorunlu özellik eksik veya aralık dışı satır yok |
+| ONNX paritesi | sklearn ve ONNX olasılıkları arasında en büyük mutlak fark < 1e-4 |
+| Gerçek veri | Etiketli satırı olan en az 15 gerçek oturum |
+
+Metrik kapılarından biri geçmezse `train.py` sıfır olmayan kodla çıkar ve hiçbir model dosyası yazılmaz. Yalnızca "Gerçek veri" kapısı geçmezse eğitim varsayılan olarak durur; `--aday` bayrağıyla model **aday** (yalnızca sentetik) statüsünde yazılabilir. Aday model Hugging Face'e yayınlanamaz ve kabul edilmiş bir sürümün üzerine yazamaz.
+
+## 18. Hata davranışı
+
+| Durum | Davranış |
+|---|---|
+| Model veya yapılandırma yüklenemedi | Oyun §4 kurallarıyla oynanır; debug panelinde "devre dışı" ve hata görünür |
+| Özellik eksik/aralık dışı | O karar için çıkarım yapılmaz, uyarlama yok |
+| Çıkarım hatası veya NaN | Uyarlama yok; hata debug paneline yazılır |
+| `?model=off` | Model hiç yüklenmez (v1 davranışı) |
+
+## 19. Sürümleme
+
+- Model sürümü `2.0.0`, yayın etiketi `v2.0`. Veri seti sürümü, CSV'nin SHA-256 özetinin ilk 12 karakteridir.
+- Üretimde model, Hugging Face'ten **commit'e sabitlenmiş** URL ile indirilir (`/resolve/<commit>/model.onnx`); `main` dalı kullanılmaz. Yayın yapılana kadar uygulama, `model/` klasöründen kopyalanan yerel dosyayı kullanır ve debug paneli bunu "yerel" olarak gösterir.
+- Geri dönüş: `config.json` içindeki sabit commit önceki sürüme çevrilir veya `rollout.mode = "off"` yapılır.
+
+## 20. Yeni kabul örnekleri (v2.0)
+
+6. **Zorlanan oyuncuya destek**
+   *Verilen:* Oyuncu "Biraz deneyimim var" seçti, model yüklü ve uyarlama açık.
+   *Olduğunda:* Karar 1'de 40 saniye bekler, ipucu panelini açar ve 1A'yı seçer.
+   *Beklenen:* Sonuç ekranında `adaptive-recap` görünür; Karar 2'de ipucu kutusu açık gelir ve `adaptive-support` görünür.
+
+7. **Akıcı oyuncuya standart akış**
+   *Verilen:* Aynı koşullar.
+   *Olduğunda:* Karar 1'de 3 saniye içinde, ipucu açmadan 1B'yi seçer.
+   *Beklenen:* `adaptive-recap` görünmez; Karar 2'de ipucu kutusu kapalı gelir.
+
+8. **Model yüklenemezse oyun bozulmaz**
+   *Verilen:* Model dosyasına ulaşılamıyor (`?model=bozuk`).
+   *Olduğunda:* Oyuncu 1B → 2B1 → A yolunu oynar.
+   *Beklenen:* İyi son açılır, uyarlama öğesi görünmez, debug panelinde model durumu "devre dışı"dır.
+
+9. **Python ve tarayıcı aynı olasılığı verir**
+   *Verilen:* `tests/parite.json`'daki 5 referans girdi.
+   *Olduğunda:* Tarayıcıdaki model bu girdilerle çalıştırılır.
+   *Beklenen:* Her girdi için `|p_python − p_tarayıcı| < 1e-4`.
+
+Yeni test kancaları: `adaptive-recap`, `adaptive-support`, `adaptive-note`, `consent`, `export-btn`, `debug-panel`, `model-status`, ve olasılık için `data-cy="p"`.

@@ -1,0 +1,19 @@
+{
+  "_aciklama": "Eğitimden ÖNCE sabitlenen ürün ve değerlendirme kararları (spec.md §14, §16, §17). Eğitim sonuçlarına bakılarak değiştirilmez.",
+  "model_adi": "kara-kutu-destek",
+  "model_surumu": "2.0.0",
+  "yayin_etiketi": "v2.0",
+  "tohum": 20261104,
+  "support_threshold": 0.65,
+  "model": {"tip": "LogisticRegression", "C": 1.0, "class_weight": "balanced", "max_iter": 1000, "olcekleyici": "StandardScaler"},
+  "bolme": {"yontem": "StratifiedGroupKFold", "kat": 5, "test_kati": 0, "grup": "oturum_id"},
+  "kapilar": {
+    "balanced_accuracy_min": 0.70,
+    "f1_min": 0.65,
+    "recall_min": 0.70,
+    "tek_ozellik_auc_max": 0.98,
+    "onnx_parite_max": 1e-4,
+    "gercek_oturum_min": 15
+  },
+  "onnx": {"opset": 17, "ml_opset": 3}
+}
