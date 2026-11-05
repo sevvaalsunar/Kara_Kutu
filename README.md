@@ -8,7 +8,7 @@ Saat 03:14. Yapay zekâ destekli yoğun bakım ağı ICU-Net siber saldırı alt
 
 > **Durum (dürüst özet):** v2.0 altyapısı çalışıyor ve gerçek tarayıcıda doğrulandı. Ancak eğitilen model **kabul kapılarını geçmedi** (dengeli doğruluk 0.527 < 0.70) ve yalnızca sentetik veriyle eğitildi; 0/15 gerçek oturum toplandı. Model bu yüzden yayınlanmadı ve uygulamada varsayılan olarak yalnızca **gölge modda** çalışır.
 >
-> Ayrıntılar: [`docs/FINAL_REPORT.md`](docs/FINAL_REPORT.md) · [`docs/MODEL_ROOT_CAUSE_ANALYSIS.md`](docs/MODEL_ROOT_CAUSE_ANALYSIS.md) · [`RELEASE.md`](RELEASE.md)
+> Ayrıntılar: [`docs/FINAL_REPORT.md`](docs/FINAL_REPORT.md) · [`docs/IZLENEBILIRLIK.md`](docs/IZLENEBILIRLIK.md) (ödev gereksinimleri) · [`docs/MODEL_ROOT_CAUSE_ANALYSIS.md`](docs/MODEL_ROOT_CAUSE_ANALYSIS.md) · [`RELEASE.md`](RELEASE.md)
 
 ## Linkler
 
@@ -138,7 +138,7 @@ Google Stitch (tasarım) → Google AI Studio (v1 uygulaması) → Cypress (E2E)
   - Kabul edilmemiş modelin yalnızca gölgede çalışması; kapı geçmeyince eşiğin, hedefin ve üreticinin değiştirilmemesi.
 - **Gerçekten çalıştırılan doğrulamalar:** pytest, `tsc`, `vite build`, gerçek headless Chromium'da Cypress senaryolarının puppeteer portları (dev ve üretim derlemesi), Python ↔ tarayıcı paritesi ve demo kaydı. Sayılar ve kanıtlar: `docs/FINAL_REPORT.md`, `docs/kanit/`.
 - **Çalıştırılamayanlar:** Cypress dosyalarının kendisi (ikili indirilemedi; CI'da koşacak), Hugging Face yayını (kabul edilmiş model yok) ve gerçek kullanıcı oturumları (0/15).
-- **Doğrulama sırasında bulunan hatalar:** 7 hata bulundu ve düzeltildi; liste `docs/FINAL_AUDIT.md` ve `docs/FINAL_REPORT.md`'de.
+- **Doğrulama sırasında bulunan hatalar:** 8 hata bulundu ve düzeltildi; liste `docs/FINAL_AUDIT.md` ve `docs/FINAL_REPORT.md`'de.
 
 ## İnceleme kaydı
 

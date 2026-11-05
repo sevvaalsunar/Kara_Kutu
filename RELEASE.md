@@ -139,6 +139,26 @@ Kol kararı `app/src/ml/rollout.ts` içinde, öncelik sırasıyla:
 
 ---
 
+## CI ve gizli anahtarlar
+
+| İş | Gizli anahtar | Not |
+|---|---|---|
+| `python-ve-sozlesme` | Yok | pytest, veri doğrulama, `tsc`, `vite build` |
+| `tarayici-e2e` | Yok | Sistem Chrome'u (`CHROME_PATH`); dev sunucusu ve üretim derlemesi |
+| `cypress` | Yok | Üretim derlemesi (`npm run serve:prod`); video her zaman, hata ekran görüntüleri yalnızca başarısızlıkta artefakt |
+| Hugging Face yayını | `HF_TOKEN` | **CI'da değil**, elle ve yalnızca kabul edilmiş model için. Repoya veya iş akışına yazılmaz; yalnızca yerel ortam değişkeni ya da GitHub Actions secret. CI hiçbir model yayınlamaz. |
+
+Gemini tutor anahtarı (`GEMINI_API_KEY`) testlerde gerekmez: testler `?test=1` ile sabit tutor cevabı kullanır.
+
+## Geri dönüşün test edilmesi
+
+| Adım | Nasıl test edilir |
+|---|---|
+| `rollout.mode = "off"` / `"shadow"` | `npm run test:rollout` (öncelik sırası ve canary kovaları); tarayıcıda `?model=off` ve gölge mod testleri |
+| Model dosyası değişirse | Uygulama, `config.json`'daki SHA-256 ile uyuşmayan dosyayı reddeder (`test_config_ozeti_dosyayla_ayni`, KÖ8) |
+| Model tamamen kaldırılırsa | `model/` boşken `npm run build` modelsiz derler; oyun v1 kurallarıyla çalışır (KÖ8 aynı yolu sınar) |
+| Kabul edilmemiş sürüm | `publish_hf.py` reddeder (`tests/unit/test_release_guard.py`, 10 test) |
+
 ## v1.x
 
 Google Stitch tasarımı, AI Studio uygulaması, Cypress E2E testleri, tutor eval. Ayrıntılar `README.md` ve `eval/`.
