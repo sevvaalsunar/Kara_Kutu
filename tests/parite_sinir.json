@@ -1,0 +1,637 @@
+{
+  "model_version": "2.0.0",
+  "release_status": "reddedildi",
+  "model_sha256": "b91ba53e820ef6b5a5bdbce17746b13fde3d44051b4a8dbfbadc781738411640",
+  "model_dosyasi": "model/gelistirme/model.onnx",
+  "feature_order": [
+    "decision_time_sec",
+    "hesitation_count",
+    "wrong_attempts_current_concept",
+    "wrong_attempts_recent",
+    "hint_usage_rate",
+    "retry_count",
+    "difficulty_level",
+    "concept_mastery_rate",
+    "recent_success_rate",
+    "branch_risk_score",
+    "consecutive_errors"
+  ],
+  "output_semantics": "P(needs_learning_support = 1): oyuncunun bir sonraki kararında riskli seçeneği seçme olasılığı (spec.md §12).",
+  "support_threshold": 0.65,
+  "tolerans": 0.0001,
+  "uretici": "onnxruntime 1.20.1 (Python)",
+  "referanslar": [
+    {
+      "ad": "tumu_min",
+      "girdi": {
+        "decision_time_sec": 0.0,
+        "hesitation_count": 0.0,
+        "wrong_attempts_current_concept": 0.0,
+        "wrong_attempts_recent": 0.0,
+        "hint_usage_rate": 0.0,
+        "retry_count": 0.0,
+        "difficulty_level": 0.0,
+        "concept_mastery_rate": 0.0,
+        "recent_success_rate": 0.0,
+        "branch_risk_score": 0.0,
+        "consecutive_errors": 0.0
+      },
+      "beklenen_p": 0.3762325048446655,
+      "destek": false
+    },
+    {
+      "ad": "tumu_max",
+      "girdi": {
+        "decision_time_sec": 300.0,
+        "hesitation_count": 50.0,
+        "wrong_attempts_current_concept": 20.0,
+        "wrong_attempts_recent": 3.0,
+        "hint_usage_rate": 1.0,
+        "retry_count": 20.0,
+        "difficulty_level": 2.0,
+        "concept_mastery_rate": 1.0,
+        "recent_success_rate": 1.0,
+        "branch_risk_score": 1.0,
+        "consecutive_errors": 20.0
+      },
+      "beklenen_p": 0.9998891353607178,
+      "destek": true
+    },
+    {
+      "ad": "tumu_orta",
+      "girdi": {
+        "decision_time_sec": 150.0,
+        "hesitation_count": 25.0,
+        "wrong_attempts_current_concept": 10.0,
+        "wrong_attempts_recent": 1.5,
+        "hint_usage_rate": 0.5,
+        "retry_count": 10.0,
+        "difficulty_level": 1.0,
+        "concept_mastery_rate": 0.5,
+        "recent_success_rate": 0.5,
+        "branch_risk_score": 0.5,
+        "consecutive_errors": 10.0
+      },
+      "beklenen_p": 0.9866203665733337,
+      "destek": true
+    },
+    {
+      "ad": "yalniz_decision_time_sec_max",
+      "girdi": {
+        "decision_time_sec": 300.0,
+        "hesitation_count": 0.0,
+        "wrong_attempts_current_concept": 0.0,
+        "wrong_attempts_recent": 0.0,
+        "hint_usage_rate": 0.0,
+        "retry_count": 0.0,
+        "difficulty_level": 0.0,
+        "concept_mastery_rate": 0.0,
+        "recent_success_rate": 0.0,
+        "branch_risk_score": 0.0,
+        "consecutive_errors": 0.0
+      },
+      "beklenen_p": 0.9225074052810669,
+      "destek": true
+    },
+    {
+      "ad": "yalniz_hesitation_count_max",
+      "girdi": {
+        "decision_time_sec": 0.0,
+        "hesitation_count": 50.0,
+        "wrong_attempts_current_concept": 0.0,
+        "wrong_attempts_recent": 0.0,
+        "hint_usage_rate": 0.0,
+        "retry_count": 0.0,
+        "difficulty_level": 0.0,
+        "concept_mastery_rate": 0.0,
+        "recent_success_rate": 0.0,
+        "branch_risk_score": 0.0,
+        "consecutive_errors": 0.0
+      },
+      "beklenen_p": 0.9901706576347351,
+      "destek": true
+    },
+    {
+      "ad": "yalniz_wrong_attempts_current_concept_max",
+      "girdi": {
+        "decision_time_sec": 0.0,
+        "hesitation_count": 0.0,
+        "wrong_attempts_current_concept": 20.0,
+        "wrong_attempts_recent": 0.0,
+        "hint_usage_rate": 0.0,
+        "retry_count": 0.0,
+        "difficulty_level": 0.0,
+        "concept_mastery_rate": 0.0,
+        "recent_success_rate": 0.0,
+        "branch_risk_score": 0.0,
+        "consecutive_errors": 0.0
+      },
+      "beklenen_p": 0.9997462034225464,
+      "destek": true
+    },
+    {
+      "ad": "yalniz_wrong_attempts_recent_max",
+      "girdi": {
+        "decision_time_sec": 0.0,
+        "hesitation_count": 0.0,
+        "wrong_attempts_current_concept": 0.0,
+        "wrong_attempts_recent": 3.0,
+        "hint_usage_rate": 0.0,
+        "retry_count": 0.0,
+        "difficulty_level": 0.0,
+        "concept_mastery_rate": 0.0,
+        "recent_success_rate": 0.0,
+        "branch_risk_score": 0.0,
+        "consecutive_errors": 0.0
+      },
+      "beklenen_p": 0.2618868350982666,
+      "destek": false
+    },
+    {
+      "ad": "yalniz_hint_usage_rate_max",
+      "girdi": {
+        "decision_time_sec": 0.0,
+        "hesitation_count": 0.0,
+        "wrong_attempts_current_concept": 0.0,
+        "wrong_attempts_recent": 0.0,
+        "hint_usage_rate": 1.0,
+        "retry_count": 0.0,
+        "difficulty_level": 0.0,
+        "concept_mastery_rate": 0.0,
+        "recent_success_rate": 0.0,
+        "branch_risk_score": 0.0,
+        "consecutive_errors": 0.0
+      },
+      "beklenen_p": 0.5251810550689697,
+      "destek": false
+    },
+    {
+      "ad": "yalniz_retry_count_max",
+      "girdi": {
+        "decision_time_sec": 0.0,
+        "hesitation_count": 0.0,
+        "wrong_attempts_current_concept": 0.0,
+        "wrong_attempts_recent": 0.0,
+        "hint_usage_rate": 0.0,
+        "retry_count": 20.0,
+        "difficulty_level": 0.0,
+        "concept_mastery_rate": 0.0,
+        "recent_success_rate": 0.0,
+        "branch_risk_score": 0.0,
+        "consecutive_errors": 0.0
+      },
+      "beklenen_p": 0.0004968345165252686,
+      "destek": false
+    },
+    {
+      "ad": "yalniz_difficulty_level_max",
+      "girdi": {
+        "decision_time_sec": 0.0,
+        "hesitation_count": 0.0,
+        "wrong_attempts_current_concept": 0.0,
+        "wrong_attempts_recent": 0.0,
+        "hint_usage_rate": 0.0,
+        "retry_count": 0.0,
+        "difficulty_level": 2.0,
+        "concept_mastery_rate": 0.0,
+        "recent_success_rate": 0.0,
+        "branch_risk_score": 0.0,
+        "consecutive_errors": 0.0
+      },
+      "beklenen_p": 0.4647146761417389,
+      "destek": false
+    },
+    {
+      "ad": "yalniz_concept_mastery_rate_max",
+      "girdi": {
+        "decision_time_sec": 0.0,
+        "hesitation_count": 0.0,
+        "wrong_attempts_current_concept": 0.0,
+        "wrong_attempts_recent": 0.0,
+        "hint_usage_rate": 0.0,
+        "retry_count": 0.0,
+        "difficulty_level": 0.0,
+        "concept_mastery_rate": 1.0,
+        "recent_success_rate": 0.0,
+        "branch_risk_score": 0.0,
+        "consecutive_errors": 0.0
+      },
+      "beklenen_p": 0.5631957054138184,
+      "destek": false
+    },
+    {
+      "ad": "yalniz_recent_success_rate_max",
+      "girdi": {
+        "decision_time_sec": 0.0,
+        "hesitation_count": 0.0,
+        "wrong_attempts_current_concept": 0.0,
+        "wrong_attempts_recent": 0.0,
+        "hint_usage_rate": 0.0,
+        "retry_count": 0.0,
+        "difficulty_level": 0.0,
+        "concept_mastery_rate": 0.0,
+        "recent_success_rate": 1.0,
+        "branch_risk_score": 0.0,
+        "consecutive_errors": 0.0
+      },
+      "beklenen_p": 0.13670986890792847,
+      "destek": false
+    },
+    {
+      "ad": "yalniz_branch_risk_score_max",
+      "girdi": {
+        "decision_time_sec": 0.0,
+        "hesitation_count": 0.0,
+        "wrong_attempts_current_concept": 0.0,
+        "wrong_attempts_recent": 0.0,
+        "hint_usage_rate": 0.0,
+        "retry_count": 0.0,
+        "difficulty_level": 0.0,
+        "concept_mastery_rate": 0.0,
+        "recent_success_rate": 0.0,
+        "branch_risk_score": 1.0,
+        "consecutive_errors": 0.0
+      },
+      "beklenen_p": 0.3646436631679535,
+      "destek": false
+    },
+    {
+      "ad": "yalniz_consecutive_errors_max",
+      "girdi": {
+        "decision_time_sec": 0.0,
+        "hesitation_count": 0.0,
+        "wrong_attempts_current_concept": 0.0,
+        "wrong_attempts_recent": 0.0,
+        "hint_usage_rate": 0.0,
+        "retry_count": 0.0,
+        "difficulty_level": 0.0,
+        "concept_mastery_rate": 0.0,
+        "recent_success_rate": 0.0,
+        "branch_risk_score": 0.0,
+        "consecutive_errors": 20.0
+      },
+      "beklenen_p": 0.37997758388519287,
+      "destek": false
+    },
+    {
+      "ad": "rastgele_00",
+      "girdi": {
+        "decision_time_sec": 228.6832733154297,
+        "hesitation_count": 47.995079040527344,
+        "wrong_attempts_current_concept": 18.80181121826172,
+        "wrong_attempts_recent": 1.6249414682388306,
+        "hint_usage_rate": 0.5992685556411743,
+        "retry_count": 3.6475281715393066,
+        "difficulty_level": 0.10601609945297241,
+        "concept_mastery_rate": 0.23010237514972687,
+        "recent_success_rate": 0.7366770505905151,
+        "branch_risk_score": 0.8532894849777222,
+        "consecutive_errors": 8.226080894470215
+      },
+      "beklenen_p": 0.9999974966049194,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_01",
+      "girdi": {
+        "decision_time_sec": 255.4041748046875,
+        "hesitation_count": 26.117589950561523,
+        "wrong_attempts_current_concept": 11.889110565185547,
+        "wrong_attempts_recent": 1.0896592140197754,
+        "hint_usage_rate": 0.3365246057510376,
+        "retry_count": 7.653023719787598,
+        "difficulty_level": 0.5098665952682495,
+        "concept_mastery_rate": 0.6289670467376709,
+        "recent_success_rate": 0.8244386911392212,
+        "branch_risk_score": 0.8628761172294617,
+        "consecutive_errors": 17.096403121948242
+      },
+      "beklenen_p": 0.9987227320671082,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_02",
+      "girdi": {
+        "decision_time_sec": 6.759699821472168,
+        "hesitation_count": 24.353954315185547,
+        "wrong_attempts_current_concept": 14.038028717041016,
+        "wrong_attempts_recent": 0.033880479633808136,
+        "hint_usage_rate": 0.9089207053184509,
+        "retry_count": 2.1996471881866455,
+        "difficulty_level": 0.7922983169555664,
+        "concept_mastery_rate": 0.2889304757118225,
+        "recent_success_rate": 0.13253183662891388,
+        "branch_risk_score": 0.7255941033363342,
+        "consecutive_errors": 8.95726203918457
+      },
+      "beklenen_p": 0.9997090101242065,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_03",
+      "girdi": {
+        "decision_time_sec": 125.45649719238281,
+        "hesitation_count": 10.174954414367676,
+        "wrong_attempts_current_concept": 17.36813735961914,
+        "wrong_attempts_recent": 1.2389922142028809,
+        "hint_usage_rate": 0.37081119418144226,
+        "retry_count": 12.954010963439941,
+        "difficulty_level": 1.9234137535095215,
+        "concept_mastery_rate": 0.20775437355041504,
+        "recent_success_rate": 0.20311184227466583,
+        "branch_risk_score": 0.807220995426178,
+        "consecutive_errors": 17.14124870300293
+      },
+      "beklenen_p": 0.9934893846511841,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_04",
+      "girdi": {
+        "decision_time_sec": 27.223440170288086,
+        "hesitation_count": 38.448970794677734,
+        "wrong_attempts_current_concept": 19.49510383605957,
+        "wrong_attempts_recent": 1.8384811878204346,
+        "hint_usage_rate": 0.07876302301883698,
+        "retry_count": 11.936407089233398,
+        "difficulty_level": 1.5231374502182007,
+        "concept_mastery_rate": 0.49975550174713135,
+        "recent_success_rate": 0.2181944102048874,
+        "branch_risk_score": 0.04687455669045448,
+        "consecutive_errors": 12.57716178894043
+      },
+      "beklenen_p": 0.9997026920318604,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_05",
+      "girdi": {
+        "decision_time_sec": 103.79795837402344,
+        "hesitation_count": 16.711959838867188,
+        "wrong_attempts_current_concept": 19.238107681274414,
+        "wrong_attempts_recent": 1.31482994556427,
+        "hint_usage_rate": 0.3302859663963318,
+        "retry_count": 4.185189723968506,
+        "difficulty_level": 1.639157772064209,
+        "concept_mastery_rate": 0.5655918121337891,
+        "recent_success_rate": 0.3446965515613556,
+        "branch_risk_score": 0.5380295515060425,
+        "consecutive_errors": 4.693892478942871
+      },
+      "beklenen_p": 0.9999183416366577,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_06",
+      "girdi": {
+        "decision_time_sec": 1.4000576734542847,
+        "hesitation_count": 43.948482513427734,
+        "wrong_attempts_current_concept": 0.16743621230125427,
+        "wrong_attempts_recent": 0.9498392343521118,
+        "hint_usage_rate": 0.23361457884311676,
+        "retry_count": 9.593826293945312,
+        "difficulty_level": 1.3221321105957031,
+        "concept_mastery_rate": 0.4474382996559143,
+        "recent_success_rate": 0.1978285014629364,
+        "branch_risk_score": 0.7836204171180725,
+        "consecutive_errors": 7.108661651611328
+      },
+      "beklenen_p": 0.7172068357467651,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_07",
+      "girdi": {
+        "decision_time_sec": 210.62969970703125,
+        "hesitation_count": 42.966102600097656,
+        "wrong_attempts_current_concept": 9.784581184387207,
+        "wrong_attempts_recent": 1.8115036487579346,
+        "hint_usage_rate": 0.15807794034481049,
+        "retry_count": 16.799015045166016,
+        "difficulty_level": 1.4365772008895874,
+        "concept_mastery_rate": 0.13052447140216827,
+        "recent_success_rate": 0.9417563676834106,
+        "branch_risk_score": 0.1017741784453392,
+        "consecutive_errors": 12.691803932189941
+      },
+      "beklenen_p": 0.9608800411224365,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_08",
+      "girdi": {
+        "decision_time_sec": 268.71435546875,
+        "hesitation_count": 18.22340202331543,
+        "wrong_attempts_current_concept": 10.900747299194336,
+        "wrong_attempts_recent": 0.013344581238925457,
+        "hint_usage_rate": 0.9968822598457336,
+        "retry_count": 6.967609405517578,
+        "difficulty_level": 1.515052318572998,
+        "concept_mastery_rate": 0.9588668942451477,
+        "recent_success_rate": 0.9396668076515198,
+        "branch_risk_score": 0.7853525876998901,
+        "consecutive_errors": 17.828235626220703
+      },
+      "beklenen_p": 0.9987333416938782,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_09",
+      "girdi": {
+        "decision_time_sec": 5.277920246124268,
+        "hesitation_count": 23.232433319091797,
+        "wrong_attempts_current_concept": 9.95601749420166,
+        "wrong_attempts_recent": 1.5259188413619995,
+        "hint_usage_rate": 0.5329157710075378,
+        "retry_count": 17.327085494995117,
+        "difficulty_level": 0.1951160728931427,
+        "concept_mastery_rate": 0.9564165472984314,
+        "recent_success_rate": 0.6620985865592957,
+        "branch_risk_score": 0.6878136992454529,
+        "consecutive_errors": 4.731874942779541
+      },
+      "beklenen_p": 0.5113059282302856,
+      "destek": false
+    },
+    {
+      "ad": "rastgele_10",
+      "girdi": {
+        "decision_time_sec": 261.8202209472656,
+        "hesitation_count": 7.892948150634766,
+        "wrong_attempts_current_concept": 2.2615201473236084,
+        "wrong_attempts_recent": 2.3501927852630615,
+        "hint_usage_rate": 0.19500727951526642,
+        "retry_count": 2.784902334213257,
+        "difficulty_level": 1.1108049154281616,
+        "concept_mastery_rate": 0.9778160452842712,
+        "recent_success_rate": 0.9141783714294434,
+        "branch_risk_score": 0.9154754877090454,
+        "consecutive_errors": 14.445679664611816
+      },
+      "beklenen_p": 0.9089537262916565,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_11",
+      "girdi": {
+        "decision_time_sec": 80.81700897216797,
+        "hesitation_count": 34.99010467529297,
+        "wrong_attempts_current_concept": 14.474857330322266,
+        "wrong_attempts_recent": 0.4520385265350342,
+        "hint_usage_rate": 0.06905785202980042,
+        "retry_count": 3.911200523376465,
+        "difficulty_level": 1.898943305015564,
+        "concept_mastery_rate": 0.25202134251594543,
+        "recent_success_rate": 0.45192214846611023,
+        "branch_risk_score": 0.5856879949569702,
+        "consecutive_errors": 2.5657260417938232
+      },
+      "beklenen_p": 0.9998361468315125,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_12",
+      "girdi": {
+        "decision_time_sec": 146.0294189453125,
+        "hesitation_count": 43.61802673339844,
+        "wrong_attempts_current_concept": 18.05050277709961,
+        "wrong_attempts_recent": 2.7922909259796143,
+        "hint_usage_rate": 0.8837490677833557,
+        "retry_count": 18.156726837158203,
+        "difficulty_level": 1.2760366201400757,
+        "concept_mastery_rate": 0.6978340744972229,
+        "recent_success_rate": 0.29984310269355774,
+        "branch_risk_score": 0.7789057493209839,
+        "consecutive_errors": 19.265575408935547
+      },
+      "beklenen_p": 0.9993060827255249,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_13",
+      "girdi": {
+        "decision_time_sec": 178.0774383544922,
+        "hesitation_count": 25.783781051635742,
+        "wrong_attempts_current_concept": 8.294395446777344,
+        "wrong_attempts_recent": 2.615074396133423,
+        "hint_usage_rate": 0.050923511385917664,
+        "retry_count": 9.963518142700195,
+        "difficulty_level": 1.5388166904449463,
+        "concept_mastery_rate": 0.6082137823104858,
+        "recent_success_rate": 0.7712448239326477,
+        "branch_risk_score": 0.0558784119784832,
+        "consecutive_errors": 10.2802734375
+      },
+      "beklenen_p": 0.9642255306243896,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_14",
+      "girdi": {
+        "decision_time_sec": 280.7569885253906,
+        "hesitation_count": 1.867079496383667,
+        "wrong_attempts_current_concept": 10.616930961608887,
+        "wrong_attempts_recent": 1.3683794736862183,
+        "hint_usage_rate": 0.6107659935951233,
+        "retry_count": 15.505704879760742,
+        "difficulty_level": 0.058183155953884125,
+        "concept_mastery_rate": 0.7663224935531616,
+        "recent_success_rate": 0.17471131682395935,
+        "branch_risk_score": 0.5009291768074036,
+        "consecutive_errors": 6.20081901550293
+      },
+      "beklenen_p": 0.8910871744155884,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_15",
+      "girdi": {
+        "decision_time_sec": 277.5441589355469,
+        "hesitation_count": 36.389442443847656,
+        "wrong_attempts_current_concept": 11.462737083435059,
+        "wrong_attempts_recent": 2.651965618133545,
+        "hint_usage_rate": 0.7258079648017883,
+        "retry_count": 8.805520057678223,
+        "difficulty_level": 0.1568552404642105,
+        "concept_mastery_rate": 0.06883406639099121,
+        "recent_success_rate": 0.15287694334983826,
+        "branch_risk_score": 0.04395626112818718,
+        "consecutive_errors": 0.8930495381355286
+      },
+      "beklenen_p": 0.9995619058609009,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_16",
+      "girdi": {
+        "decision_time_sec": 76.58897399902344,
+        "hesitation_count": 22.285341262817383,
+        "wrong_attempts_current_concept": 1.2093700170516968,
+        "wrong_attempts_recent": 0.7868521809577942,
+        "hint_usage_rate": 0.6498034000396729,
+        "retry_count": 0.9187635779380798,
+        "difficulty_level": 0.5038309097290039,
+        "concept_mastery_rate": 0.7226899862289429,
+        "recent_success_rate": 0.11122983694076538,
+        "branch_risk_score": 0.6742514967918396,
+        "consecutive_errors": 8.943709373474121
+      },
+      "beklenen_p": 0.9696009159088135,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_17",
+      "girdi": {
+        "decision_time_sec": 36.25750732421875,
+        "hesitation_count": 8.711499214172363,
+        "wrong_attempts_current_concept": 12.568833351135254,
+        "wrong_attempts_recent": 1.1630529165267944,
+        "hint_usage_rate": 0.8938494324684143,
+        "retry_count": 17.020902633666992,
+        "difficulty_level": 1.602288842201233,
+        "concept_mastery_rate": 0.22477158904075623,
+        "recent_success_rate": 0.9271659851074219,
+        "branch_risk_score": 0.2989419102668762,
+        "consecutive_errors": 17.082185745239258
+      },
+      "beklenen_p": 0.44553104043006897,
+      "destek": false
+    },
+    {
+      "ad": "rastgele_18",
+      "girdi": {
+        "decision_time_sec": 171.7198944091797,
+        "hesitation_count": 3.107914686203003,
+        "wrong_attempts_current_concept": 14.420899391174316,
+        "wrong_attempts_recent": 1.5355756282806396,
+        "hint_usage_rate": 0.7501888275146484,
+        "retry_count": 19.239858627319336,
+        "difficulty_level": 0.5822209715843201,
+        "concept_mastery_rate": 0.2686028778553009,
+        "recent_success_rate": 0.0009875479154288769,
+        "branch_risk_score": 0.23747368156909943,
+        "consecutive_errors": 3.307727098464966
+      },
+      "beklenen_p": 0.81834876537323,
+      "destek": true
+    },
+    {
+      "ad": "rastgele_19",
+      "girdi": {
+        "decision_time_sec": 162.13766479492188,
+        "hesitation_count": 9.637468338012695,
+        "wrong_attempts_current_concept": 3.8243398666381836,
+        "wrong_attempts_recent": 2.8370792865753174,
+        "hint_usage_rate": 0.29549336433410645,
+        "retry_count": 8.011361122131348,
+        "difficulty_level": 0.6255489587783813,
+        "concept_mastery_rate": 0.6818893551826477,
+        "recent_success_rate": 0.46630099415779114,
+        "branch_risk_score": 0.11949899047613144,
+        "consecutive_errors": 15.794200897216797
+      },
+      "beklenen_p": 0.6503145098686218,
+      "destek": true
+    }
+  ]
+}

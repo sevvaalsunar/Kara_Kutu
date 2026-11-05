@@ -106,6 +106,20 @@ d = labeled(generate(6400, 20267800))
 hgb = HistGradientBoostingClassifier(random_state=0, class_weight="balanced").fit(d[FEATURES], d[LABEL])
 R["model_sinifi_bagimsiz_test"] = {"lojistik_6400": curve["6400"], "gradient_boosting_6400": m(ybt, hgb.predict_proba(big_test[FEATURES])[:, 1])}
 
+# 7b) Kalibrasyon: tahmin edilen olasılık, gözlenen orana ne kadar yakın? (yayın modeli, test kümesi)
+from sklearn.metrics import brier_score_loss  # noqa: E402
+bins = np.linspace(0, 1, 11)
+tab = []
+for lo_, hi_ in zip(bins[:-1], bins[1:]):
+    msk = (p_te >= lo_) & (p_te < hi_ if hi_ < 1 else p_te <= hi_)
+    if msk.sum():
+        tab.append({"aralik": f"{lo_:.1f}-{hi_:.1f}", "n": int(msk.sum()),
+                    "ort_tahmin": round(float(p_te[msk].mean()), 3), "gozlenen_oran": round(float(y_te[msk].mean()), 3)})
+R["kalibrasyon_test"] = {"brier": round(float(brier_score_loss(y_te, p_te)), 4),
+                         "brier_taban_oranla": round(float(brier_score_loss(y_te, np.full_like(p_te, y_te.mean()))), 4),
+                         "ortalama_tahmin": round(float(p_te.mean()), 4), "gozlenen_pozitif_oran": round(float(y_te.mean()), 4),
+                         "tablo": tab}
+
 # 8) Bayes tavanı (data/tavan_analizi.json)
 R["bayes_tavani"] = json.loads((ROOT / "data" / "tavan_analizi.json").read_text())
 

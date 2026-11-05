@@ -331,6 +331,10 @@ def main() -> int:
     log("1/7 Veri yükleniyor ve doğrulanıyor")
     df, info = load_dataset(Path(a.veri), settings["bolme"]["kat"])
     log(f"    {info}")
+    if info["gercek_oturum"] < gates_cfg["gercek_oturum_min"]:
+        log(f"    UYARI: Yalnızca {info['gercek_oturum']} gerçek oturum var (gerekli {gates_cfg['gercek_oturum_min']}). "
+            f"Aşağıdaki metrikler {'tamamen ' if info['gercek_oturum'] == 0 else 'büyük ölçüde '}SENTETİK veriye dayanır ve "
+            "gerçek oyuncu başarısını göstermez. Model bu durumda KABUL edilemez.")
 
     log("2/7 Oturum gruplu bölme")
     tr, te = split(df, settings)

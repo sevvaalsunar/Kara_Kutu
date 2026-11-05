@@ -9,6 +9,7 @@ import {
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const REF = JSON.parse(readFileSync(join(ROOT, 'tests', 'parite.json'), 'utf8'));
+const SINIR = JSON.parse(readFileSync(join(ROOT, 'tests', 'parite_sinir.json'), 'utf8'));
 const refP = (ad) => REF.referanslar.find((r) => r.ad === ad).beklenen_p;
 const FROZEN = { freezeDate: true };
 
@@ -240,6 +241,18 @@ export const parite = [
       expect(d < REF.tolerans, `${r.ad}: |${got} − ${r.beklenen_p}| = ${d}`);
     }
   }],
+  ['Sınır/normal/uç değer kümesi (34 girdi): |p_python − p_tarayıcı| < 1e-4', async (p) => {
+    await visit(p, '/?test=1&debug=1');
+    await modelHazir(p);
+    expect(SINIR.model_sha256 === REF.model_sha256, 'aynı model');
+    let worst = 0;
+    for (const r of SINIR.referanslar) {
+      const got = await p.evaluate((f) => window.__KK_MODEL__.predict(f), r.girdi);
+      worst = Math.max(worst, Math.abs(got - r.beklenen_p));
+      expect(Math.abs(got - r.beklenen_p) < SINIR.tolerans, `${r.ad}: ${got} ≠ ${r.beklenen_p}`);
+    }
+    pariteSonuclari.push({ ad: `sinir_kumesi (${SINIR.referanslar.length} girdi)`, en_buyuk_fark: worst });
+  }],
   ['Tarayıcıdaki model dosyası parite.json ile aynı model', async (p) => {
     await visit(p, '/?test=1&debug=1');
     const sha = await p.evaluate(async () => (await (await fetch('/model/config.json')).json()).artifact.sha256);
@@ -278,7 +291,7 @@ import { execFileSync, spawnSync } from 'node:child_process';
 import { mkdtempSync, readdirSync, existsSync, copyFileSync, mkdirSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 
-async function katilimci(p, dir, { seviye, plan, tekrar }) {
+export async function katilimci(p, dir, { seviye, plan, tekrar }) {
   const cdp = await p.createCDPSession();
   await cdp.send('Browser.setDownloadBehavior', { behavior: 'allow', downloadPath: dir });
   await visit(p, '/?test=1&debug=1&veri=1');

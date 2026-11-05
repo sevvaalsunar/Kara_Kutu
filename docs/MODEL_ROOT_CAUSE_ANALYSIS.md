@@ -74,6 +74,31 @@ En iyi eşikte bile 0.70'e ulaşılmıyor. Eşik sorunu ana nedeni ağırlaştı
 
 §2'deki tablo, etiketin taban oranının sonraki sahneye göre 0.29 ile 0.48 arasında değiştiğini gösteriyor. Sonraki sahne tahmin anında bilinir (seçimden belirlenir) ama modele doğrudan verilmiyor; yalnızca `branch_risk_score` üzerinden dolaylı olarak var. Bu, gelecekteki bir sürüm için ön kayıt adayıdır. Burada eklenmedi, çünkü sonuçlar görüldükten sonra özellik eklemek kapıyı anlamsızlaştırır.
 
+### Neden 5 — Olasılıklar kalibre değil (`class_weight="balanced"`)
+
+Dengeli sınıf ağırlıkları, tahminleri azınlık sınıfına doğru kaydırır. Test kümesinde:
+
+| | Değer |
+|---|---|
+| Ortalama tahmin | 0.491 |
+| Gözlenen pozitif oran | 0.341 |
+| Brier skoru (model) | 0.236 |
+| Brier skoru (herkese taban oranı söyleyen sabit tahminci) | 0.225 |
+
+| Tahmin aralığı | n | Ortalama tahmin | Gözlenen oran |
+|---|---|---|---|
+| 0.2–0.3 | 15 | 0.267 | 0.133 |
+| 0.3–0.4 | 70 | 0.357 | 0.214 |
+| 0.4–0.5 | 87 | 0.443 | 0.264 |
+| 0.5–0.6 | 77 | 0.552 | 0.481 |
+| 0.6–0.7 | 36 | 0.648 | 0.500 |
+| 0.7–0.8 | 16 | 0.741 | 0.562 |
+| 0.8–0.9 | 7 | 0.827 | 0.143 |
+
+Model sıralamada taban orandan iyi (AUC 0.651), ama olasılık olarak taban orandan kötü. Sonuç: spec §14'teki "P(needs_learning_support = 1)" yorumu bu model için geçerli değil. Panelde "p = 0.73" görünmesi "%73 olasılık" anlamına gelmez. 0.65 eşiği de kalibre olmayan bir puana uygulanıyor.
+
+v2.1 ön kayıt adayı: `class_weight` olmadan eğitim ya da açıkça tanımlanmış bir kalibrasyon adımı, ve kalibrasyon için bir kabul ölçütü (örneğin Brier skoru taban orandan iyi). Bu bulgu v2.0'da modeli veya eşiği **değiştirmez**.
+
 ## 4. Elenen nedenler
 
 | Aday neden | Sonuç | Kanıt |
@@ -109,6 +134,7 @@ Bu alternatifin metrikleri **bilerek hesaplanmadı**. Önce hesaplayıp sonra se
    - Hedef: mevcut hedef ya da §5'teki öneri; biri seçilmeli.
    - Ek özellik: `next_scene` (tek sıcak kodlanmış).
    - Eşik politikası: sabit 0.65 korunabilir; ya da kalibrasyon yöntemi ve eşik ön kayıtta açıkça tanımlanmalı.
+   - Kalibrasyon: `class_weight="balanced"` yerine kalibre olasılıklar ve bir kalibrasyon kabul ölçütü (Neden 5).
    - Gerekçe: bu belge.
 3. Gerçek veriyle yeniden eğitim. Kapılar geçerse **kabul**, geçmezse sonuç yine kaydedilir.
 

@@ -17,6 +17,18 @@ describe('Diferansiyel parite: Python ↔ tarayıcı', () => {
     });
   });
 
+  it('Sınır/normal/uç değer kümesinde de |p_python − p_tarayıcı| < 1e-4', () => {
+    cy.readFile('../tests/parite_sinir.json').then((ref) => {
+      cy.visit('/?test=1&debug=1');
+      cy.modelHazir();
+      ref.referanslar.forEach((r) => {
+        cy.window()
+          .then((w) => w.__KK_MODEL__.predict(r.girdi))
+          .then((p) => expect(Math.abs(p - r.beklenen_p), r.ad).to.be.lessThan(ref.tolerans));
+      });
+    });
+  });
+
   it('Tarayıcıdaki model dosyası parite.json ile aynı model', () => {
     cy.readFile('../tests/parite.json').then((ref) => {
       cy.request({ url: '/model/config.json' }).its('body.artifact.sha256').should('eq', ref.model_sha256);

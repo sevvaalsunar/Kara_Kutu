@@ -97,9 +97,9 @@ Dağıtım kolları: `?model=off`, gölge, canary (oturum kovası), açık. Kabu
 ## Testler
 
 ```bash
-python -m pytest -q tests                  # 43 test: birim, kapılar, eğitim sağlamlığı, birleştirici, TS↔Python sözleşmesi, ORT-web paritesi, dağıtım simülasyonu
+python -m pytest -q tests                  # 55 test: birim, kapılar, eğitim sağlamlığı, birleştirici, TS↔Python sözleşmesi, ORT-web paritesi, dağıtım simülasyonu
 cd app && npm run lint && npm run build
-cd tools/browser-e2e && npm install && ./with-server.sh node run.mjs              # gerçek Chromium: 34 test (dev sunucusu)
+cd tools/browser-e2e && npm install && ./with-server.sh node run.mjs              # gerçek Chromium: 35 test (dev sunucusu)
 PROD=1 ./with-server.sh node run.mjs parite adaptif model                        # üretim derlemesi (dist/)
 cd app && npx cypress run                  # Cypress (uygulama çalışırken; app/README-cypress.md)
 ```
@@ -131,25 +131,33 @@ Google Stitch (tasarım) → Google AI Studio (v1 uygulaması) → Cypress (E2E)
 
 ## Kodlama aracı beyanı (v2.0)
 
-- **Kullanılan araç:** v2.0 kodu, Claude (Anthropic) ile claude.ai sohbet arayüzündeki kod çalıştırma ortamında yazıldı ve hata ayıklandı.
-- **Aracın yaptıkları:**
-  - Repo denetimi; spec §11–§20 taslağı.
-  - Veri şeması, sentetik üretici, birleştirici; `train.py`, ONNX dönüşümü.
-  - Tarayıcı entegrasyonu, Python Oracle, testler, tarayıcı test portları.
-  - Demo kaydı, kök neden analizi, belgeler.
-- **Araç tarafından verilen mühendislik kararları:**
-  - Etiket tanımı, özellik seti, 0.65 eşiği ve kabul kapıları; tarayıcı içi çıkarım.
-  - Kabul edilmemiş modelin yalnızca gölgede çalışması.
-  - Kapı geçmeyince eşiğin, hedefin veya üreticinin değiştirilmemesi.
-  - `?test=1` oturumlarının `kaynak=test` olarak ayrılması.
-- **Otomatik olarak gerçekten çalıştırılan doğrulamalar:**
-  - 43 pytest testi; `tsc` ve `vite build`.
-  - Gerçek headless Chromium 153'te 34 tarayıcı testi (v1 regresyonu 19/19 dahil) ve üretim derlemesinde 12 test.
-  - Python ↔ tarayıcı paritesi: 5/5, fark 0.
-  - Kanıtlar `docs/FINAL_REPORT.md`'de.
-- **Doğrulama sırasında bulunan ve düzeltilen hatalar:** 5 hata; liste `docs/FINAL_AUDIT.md`'de.
-- **İnsan incelemesi:** _Repo sahibi tarafından doldurulacak._ Bu alan bilerek boş bırakıldı; araç, kimin neyi incelediğini bilemez ve uydurmaz. Doldurulacaklar:
-  - [ ] Hangi dosyaları/bölümleri okudum ve onayladım: …
-  - [ ] Elle değiştirdiğim veya geri aldığım yerler: …
-  - [ ] Kendi cihazımda oynayıp kontrol ettiğim akışlar (ör. telefonda `?veri=1`): …
-  - [ ] Cypress'in CI'daki ilk koşu sonucu: …
+- **Araç:** v2.0'ın kodu, testleri, analizleri ve belgeleri Claude (Anthropic) ile, claude.ai sohbet arayüzündeki kod çalıştırma ortamında yazıldı ve hata ayıklandı.
+- **Aracın verdiği mühendislik kararları:**
+  - Etiket tanımı, 11 özellik, 0.65 eşiği ve kabul kapıları; eğitimden önce sabitlendi (`6ffaaeb`).
+  - Tarayıcı içi çıkarım.
+  - Kabul edilmemiş modelin yalnızca gölgede çalışması; kapı geçmeyince eşiğin, hedefin ve üreticinin değiştirilmemesi.
+- **Gerçekten çalıştırılan doğrulamalar:** pytest, `tsc`, `vite build`, gerçek headless Chromium'da Cypress senaryolarının puppeteer portları (dev ve üretim derlemesi), Python ↔ tarayıcı paritesi ve demo kaydı. Sayılar ve kanıtlar: `docs/FINAL_REPORT.md`, `docs/kanit/`.
+- **Çalıştırılamayanlar:** Cypress dosyalarının kendisi (ikili indirilemedi; CI'da koşacak), Hugging Face yayını (kabul edilmiş model yok) ve gerçek kullanıcı oturumları (0/15).
+- **Doğrulama sırasında bulunan hatalar:** 7 hata bulundu ve düzeltildi; liste `docs/FINAL_AUDIT.md` ve `docs/FINAL_REPORT.md`'de.
+
+## İnceleme kaydı
+
+### Araç tarafından yapılan teknik incelemeler (yapıldı)
+
+- [x] Spec §11–§20 ile `data/schema.py`, `app/src/ml/features.ts` ve `train.py` arasındaki tutarlılık. Formül eşitliği 60 oturumluk TS↔Python sözleşme testiyle doğrulandı.
+- [x] Etiket sızıntısı: gruplu bölme ve tek özellik AUC'si ≤ 0.98; özellikler yalnızca geçmişten hesaplanıyor.
+- [x] Kabul kapısı ve yayın koruması: başarısız eğitimin, aday ve reddedilmiş modelin ve özet uyuşmazlığının yayını engellediği testlerle gösterildi.
+- [x] Gizlilik: CSV'de kişisel veri sütunu yok; doğrulayıcı böyle sütunları reddediyor; veri sunucuya gitmiyor.
+- [x] Tutor kuralı (§7): uyarlama destek metinleri seçenek adı veya harfi içermiyor (otomatik test).
+- [x] Gizli anahtar taraması: repoda token veya API anahtarı yok.
+- [x] Mobil düzen: 390 px ekranda oyun kontrollerinin örtülmediği gerçek tarayıcıda doğrulandı (hata #1 düzeltildi).
+
+### Repo sahibinin kişisel incelemesi (yalnızca Şevval Sunar doldurabilir)
+
+Bu maddeler bilerek boş bırakıldı; araç kimin neyi incelediğini bilemez ve bunu uydurmaz.
+
+- [ ] Okuyup onayladığım dosyalar/bölümler: …
+- [ ] Elle değiştirdiğim veya geri aldığım yerler: …
+- [ ] Kendi telefonumda `?veri=1` ile oynayıp kontrol ettiğim akışlar: …
+- [ ] Demo videosunu izledim ve dürüstlük notlarının yeterli olduğunu onaylıyorum: …
+- [ ] CI'ın ilk koşu sonucu (Cypress dahil): …

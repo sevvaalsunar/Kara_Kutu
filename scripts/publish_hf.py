@@ -33,7 +33,7 @@ def fail(msg: str) -> int:
     return 1
 
 
-def preflight() -> tuple[dict, dict] | str:
+def preflight(MODEL: Path = MODEL) -> tuple[dict, dict] | str:
     missing = [f for f in FILES if not (MODEL / f).exists()]
     if missing:
         return f"model/ altında eksik dosya: {missing}. (Reddedilmiş model model/gelistirme/ altındadır ve yayınlanamaz.)"

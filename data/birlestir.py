@@ -2,6 +2,7 @@
 
 Kullanım:
     python data/birlestir.py
+    python data/birlestir.py --gecersizleri-atla   # hatalı dosyaları gercek/reddedilen/ altına taşır, kalanları birleştirir
     python data/birlestir.py --gercek-dizin <klasör> --cikti <csv> --rapor <md>   (testler için)
 
 Girdi : data/sentetik.csv, data/gercek/*.csv (oyunun "Oturum verisini indir" çıktısı)
@@ -106,6 +107,8 @@ def main() -> int:
     ap.add_argument("--gercek-dizin", default=str(ROOT / "gercek"))
     ap.add_argument("--cikti", default=str(ROOT / "oturumlar.csv"))
     ap.add_argument("--rapor", default=str(ROOT / "VERI_RAPORU.md"))
+    ap.add_argument("--gecersizleri-atla", action="store_true",
+                    help="Hatalı dosyaları <gercek>/reddedilen/ altına gerekçesiyle taşı ve kalanları birleştir")
     a = ap.parse_args()
 
     parts = []
@@ -118,9 +121,21 @@ def main() -> int:
         parts.append(df)
     files = sorted(Path(a.gercek_dizin).glob("*.csv"))
     frames, errors, warnings = check_real_files(files)
-    if errors:
+    if errors and not a.gecersizleri_atla:
         print("REDDEDİLDİ (birleştirme yapılmadı):\n  - " + "\n  - ".join(errors))
+        print("İpucu: --gecersizleri-atla hatalı dosyaları ayırıp geçerlileri birleştirir.")
         return 1
+    if errors:
+        rej = Path(a.gercek_dizin) / "reddedilen"
+        rej.mkdir(exist_ok=True)
+        bad_names = {e.split(":", 1)[0] for e in errors}
+        for name in bad_names:
+            (Path(a.gercek_dizin) / name).rename(rej / name)
+        (rej / "NEDENLER.txt").write_text("\n".join(errors) + "\n", encoding="utf-8")
+        print(f"{len(bad_names)} hatalı dosya {rej} altına taşındı (nedenler: NEDENLER.txt).")
+        files = sorted(Path(a.gercek_dizin).glob("*.csv"))
+        frames, errors, warnings = check_real_files(files)
+        warnings = [f"Reddedilen dosya: {e}" for e in (rej / "NEDENLER.txt").read_text(encoding="utf-8").splitlines()] + warnings
     parts += frames
     if not parts:
         print("Birleştirilecek veri yok.")

@@ -20,6 +20,7 @@ import onnxruntime as ort
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = Path(__file__).with_name("parite.json")
+OUT_SINIR = Path(__file__).with_name("parite_sinir.json")
 TOLERANS = 1e-4
 
 # Belgelenmiş 5 referans girdi (spec.md §13 sırası ve birimleri). Değerler oyunda oluşabilecek durumlardır.
@@ -52,6 +53,22 @@ REFERANSLAR = [
 ]
 
 
+def sinir_girdileri(cfg: dict) -> list[dict]:
+    """Sınır/normal/uç değer kümesi: tümü min, tümü max, tümü orta, her özellik tek başına max, 20 tohumlu rastgele."""
+    order = cfg["input"]["feature_order"]
+    spec = cfg["input"]["features"]
+    lo = {f: float(spec[f]["min"]) for f in order}
+    hi = {f: float(spec[f]["max"]) for f in order}
+    mid = {f: (lo[f] + hi[f]) / 2 for f in order}
+    out = [{"ad": "tumu_min", "girdi": lo}, {"ad": "tumu_max", "girdi": hi}, {"ad": "tumu_orta", "girdi": mid}]
+    for f in order:
+        out.append({"ad": f"yalniz_{f}_max", "girdi": {**lo, f: hi[f]}})
+    rng = np.random.default_rng(20261105)
+    for i in range(20):
+        out.append({"ad": f"rastgele_{i:02d}", "girdi": {f: float(np.float32(lo[f] + rng.random() * (hi[f] - lo[f]))) for f in order}})
+    return out
+
+
 def predict(model_path: Path, order: list[str], inputs: list[dict]) -> list[float]:
     sess = ort.InferenceSession(str(model_path), providers=["CPUExecutionProvider"])
     X = np.array([[r[f] for f in order] for r in inputs], dtype=np.float32)
@@ -63,6 +80,7 @@ def main() -> int:
     ap.add_argument("--model", default=str(ROOT / "model" / "model.onnx"))
     ap.add_argument("--config", default=None)
     ap.add_argument("--uret", action="store_true")
+    ap.add_argument("--sinir", action="store_true", help="Ek sınır/uç değer kümesi (parite_sinir.json)")
     a = ap.parse_args()
     model = Path(a.model).resolve()
     cfg_path = Path(a.config) if a.config else model.with_name("config.json")
@@ -72,7 +90,9 @@ def main() -> int:
     cfg = json.loads(cfg_path.read_text(encoding="utf-8"))
     order = cfg["input"]["feature_order"]
     sha = hashlib.sha256(model.read_bytes()).hexdigest()
-    probs = predict(model, order, [r["girdi"] for r in REFERANSLAR])
+    refs = sinir_girdileri(cfg) if a.sinir else REFERANSLAR
+    out_path = OUT_SINIR if a.sinir else OUT
+    probs = predict(model, order, [r["girdi"] for r in refs])
 
     if a.uret:
         doc = {
@@ -86,15 +106,15 @@ def main() -> int:
             "tolerans": TOLERANS,
             "uretici": f"onnxruntime {ort.__version__} (Python)",
             "referanslar": [{**r, "beklenen_p": p, "destek": p >= cfg["support_threshold"]}
-                            for r, p in zip(REFERANSLAR, probs)],
+                            for r, p in zip(refs, probs)],
         }
-        OUT.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-        for r, p in zip(REFERANSLAR, probs):
+        out_path.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        for r, p in zip(refs, probs):
             print(f"{r['ad']:<28} p = {p:.7f}  {'DESTEK' if p >= cfg['support_threshold'] else 'standart'}")
-        print(f"→ {OUT}")
+        print(f"→ {out_path}")
         return 0
 
-    doc = json.loads(OUT.read_text(encoding="utf-8"))
+    doc = json.loads(out_path.read_text(encoding="utf-8"))
     if doc["model_sha256"] != sha:
         print(f"UYARI: parite.json başka bir modelden üretilmiş ({doc['model_sha256'][:12]} ≠ {sha[:12]}).")
         return 1

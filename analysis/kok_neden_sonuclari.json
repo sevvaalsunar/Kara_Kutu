@@ -173,6 +173,56 @@
       "pozitif_tahmin_orani": 0.1685
     }
   },
+  "kalibrasyon_test": {
+    "brier": 0.2363,
+    "brier_taban_oranla": 0.2247,
+    "ortalama_tahmin": 0.4905,
+    "gozlenen_pozitif_oran": 0.3409,
+    "tablo": [
+      {
+        "aralik": "0.2-0.3",
+        "n": 15,
+        "ort_tahmin": 0.267,
+        "gozlenen_oran": 0.133
+      },
+      {
+        "aralik": "0.3-0.4",
+        "n": 70,
+        "ort_tahmin": 0.357,
+        "gozlenen_oran": 0.214
+      },
+      {
+        "aralik": "0.4-0.5",
+        "n": 87,
+        "ort_tahmin": 0.443,
+        "gozlenen_oran": 0.264
+      },
+      {
+        "aralik": "0.5-0.6",
+        "n": 77,
+        "ort_tahmin": 0.552,
+        "gozlenen_oran": 0.481
+      },
+      {
+        "aralik": "0.6-0.7",
+        "n": 36,
+        "ort_tahmin": 0.648,
+        "gozlenen_oran": 0.5
+      },
+      {
+        "aralik": "0.7-0.8",
+        "n": 16,
+        "ort_tahmin": 0.741,
+        "gozlenen_oran": 0.562
+      },
+      {
+        "aralik": "0.8-0.9",
+        "n": 7,
+        "ort_tahmin": 0.827,
+        "gozlenen_oran": 0.143
+      }
+    ]
+  },
   "bayes_tavani": {
     "n": 1610,
     "roc_auc_tavan": 0.7357,

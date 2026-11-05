@@ -1,12 +1,14 @@
 ## pytest
-...........................................                              [100%]
-43 passed in 39.02s
+55 passed in 31.13s
 ## veri doğrulama
 GEÇERLİ   data/oturumlar.csv: 2010 satır, 0 gerçek oturum, 400 sentetik oturum
 ## sentetik tekrarlanabilirlik
 aynı tohum → aynı dosya
 ## parite (Python Oracle)
 GEÇTİ: en büyük fark 0.00e+00 (tolerans 0.0001)
+GEÇTİ: en büyük fark 0.00e+00 (tolerans 0.0001)
+## ORT-web (Node)
+GEÇTİ: 39 girdi (5 referans + sınır kümesi), en büyük fark 1.79e-7 (tolerans 0.0001), onnxruntime-web 1.30.0
 ## yayın reddi
 YAYIN REDDEDİLDİ: model/ altında eksik dosya: ['model.onnx', 'config.json', 'metrics.json', 'model_version.json']. (Reddedilmiş model model/gelistirme/ altındadır ve yayınlanamaz.)
 çıkış=1
@@ -18,4 +20,4 @@ temiz
 ## vite build
 [sync-model] kara-kutu-destek 2.0.0 (reddedildi) ← /home/claude/Kara_Kutu/model/gelistirme
 [sync-model] ORT-web WASM dosyaları → public/ort/
-✓ built in 3.85s
+✓ built in 2.29s

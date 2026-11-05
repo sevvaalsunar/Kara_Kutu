@@ -19,6 +19,14 @@ def test_python_oracle_parite_json_ile_ayni():
     assert r.returncode == 0, r.stdout
 
 
+def test_sinir_kumesi_python_oracle_ile_ayni():
+    sinir = json.loads((ROOT / "tests" / "parite_sinir.json").read_text(encoding="utf-8"))
+    assert sinir["model_sha256"] == REF["model_sha256"] and len(sinir["referanslar"]) == 34
+    r = subprocess.run([sys.executable, str(ROOT / "tests" / "parite.py"), "--sinir", "--model", str(ROOT / REF["model_dosyasi"])],
+                       capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout
+
+
 def test_onnxruntime_web_python_ile_ayni():
     r = subprocess.run(["node", "scripts/parity-web.mjs"], cwd=ROOT / "app", capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr

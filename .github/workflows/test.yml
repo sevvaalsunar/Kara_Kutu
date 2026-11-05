@@ -70,8 +70,12 @@ jobs:
           path: tools/browser-e2e/sonuclar.json
 
   cypress:
+    # Cypress dosyalarının kendisi. Geliştirme ortamında Cypress ikilisi indirilemediği için ilk kez burada koşar.
+    # Üretim derlemesine karşı koşar: Vite dev sunucusunun bağımlılık optimizasyonu sırasında sayfayı yeniden
+    # yüklemesi ilk testi kararsız yapabilir; dist/ ise GitHub Pages'a gidenle aynıdır.
     runs-on: ubuntu-latest
     needs: python-ve-sozlesme
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -79,15 +83,21 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: app/package-lock.json
-      - working-directory: app
+      - name: Bağımlılıklar (Cypress ikilisi dahil)
+        working-directory: app
         run: npm ci
-      - name: Cypress (v1 regresyon + v2.0 adaptif, model, parite, veri)
+      - name: Üretim derlemesi (model ve ORT WASM dosyaları dist/ içine kopyalanır)
+        working-directory: app
+        run: npm run build
+      - name: Cypress (v1 regresyon + v2.0 adaptif, model, parite, sınır paritesi, veri)
         uses: cypress-io/github-action@v6
         with:
           working-directory: app
           install: false
-          start: npm run dev
-          wait-on: 'http://localhost:3000'
+          start: npm run serve:prod
+          wait-on: 'http://localhost:3000/model/config.json'
+          wait-on-timeout: 120
+          browser: electron
           spec: |
             cypress/e2e/yollar.cy.js
             cypress/e2e/kabul.cy.js
@@ -100,3 +110,10 @@ jobs:
         with:
           name: cypress-videolari
           path: app/cypress/videos
+          if-no-files-found: ignore
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-hata-ekran-goruntuleri
+          path: app/cypress/screenshots
+          if-no-files-found: ignore

@@ -122,7 +122,9 @@ def main(argv: list[str]) -> int:
         else:
             real = df.loc[df.kaynak == "gercek", "oturum_id"].nunique()
             synth = df.loc[df.kaynak == "sentetik", "oturum_id"].nunique()
-            print(f"GEÇERLİ   {path}: {len(df)} satır, {real} gerçek oturum, {synth} sentetik oturum")
+            test = df.loc[df.kaynak == "test", "oturum_id"].nunique()
+            print(f"GEÇERLİ   {path}: {len(df)} satır, {real} gerçek oturum, {synth} sentetik oturum"
+                  + (f", {test} TEST oturumu (eğitime giremez)" if test else ""))
     return status
 
 

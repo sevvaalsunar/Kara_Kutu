@@ -1,80 +1,104 @@
 {
-  "tarih": "2026-11-05T10:41:53.921Z",
+  "tarih": "2026-11-05T19:08:12.735Z",
   "tarayici": "@sparticuz/chromium",
-  "gecen": 12,
-  "toplam": 12,
+  "gecen": 16,
+  "toplam": 16,
   "sonuclar": [
-    {
-      "suite": "parite",
-      "title": "5 referans girdinin hepsinde |p_python − p_tarayıcı| < 1e-4",
-      "ok": true,
-      "ms": 863
-    },
-    {
-      "suite": "parite",
-      "title": "Tarayıcıdaki model dosyası parite.json ile aynı model",
-      "ok": true,
-      "ms": 159
-    },
     {
       "suite": "adaptif",
       "title": "KÖ6: Zorlanan oyuncu kavram özeti ve sonraki kararda ek destek alır",
       "ok": true,
-      "ms": 2263
+      "ms": 2435
     },
     {
       "suite": "adaptif",
       "title": "KÖ7: Akıcı oyuncu standart akışta kalır",
       "ok": true,
-      "ms": 749
+      "ms": 1917
     },
     {
       "suite": "adaptif",
       "title": "Destek alan deneyimli oyuncunun sonraki geri sayımı 90 sn olur",
       "ok": true,
-      "ms": 1911
+      "ms": 955
     },
     {
       "suite": "adaptif",
       "title": "Destek soruları seçenek adı veya harfi önermez (§7)",
       "ok": true,
-      "ms": 962
+      "ms": 1954
     },
     {
       "suite": "model",
       "title": "Model yüklenir; sürüm ve statü debug panelinde görünür",
       "ok": true,
-      "ms": 755
+      "ms": 964
     },
     {
       "suite": "model",
       "title": "Kabul edilmemiş model varsayılan olarak yalnızca gölgede çalışır",
       "ok": true,
-      "ms": 437
+      "ms": 451
     },
     {
       "suite": "model",
       "title": "Gölge modda olasılık hesaplanır ama oyun değişmez",
       "ok": true,
-      "ms": 1575
+      "ms": 2038
     },
     {
       "suite": "model",
       "title": "KÖ8: Model indirilemezse oyun v1 kurallarıyla sonuna kadar oynanır",
       "ok": true,
-      "ms": 776
+      "ms": 899
     },
     {
       "suite": "model",
       "title": "?model=off modeli hiç yüklemez",
       "ok": true,
-      "ms": 1656
+      "ms": 1662
     },
     {
       "suite": "model",
       "title": "Aralık dışı özellikle çıkarım reddedilir (sahte olasılık üretilmez)",
       "ok": true,
-      "ms": 312
+      "ms": 321
+    },
+    {
+      "suite": "parite",
+      "title": "5 referans girdinin hepsinde |p_python − p_tarayıcı| < 1e-4",
+      "ok": true,
+      "ms": 1511
+    },
+    {
+      "suite": "parite",
+      "title": "Sınır/normal/uç değer kümesi (34 girdi): |p_python − p_tarayıcı| < 1e-4",
+      "ok": true,
+      "ms": 653
+    },
+    {
+      "suite": "parite",
+      "title": "Tarayıcıdaki model dosyası parite.json ile aynı model",
+      "ok": true,
+      "ms": 140
+    },
+    {
+      "suite": "veri",
+      "title": "Onay verilmeden nöbet devralınamaz; mod her zaman gölgededir",
+      "ok": true,
+      "ms": 1794
+    },
+    {
+      "suite": "veri",
+      "title": "Son ekranında oturum CSV dışa aktarma düğmesi vardır; normal modda yoktur",
+      "ok": true,
+      "ms": 4843
+    },
+    {
+      "suite": "veriHatti",
+      "title": "Üç test katılımcısı: CSV indirilir, doğrulanır; birleştirici kaynak=test olduğu için reddeder",
+      "ok": true,
+      "ms": 11562
     }
   ],
   "parite": [
@@ -107,6 +131,10 @@
       "python": 0.9999377131462097,
       "tarayici": 0.9999377131462097,
       "fark": 0
+    },
+    {
+      "ad": "sinir_kumesi (34 girdi)",
+      "en_buyuk_fark": 1.7881393432617188e-7
     }
   ]
 }

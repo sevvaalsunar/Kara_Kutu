@@ -20,9 +20,9 @@ def fake_real_file(path: Path, seed: int, kaynak: str = "gercek", n: int = 2):
     return df
 
 
-def run(tmp: Path):
+def run(tmp: Path, *extra):
     r = subprocess.run([sys.executable, str(ROOT / "data" / "birlestir.py"), "--sentetik", str(tmp / "yok.csv"),
-                        "--gercek-dizin", str(tmp / "g"), "--cikti", str(tmp / "o.csv"), "--rapor", str(tmp / "r.md")],
+                        "--gercek-dizin", str(tmp / "g"), "--cikti", str(tmp / "o.csv"), "--rapor", str(tmp / "r.md"), *extra],
                        capture_output=True, text=True)
     return r.returncode, r.stdout
 
@@ -72,3 +72,15 @@ def test_tamamlanmamis_oturum_uyari_verir(tmp_path):
     code, out = run(tmp_path)
     assert code == 0, out
     assert "tamamlanmamış" in (tmp_path / "r.md").read_text()
+
+
+def test_gecersizleri_atla_hatalilari_ayirir_gecerlileri_birlestirir(tmp_path):
+    (tmp_path / "g").mkdir()
+    fake_real_file(tmp_path / "g" / "iyi.csv", 1)
+    fake_real_file(tmp_path / "g" / "test.csv", 2, kaynak="test")
+    code, out = run(tmp_path, "--gecersizleri-atla")
+    assert code == 0, out
+    assert (tmp_path / "g" / "reddedilen" / "test.csv").exists()
+    assert "kaynak=test" in (tmp_path / "g" / "reddedilen" / "NEDENLER.txt").read_text()
+    merged = pd.read_csv(tmp_path / "o.csv", dtype=str)
+    assert set(merged.kaynak) == {"gercek"} and "Reddedilen dosya" in (tmp_path / "r.md").read_text()
