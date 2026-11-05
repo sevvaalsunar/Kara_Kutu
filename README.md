@@ -23,7 +23,7 @@ Saat 03:14. Yapay zekâ destekli yoğun bakım ağı ICU-Net siber saldırı alt
 
 | Link | Durum |
 |---|---|
-| 1. GitHub repo | https://github.com/sevvaalsunar/Kara_Kutu — **v2.0 henüz push edilmedi** (yerelde 9 commit) |
+| 1. GitHub repo | https://github.com/sevvaalsunar/Kara_Kutu — **v2.0 commit'leri henüz push edilmedi** |
 | 2. Hugging Face model (commit'li) | **Yok.** Model kabul kapılarını geçmedi; ödev kuralı ve spec §17 gereği yayınlanmaz. Yayın hattı hazır: `scripts/publish_hf.py` |
 | 3. Canlı uygulama | https://sevvaalsunar.github.io/Kara_Kutu/ — şu an v1. Push sonrası Pages iş akışı v2.0'ı (model gölgede) dağıtır |
 | 4. Demo video | `docs/demo/kara-kutu-v2.0-demo.mp4` (77 sn). Forma girmek için YouTube vb. bir yere **yüklenmesi** gerekir |
