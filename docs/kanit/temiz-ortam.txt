@@ -1,5 +1,4 @@
-## dosyalar
-data/gercek: README.md  data/sablon: ORNEK_ACIKLAMA.md ORNEK_test_oturumu.csv oturum_sablonu.csv 
+## temiz klon: c3bfbf4
 ## pip
 tamam
 ## birleştir
@@ -10,10 +9,9 @@ oturumlar.csv: 2010 satır; 0 gerçek, 400 sentetik oturum; 0 uyarı → VERI_RA
     UYARI: Yalnızca 0 gerçek oturum var (gerekli 15). Aşağıdaki metrikler tamamen SENTETİK veriye dayanır ve gerçek oyuncu başarısını göstermez. Model bu durumda KABUL edilemez.
 SONUÇ: Kapı(lar) geçmedi: ['balanced_accuracy', 'f1', 'recall']. Hiçbir dosya yazılmadı.
 ## npm ci + build
-added 335 packages in 13s
-[sync-model] kara-kutu-destek 2.0.0 (reddedildi) ← /tmp/temiz/model/gelistirme
-[sync-model] ORT-web WASM dosyaları → public/ort/
-✓ built in 970ms
+added 335 packages in 9s
+✓ built in 816ms
 ## pytest
-55 passed in 32.12s
+59 passed in 35.13s
 ## git status
+0

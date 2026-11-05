@@ -11,7 +11,7 @@ Aşağıdaki sonuçların tamamı son kod üzerinde bu aşamada yeniden koşturu
 | Madde | Statü | Kanıt |
 |---|---|---|
 | Repo bütünlüğü | PASS | Git geçmişi korundu; patch tekrar uygulanmadı; temiz klonda `git status` temiz; gizli anahtar taraması temiz |
-| Temiz ortamda README komutları | PASS | Yeni klonda `pip install`, `birlestir.py` (0), `train.py` (1, beklenen), `npm ci`, `npm run build`, 55/55 pytest (`kanit/temiz-ortam.txt`) |
+| Temiz ortamda README komutları | PASS | Yeni klonda `pip install`, `birlestir.py` (0), `train.py` (1, beklenen), `npm ci`, `npm run build`, 59/59 pytest, `git status` temiz (`kanit/temiz-ortam.txt`) |
 | Mevcut Primer (v1 regresyonu) | PASS | Gerçek Chromium: dev 19/19, üretim derlemesi 19/19 |
 | pytest | PASS | 59/59, sunucu paritesi dahil (`kanit/python-ve-derleme.txt`) |
 | TypeScript | PASS | `tsc --noEmit` temiz |
