@@ -19,6 +19,17 @@ Saat 03:14. Yapay zekâ destekli yoğun bakım ağı ICU-Net siber saldırı alt
 - **Katılımcı yönergesi:** [`docs/KATILIMCI.md`](docs/KATILIMCI.md)
 - **Hugging Face:** henüz yayınlanmadı (bkz. RELEASE.md)
 
+## Teslim formu için 4 link
+
+| Link | Durum |
+|---|---|
+| 1. GitHub repo | https://github.com/sevvaalsunar/Kara_Kutu — **v2.0 henüz push edilmedi** (yerelde 9 commit) |
+| 2. Hugging Face model (commit'li) | **Yok.** Model kabul kapılarını geçmedi; ödev kuralı ve spec §17 gereği yayınlanmaz. Yayın hattı hazır: `scripts/publish_hf.py` |
+| 3. Canlı uygulama | https://sevvaalsunar.github.io/Kara_Kutu/ — şu an v1. Push sonrası Pages iş akışı v2.0'ı (model gölgede) dağıtır |
+| 4. Demo video | `docs/demo/kara-kutu-v2.0-demo.mp4` (77 sn). Forma girmek için YouTube vb. bir yere **yüklenmesi** gerekir |
+
+Ödev puanlamasına karşı ayrıntılı uyum tablosu: [`docs/ODEV_UYUM.md`](docs/ODEV_UYUM.md).
+
 ## Kurulum ve çalıştırma
 
 ```bash
@@ -94,10 +105,19 @@ Model, Hugging Face'te yayınlandıktan sonra yalnızca commit'e sabitli URL'den
 
 Dağıtım kolları: `?model=off`, gölge, canary (oturum kovası), açık. Kabul edilmemiş model yalnızca gölgede çalışır; `?rollout=on` bir geliştirici geçersiz kılmasıdır ve panelde DENEYSEL olarak görünür.
 
+## Sunucu tüketicisi (bonus)
+
+`server/app.py`: FastAPI + onnxruntime; başlangıç reposundaki `rails-api` ile aynı API biçimi. Aynı `model.onnx` + `config.json`'ı tüketir; `tests/integration/test_server_parity.py` gerçek bir sunucuyu HTTP üzerinden sorgular. 5 referansta en büyük fark 3.0e-8, 34 sınır girdisinde 1.8e-7. Render.com için `render.yaml` hazır; **dağıtım yapılmadı**.
+
+```bash
+uvicorn server.app:app --port 8000
+curl -s localhost:8000/api/v1/predictions -H 'content-type: application/json' -d '{"inputs":{"decision_time_sec":40,"hesitation_count":1,"wrong_attempts_current_concept":1,"wrong_attempts_recent":1,"hint_usage_rate":1,"retry_count":0,"difficulty_level":1,"concept_mastery_rate":0,"recent_success_rate":0,"branch_risk_score":1,"consecutive_errors":1}}'
+```
+
 ## Testler
 
 ```bash
-python -m pytest -q tests                  # 55 test: birim, kapılar, eğitim sağlamlığı, birleştirici, TS↔Python sözleşmesi, ORT-web paritesi, dağıtım simülasyonu
+python -m pytest -q tests                  # 59 test: birim, kapılar, eğitim sağlamlığı, birleştirici, TS↔Python sözleşmesi, ORT-web paritesi, dağıtım simülasyonu
 cd app && npm run lint && npm run build
 cd tools/browser-e2e && npm install && ./with-server.sh node run.mjs              # gerçek Chromium: 41 test (dev sunucusu; üretim için PROD=1)
 PROD=1 ./with-server.sh node run.mjs parite adaptif model                        # üretim derlemesi (dist/)
@@ -128,17 +148,6 @@ Toplanan tek veri oyun içi sayısal olaylardır: süre, tereddüt sayısı, se�
 ## Araçlar
 
 Google Stitch (tasarım) → Google AI Studio (v1 uygulaması) → Cypress (E2E) → scikit-learn, skl2onnx, onnxruntime / onnxruntime-web (v2.0). v1 uygulama kodu AI Studio tarafından üretildi; v1 spec, tasarım kararları, eval ve ürün kararı bana ait.
-
-## Kodlama aracı beyanı (v2.0)
-
-- **Araç:** v2.0'ın kodu, testleri, analizleri ve belgeleri Claude (Anthropic) ile, claude.ai sohbet arayüzündeki kod çalıştırma ortamında yazıldı ve hata ayıklandı.
-- **Aracın verdiği mühendislik kararları:**
-  - Etiket tanımı, 11 özellik, 0.65 eşiği ve kabul kapıları; eğitimden önce sabitlendi (`6ffaaeb`).
-  - Tarayıcı içi çıkarım.
-  - Kabul edilmemiş modelin yalnızca gölgede çalışması; kapı geçmeyince eşiğin, hedefin ve üreticinin değiştirilmemesi.
-- **Gerçekten çalıştırılan doğrulamalar:** pytest, `tsc`, `vite build`, gerçek headless Chromium'da Cypress senaryolarının puppeteer portları (dev ve üretim derlemesi), Python ↔ tarayıcı paritesi ve demo kaydı. Sayılar ve kanıtlar: `docs/FINAL_REPORT.md`, `docs/kanit/`.
-- **Çalıştırılamayanlar:** Cypress dosyalarının kendisi (ikili indirilemedi; CI'da koşacak), Hugging Face yayını (kabul edilmiş model yok) ve gerçek kullanıcı oturumları (0/15).
-- **Doğrulama sırasında bulunan hatalar:** 8 teknik hata ve simüle UX turunda 7 kullanılabilirlik sorunu bulundu ve düzeltildi; listeler `docs/FINAL_AUDIT.md` ve `docs/UX_DEGERLENDIRME.md`'de.
 
 ## İnceleme kaydı
 
@@ -230,3 +239,12 @@ Bu turda bulunan ve düzeltilen sorunlar (testlerle doğrulandı):
 | Kafamı karıştıran yer | … |
 | Simüle değerlendirmeyle uyuşmayan bulgu | … |
 | Repo sahibinin onayı: okuduğum ve onayladığım bölümler | … |
+
+## Kodlama aracı beyanı (ödev kuralı: hangi araç, hangi adım, ne elle düzeltildi)
+
+- **v1 (geçen hafta):** Tasarım Google Stitch, uygulama kodu Google AI Studio, E2E testleri Cypress. Spec, tasarım kararları, tutor eval'i ve ürün kararı Şevval Sunar'ındır.
+- **v2.0, adım 1–7 (spec, veri, eğitim, paketleme, yayın hattı, tüketiciler ve testler, sınav tasarımı):** Kod, testler, analizler, demo kaydı ve belgeler Claude (Anthropic) ile, claude.ai'deki kod çalıştırma ortamında üretildi. Yerel olarak gerçekten koşturulanlar: pytest, `tsc`, `vite build`, gerçek Chromium'da tarayıcı testleri, Python ↔ tarayıcı ↔ sunucu paritesi.
+- **Süreç yönetimi:** Şevval Sunar, ajanı beş tur boyunca ödev gereksinimleri ve kısıtlarla yönetti: eşiği sonradan değiştirmeme, sahte gerçek veri üretmeme, testleri zayıflatmama, sonuçları uydurmama.
+- **Ajanın kendi doğrulamasında düzelttiği çıktılar:** 8 teknik hata ve 7 kullanılabilirlik sorunu (`docs/FINAL_AUDIT.md`, `docs/UX_DEGERLENDIRME.md`), ayrıca raporlarda yanlış yazılmış test sayıları.
+- **Elle düzeltilen çıktılar (Şevval Sunar dolduracak):** _…_
+

@@ -13,7 +13,7 @@ Aşağıdaki sonuçların tamamı son kod üzerinde bu aşamada yeniden koşturu
 | Repo bütünlüğü | PASS | Git geçmişi korundu; patch tekrar uygulanmadı; temiz klonda `git status` temiz; gizli anahtar taraması temiz |
 | Temiz ortamda README komutları | PASS | Yeni klonda `pip install`, `birlestir.py` (0), `train.py` (1, beklenen), `npm ci`, `npm run build`, 55/55 pytest (`kanit/temiz-ortam.txt`) |
 | Mevcut Primer (v1 regresyonu) | PASS | Gerçek Chromium: dev 19/19, üretim derlemesi 19/19 |
-| pytest | PASS | 55/55 (`kanit/python-ve-derleme.txt`) |
+| pytest | PASS | 59/59, sunucu paritesi dahil (`kanit/python-ve-derleme.txt`) |
 | TypeScript | PASS | `tsc --noEmit` temiz |
 | Vite build | PASS | Temiz; `sync-model` reddedilmiş modeli kopyalıyor |
 | Gerçek tarayıcı testleri (Cypress senaryolarının puppeteer portları) | PASS | Headless Chromium 153: dev 41/41, üretim derlemesi 41/41, UX testleri dahil (`kanit/tarayici-{dev,uretim}-*.json`) |
@@ -32,6 +32,8 @@ Aşağıdaki sonuçların tamamı son kod üzerinde bu aşamada yeniden koşturu
 | Yayın koruması | PASS | 10 test: reddedilmiş, aday, geçmeyen kapı, özet uyuşmazlığı ve eksik dosya durumlarının hepsi reddediliyor; commit sabitleme şeması yalnızca 40 haneli SHA kabul ediyor |
 | Hugging Face yayını | BLOCKED | Kabul edilmiş model yok; `v2.0` etiketi oluşturulmadı |
 | Demo videosu | PASS | `docs/demo/kara-kutu-v2.0-demo.mp4`: 77 sn, UX düzeltmelerinden sonra yeniden kaydedildi; gerçek uygulama ve çıkarım; red statüsü ve geçersiz kılma hem altyazıda hem uygulamanın DENEYSEL MOD şeridinde |
+| Sunucu tüketicisi (bonus) | PASS (yerel) · dağıtım: REQUIRES HUMAN ACTION | FastAPI + onnxruntime, gerçek HTTP: 5 referansta en büyük fark 3.0e-8, 34 sınır girdisinde 1.8e-7 (`kanit/sunucu-parite.txt`); Render dağıtımı yapılmadı |
+| Ödev metnine uyum | Bkz. tablo | [`ODEV_UYUM.md`](ODEV_UYUM.md): puanlama kalemi bazında durum ve risk |
 | Simüle UX değerlendirmesi | PASS | 3 profil, 13 ekran (önce/sonra), otomatik erişilebilirlik ölçümleri; 7 bulgu düzeltildi ve testlendi (`UX_DEGERLENDIRME.md`, `docs/ux/`). **İnsan değerlendirmesi değildir** |
 | Profil bazlı model analizi | PASS (teşhis) | Aşırı uyum yok (AUC eğitim 0.658 / test 0.651); kör noktalar: hızlı-yanılan oyuncu (FN %96.6), ipucu kullanan (FP %51.6) (`MODEL_ROOT_CAUSE_ANALYSIS.md` §8) |
 | SINAV_TASARIMI.md (≤ 1 sayfa) | PASS | 343 kelime; A4, 10.5 pt'de 1 sayfa |
@@ -74,7 +76,7 @@ Ayrıca demo betiğindeki altyazı katmanı uygulamanın DENEYSEL şeridini ört
 ## Çalıştırılan komutlar
 
 ```bash
-python -m pytest -q tests                                                  # 55 passed
+python -m pytest -q tests                                                  # 59 passed
 python data/validate_dataset.py data/oturumlar.csv                         # GEÇERLİ
 python data/generate_synthetic.py --cikti /tmp/s.csv && cmp /tmp/s.csv data/sentetik.csv
 python tests/parite.py --model model/gelistirme/model.onnx                 # fark 0
@@ -106,7 +108,7 @@ Gerçek uygulama, üç kullanıcı profiliyle gerçek tarayıcıda oynatıldı. 
 - **İnsan eylemi:** 15 gerçek oturum. CI koşusu ve kişisel inceleme de insan eylemi bekliyor ama tabloda ayrı satır değil; ilgili satırların içinde belirtildi. Tam tablo: `IZLENEBILIRLIK.md`.
 
 **2. Hangi testler gerçekten çalıştı?**
-- 55 pytest testi
+- 59 pytest testi (gerçek HTTP sunucu paritesi dahil)
 - `tsc` ve `vite build`
 - Node ORT-web paritesi (39 girdi)
 - Gerçek Chromium'da 41 senaryo dev sunucusunda, 41 senaryo üretim derlemesinde (UX testleri dahil)

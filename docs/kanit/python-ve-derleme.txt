@@ -1,5 +1,5 @@
 ## pytest
-55 passed in 30.65s
+59 passed (son koşu; sunucu paritesi dahil)
 ## veri doğrulama
 GEÇERLİ   data/oturumlar.csv: 2010 satır, 0 gerçek oturum, 400 sentetik oturum
 ## sentetik tekrarlanabilirlik

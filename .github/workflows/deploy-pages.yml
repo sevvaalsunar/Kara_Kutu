@@ -24,13 +24,15 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: app/package-lock.json
       - name: Install dependencies
         working-directory: app
         run: npm ci
-      - name: Build
+        env:
+          CYPRESS_INSTALL_BINARY: 0   # dağıtımda Cypress ikilisi gerekmez
+      - name: Build (prebuild, modeli ve ORT WASM dosyalarını dist/ içine kopyalar)
         working-directory: app
         run: npm run build
       - uses: actions/configure-pages@v5

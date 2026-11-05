@@ -1,0 +1,12 @@
+# Render.com (ücretsiz katman) sunucu tüketicisi. Dağıtım repo sahibinin Render hesabıyla yapılır.
+services:
+  - type: web
+    name: kara-kutu-model-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r server/requirements.txt
+    startCommand: uvicorn server.app:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /healthz
+    envVars:
+      - key: MODEL_SOURCE
+        value: local   # model kabul edilip HF'ye yayınlanınca: http (commit'e sabitli URL)

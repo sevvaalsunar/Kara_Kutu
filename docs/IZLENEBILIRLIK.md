@@ -30,3 +30,6 @@ Kaynak: v2.0 ödev talimatı (Adaptive The Primer). Statüler: PASS · FAIL · B
 | 24 | `SINAV_TASARIMI.md` en fazla bir sayfa | Özgün senaryo, soru, cevaplar, çeldiriciler, puanlama | `SINAV_TASARIMI.md` | 343 kelime; A4, 10.5 pt'de 1 sayfa (ölçüldü) | PASS |
 | 25 | README bölümleri, en fazla 3 kurulum komutu | Kurulum 3 komut; komutlar temiz klonda doğrulandı | `README.md` | `kanit/temiz-ortam.txt` | PASS |
 | 26 | Kodlama aracı beyanı (3–5 madde) | 5 madde; ayrıca araç incelemeleri ile sahibin kişisel incelemesi ayrı | `README.md` | — | PASS · simüle UX değerlendirmesi dolu (`docs/UX_DEGERLENDIRME.md`); insan değerlendirmesi: REQUIRES HUMAN ACTION |
+| 27 | Bonus: kendi sunucunuzda tüketici, aynı referanslarda < 1e-4 | FastAPI + onnxruntime, `rails-api` ile aynı API biçimi | `server/app.py`, `render.yaml`, `tests/integration/test_server_parity.py` | Gerçek HTTP: 5 referansta en büyük fark 3.0e-8, 34 sınır girdisinde 1.8e-7 | PASS (yerel) · Render dağıtımı: REQUIRES HUMAN ACTION |
+
+Puanlama kalemi bazında özet ve riskler: [`ODEV_UYUM.md`](ODEV_UYUM.md).

@@ -1,0 +1,3 @@
+parite.json: 5 girdi, en büyük fark 2.98e-08
+.parite_sinir.json: 34 girdi, en büyük fark 1.79e-07
+4 passed in 1.89s

@@ -94,9 +94,22 @@ cd app && npx cypress run --spec cypress/e2e/parite.cy.js   # gerçek tarayıcı
 | İşletme maliyeti | ~0 (GitHub Pages) | Geliştirici hesapları | Sürekli sunucu |
 | Test karmaşıklığı | Tarayıcı + Python paritesi (Cypress) | Cihaz/simülatör testleri | API sözleşme testleri |
 
+### Dersteki 3 temel soru
+
+| Soru | Tarayıcı (`onnxruntime-web`) | Cihaz içi mobil (Expo, gömülü ONNX) | Kendi sunucum (FastAPI, `server/`) |
+|---|---|---|---|
+| 1. İnternet zorunlu mu, gecikme nasıl? | İlk açılışta WASM ve model indirilir (ölçülen yükleme 0.46–2.1 sn); sonra çevrimdışı. Tahmin < 1 ms (debug panelinde 11–15 ms, React güncellemesi dahil). | Kurulumdan sonra internet gerekmez. | Her tahmin bir ağ turu. Render ücretsiz katmanında uyku sonrası soğuk başlangıç saniyeler sürer. |
+| 2. Veri cihazdan çıkar mı? | Hayır. | Hayır. | **Evet:** her kararın özellikleri sunucuya gider; KVKK kapsamında aydınlatma ve kayıt politikası gerekir. |
+| 3. Model gizli kalır mı? | Hayır: `model.onnx` indirilebilir. 11 katsayılı bir modelde gizlenecek değer yok. | Hayır: paketten çıkarılabilir. | Evet, ama istek-yanıt üzerinden çok sorguyla katsayılar yaklaşık tahmin edilebilir (model çıkarma). Bunun için hız sınırı gerekir. |
+
 ### Karar: tarayıcı içi çıkarım
 
 KARA KUTU zaten GitHub Pages'ta statik bir web uygulaması. Model küçük ve gizli bir değer taşımıyor; oyuncu verisinin cihazdan çıkmaması, veri toplama dışında KVKK yükümlülüğü doğurmuyor. Sunucu, yalnızca gizlilik riskini ve işletme maliyetini artırırdı. Mobil uygulama spec §2'de kapsam dışı. Bedeli: ilk yüklemede ~3.7 MB (gzip) WASM indirmesi ve modelin herkese görünür olması. Model yüklenemezse oyun v1 kurallarıyla oynanır (spec §18).
+
+**Sunucu tüketicisi (bonus, yerel olarak doğrulandı):** `server/app.py` (FastAPI + onnxruntime), başlangıç reposundaki `rails-api` ile aynı API biçimine sahip (`POST /api/v1/predictions`). Aynı `model.onnx` + `config.json` sözleşmesini tüketir, SHA-256'yı doğrular ve geçersiz girdide 422 döner.
+- Gerçek bir uvicorn süreci HTTP üzerinden sorgulandı: 5 referans girdide en büyük fark **3.0e-8**, 34 sınır girdisinde **1.8e-7** (< 1e-4; `tests/integration/test_server_parity.py`).
+- Render.com dağıtımı için `render.yaml` hazır. **Dağıtım yapılmadı** (hesap gerekiyor).
+- Oyun bu sunucuyu kullanmaz: gizlilik ve çevrimdışı çalışma için tarayıcı seçildi. Sunucu, üçüncü bağımsız tüketici ve model gizli tutulmak istenirse kullanılacak alternatif olarak durur.
 
 ## Güvenli dağıtım
 
@@ -158,6 +171,19 @@ Gemini tutor anahtarı (`GEMINI_API_KEY`) testlerde gerekmez: testler `?test=1` 
 | Model dosyası değişirse | Uygulama, `config.json`'daki SHA-256 ile uyuşmayan dosyayı reddeder (`test_config_ozeti_dosyayla_ayni`, KÖ8) |
 | Model tamamen kaldırılırsa | `model/` boşken `npm run build` modelsiz derler; oyun v1 kurallarıyla çalışır (KÖ8 aynı yolu sınar) |
 | Kabul edilmemiş sürüm | `publish_hf.py` reddeder (`tests/unit/test_release_guard.py`, 10 test) |
+
+## Kaynaklar ve hangi karara dayanak oldukları
+
+| Kaynak | Bu projedeki karşılığı |
+|---|---|
+| Amershi, S. vd. (2019). *Software Engineering for Machine Learning: A Case Study.* ICSE-SEIP. | ML yaşam döngüsünün geri beslemeli olması: veri toplama → eğitim → gölge → izleme → yeniden toplama. Veri toplama modunun gölgede çalışması ve `model_p` kaydı bu döngünün izleme halkası. |
+| Shankar, S. vd. (2022). *Operationalizing Machine Learning: An Interview Study.* arXiv:2209.09125. | **3V:** Velocity (tek komutla eğitim, yerel tarayıcı testleri), Validation (eğitimden önce sabitlenen kapılar, parite, tavan analizi), Versioning (veri sürümü = CSV özeti, model SHA-256, commit'e sabitli URL zorunluluğu). |
+| Mitchell, M. vd. (2019). *Model Cards for Model Reporting.* FAT*. | `model/README.md` bölüm yapısı: amaçlanan ve amaçlanmayan kullanım, faktörler, metrikler, etik, uyarılar. |
+| Breck, E. vd. (2017). *The ML Test Score: A Rubric for ML Production Readiness and Technical Debt Reduction.* IEEE BigData. | Özellik sözleşmesi testi (TS ↔ Python), eğitim tekrarlanabilirliği, yayın öncesi kalite kapısı, eğitim/sunum çarpıklığı denetimi (Python ↔ tarayıcı ↔ sunucu paritesi), canary ve geri dönüş. |
+| Sommerville, I. (2016). *Software Engineering*, 10. baskı. Bl. 8, 17, 18, 25. | Bl. 8: doğrulama ve geçerleme ayrımı (testler doğrulamayı, gerçek veri kapısı geçerlemeyi temsil eder; `SINAV_TASARIMI.md`). Bl. 17–18: istemci ve sunucu dağıtım seçenekleri. Bl. 25: sürüm ve konfigürasyon yönetimi (`config.json` sözleşmesi, commit sabitleme). |
+| Hugging Face Hub belgeleri: `revision` / `resolve/<commit>` URL'leri. | Tüketicilerin `main` yerine commit'e sabitli URL kullanması; `config.schema.json` yalnızca 40 haneli commit SHA'sını kabul ediyor. |
+| `seyyah/huggingface-hello-web` (başlangıç reposu). | `onnx_aktar`'daki sklearn ↔ ONNX < 1e-4 kontrolü `train.py`'de daha geniş biçimde (2308 girdi) uygulandı; sunucu API biçimi `rails-api`'den alındı. |
+| Stanford HAI (2025) *AI Index*; Gartner (2025) küçük göreve özel modeller öngörüsü. | Ders sunumunda aktarıldığı biçimiyle küçük, göreve özel model seçiminin gerekçesi. Orijinal raporlardaki sayılar bu projede ayrıca doğrulanmadı. |
 
 ## v1.x
 
