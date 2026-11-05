@@ -28,7 +28,7 @@
 | Python ↔ tarayıcı paritesi | 5/5 referansta fark 0 (tolerans 1e-4) |
 | v1 regresyonu (gerçek tarayıcı) | 19/19 |
 | Cypress dosyalarının kendisi | Koşturulmadı (ikili indirilemedi); CI'da koşacak |
-| Demo videosu | Kaydedildi: `docs/demo/kara-kutu-v2.0-demo.mp4` (76 sn). Uyarlama geliştirici geçersiz kılmasıyla gösterilir ve videoda belirtilir. |
+| Demo videosu | Kaydedildi: `docs/demo/kara-kutu-v2.0-demo.mp4` (77 sn; UX düzeltmelerinden sonra yeniden kaydedildi). Uyarlama geliştirici geçersiz kılmasıyla gösterilir; videoda ve oyunun üstündeki DENEYSEL MOD şeridinde belirtilir. |
 | Kök neden analizi | `docs/MODEL_ROOT_CAUSE_ANALYSIS.md` |
 | Ayrıntılı kanıtlar | `docs/FINAL_REPORT.md` |
 

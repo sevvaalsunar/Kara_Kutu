@@ -34,7 +34,7 @@ const STATUS_LABEL: Record<ModelState['status'], string> = {
 };
 
 export const DebugPanel: React.FC<Props> = ({ model, rollout, last, sessionId, decisions, onExport }) => {
-  // Varsayılan kapalı: açık panel 390 px ekranda oyun kontrollerinin üstüne biniyordu (FINAL_AUDIT, hata #1).
+  // Varsayılan kapalı. Panel sayfa akışında olduğu için açıkken de oyun kontrollerini örtmez.
   const [open, setOpen] = useState(false);
   const cfg = model.config;
   const statusColor =
@@ -43,7 +43,8 @@ export const DebugPanel: React.FC<Props> = ({ model, rollout, last, sessionId, d
   return (
     <aside
       data-testid="debug-panel"
-      className={`fixed bottom-3 right-3 z-50 rounded-lg border ${open ? 'w-[min(92vw,340px)] max-h-[70vh] overflow-y-auto' : 'w-auto'} border-slate-700 bg-slate-950/95 font-mono text-[10px] text-slate-300 shadow-2xl backdrop-blur`}
+      // Sabit konumlu değil, sayfa akışının sonunda: hiçbir oyun kontrolünü örtemez (FINAL_AUDIT hata #1, UX turu)
+      className={`mx-auto mt-2 mb-6 w-[min(92vw,358px)] rounded-lg border border-slate-700 bg-slate-950/95 font-mono text-[10px] text-slate-300 shadow-2xl backdrop-blur`}
     >
       <button
         onClick={() => setOpen(!open)}

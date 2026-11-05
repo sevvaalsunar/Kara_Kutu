@@ -1,6 +1,6 @@
 # Son rapor — KARA KUTU v2.0
 
-Tarih: 2026-11-05 · Başlangıç durumu: [`FINAL_AUDIT.md`](FINAL_AUDIT.md) · Ödev gereksinimleri: [`IZLENEBILIRLIK.md`](IZLENEBILIRLIK.md) · Ham kanıtlar: [`kanit/`](kanit/)
+Tarih: 2026-11-05 (UX turu sonrası güncellendi) · Başlangıç durumu: [`FINAL_AUDIT.md`](FINAL_AUDIT.md) · Ödev gereksinimleri: [`IZLENEBILIRLIK.md`](IZLENEBILIRLIK.md) · Simüle UX değerlendirmesi: [`UX_DEGERLENDIRME.md`](UX_DEGERLENDIRME.md) · Ham kanıtlar: [`kanit/`](kanit/)
 
 **Özet:** Uyarlama mekanizması uygulandı ve gerçek tarayıcıda, hem dev sunucusunda hem üretim derlemesinde doğrulandı. Model kabul kapılarını **geçmedi**, reddedildi statüsünde kalıyor ve yayınlanmadı. Normal kullanıcıda yalnızca gölgede çalışıyor. Bunu değiştirebilecek tek şey en az 15 gerçek oturumdan oluşan veri.
 
@@ -16,12 +16,12 @@ Aşağıdaki sonuçların tamamı son kod üzerinde bu aşamada yeniden koşturu
 | pytest | PASS | 55/55 (`kanit/python-ve-derleme.txt`) |
 | TypeScript | PASS | `tsc --noEmit` temiz |
 | Vite build | PASS | Temiz; `sync-model` reddedilmiş modeli kopyalıyor |
-| Gerçek tarayıcı testleri (Cypress senaryolarının puppeteer portları) | PASS | Headless Chromium 153: dev 35/35, üretim 35/35 (`kanit/tarayici-{dev,uretim}-v{1,2}.json`) |
+| Gerçek tarayıcı testleri (Cypress senaryolarının puppeteer portları) | PASS | Headless Chromium 153: dev 41/41, üretim derlemesi 41/41, UX testleri dahil (`kanit/tarayici-{dev,uretim}-*.json`) |
 | Cypress dosyalarının kendisi | BLOCKED (yerel) | `download.cypress.io` erişilemez. CI'da üretim derlemesine karşı koşacak şekilde yapılandırıldı. **Puppeteer portları Cypress'in yerine geçmez**: aynı senaryolar, farklı test çatısı |
 | Cypress CI koşusu | REQUIRES HUMAN ACTION | Push yetkisi yok; CI çalıştırılmadı ve başarılı olduğu iddia edilmiyor |
 | Tarayıcı çıkarımı | PASS | Dev, üretim ve GitHub Pages alt yolu (`/Kara_Kutu/`); model SHA-256 doğrulaması tarayıcıda |
 | Python Oracle | PASS | 5 referans ve 34 sınır girdisi, fark 0 |
-| Diferansiyel parite (< 1e-4) | PASS | Gerçek tarayıcı: 5/5 fark 0; sınır kümesi 34/34. Node ORT-web: 39 girdi, en büyük fark 1.79e-7 |
+| Diferansiyel parite (< 1e-4) | PASS | Gerçek tarayıcı: 5/5 referansta fark 0; 34 girdilik sınır kümesinin tamamı tolerans içinde. Node ORT-web: 39 girdi, en büyük fark 1.79e-7 |
 | Veri toplama hattı | PASS | Tarayıcıdan indirilen test CSV'leri doğrulayıcıdan geçti ve birleştirici `kaynak=test` olduğu için reddetti; `--gecersizleri-atla`, tekrar, tamlık ve rapor testleri geçti |
 | Gerçek oturumlar | REQUIRES HUMAN ACTION | **0/15.** Uydurulmadı |
 | Sentetik üretici | PASS | Aynı tohum → aynı dosya; veri sürümü `7dae87520a30` |
@@ -31,10 +31,12 @@ Aşağıdaki sonuçların tamamı son kod üzerinde bu aşamada yeniden koşturu
 | ONNX yapıtı | PASS (yalnızca `gelistirme/`) | sklearn ↔ ONNX farkı 2.6e-7; statü reddedildi, dağıtım modu gölge |
 | Yayın koruması | PASS | 10 test: reddedilmiş, aday, geçmeyen kapı, özet uyuşmazlığı ve eksik dosya durumlarının hepsi reddediliyor; commit sabitleme şeması yalnızca 40 haneli SHA kabul ediyor |
 | Hugging Face yayını | BLOCKED | Kabul edilmiş model yok; `v2.0` etiketi oluşturulmadı |
-| Demo videosu | PASS | `docs/demo/kara-kutu-v2.0-demo.mp4`: 76 sn, gerçek uygulama ve çıkarım; red statüsü ve geçersiz kılma videoda belirtilir |
+| Demo videosu | PASS | `docs/demo/kara-kutu-v2.0-demo.mp4`: 77 sn, UX düzeltmelerinden sonra yeniden kaydedildi; gerçek uygulama ve çıkarım; red statüsü ve geçersiz kılma hem altyazıda hem uygulamanın DENEYSEL MOD şeridinde |
+| Simüle UX değerlendirmesi | PASS | 3 profil, 13 ekran (önce/sonra), otomatik erişilebilirlik ölçümleri; 7 bulgu düzeltildi ve testlendi (`UX_DEGERLENDIRME.md`, `docs/ux/`). **İnsan değerlendirmesi değildir** |
+| Profil bazlı model analizi | PASS (teşhis) | Aşırı uyum yok (AUC eğitim 0.658 / test 0.651); kör noktalar: hızlı-yanılan oyuncu (FN %96.6), ipucu kullanan (FP %51.6) (`MODEL_ROOT_CAUSE_ANALYSIS.md` §8) |
 | SINAV_TASARIMI.md (≤ 1 sayfa) | PASS | 343 kelime; A4, 10.5 pt'de 1 sayfa |
 | README | PASS | Komutlar temiz klonda doğrulandı; beyan 5 madde; inceleme kaydı araç ve sahip için ayrı |
-| İnsan incelemesi | REQUIRES HUMAN ACTION | README'deki "Repo sahibinin kişisel incelemesi" kutuları |
+| İnsan değerlendirmesi | REQUIRES HUMAN ACTION | README → "Human Evaluation" şablonu. Simüle değerlendirme bunun yerine geçmez |
 
 ## Bu aşamada bulunan ve düzeltilen hatalar
 
@@ -48,6 +50,26 @@ Aşağıdaki sonuçların tamamı son kod üzerinde bu aşamada yeniden koşturu
 8. **Doğrulayıcı test oturumlarını saymıyordu.**
 
 Ayrıca bir risk giderildi: CI'daki Cypress, Vite dev sunucusunun yeniden yükleme riskine karşı üretim derlemesine taşındı.
+
+## Simüle UX turu: bulunan ve düzeltilen sorunlar
+
+| # | Bulgu (gerçek tarayıcıda gözlendi/ölçüldü) | Düzeltme | Test |
+|---|---|---|---|
+| U1 | Debug çipi tutor'un gönder butonunu, kavram özetini ve veri modunda rol seçeneklerini örtüyordu | Panel sabit konumdan çıkıp sayfa akışına alındı | `ux` |
+| U2 | Seçenekler 42 px, ipucu 36 px, tutor girişi ve gönder 34 px (`DESIGN.md` ≥ 44 px) | 44–48 px | `ux`, `ux.cy.js` |
+| U3 | Zorlanan oyuncudan destek K3'te geri çekiliyordu (p 0.730 → 0.578) | Destek sürekliliği (spec §14 madde 4, KÖ10) | KÖ10 |
+| U4 | "Nöbeti devral" pasifken nedeni yazmıyordu | `start-hint` | `ux` |
+| U5 | Uyarlama notu belirsizdi | Dayanağını ve not olmadığını söylüyor | KÖ6 |
+| U6 | Geçersiz kılma yalnızca panelde görünüyordu | DENEYSEL MOD şeridi (spec §14 madde 5) | `ux` |
+| U7 | Son ekranda öğrenme geri bildirimi yoktu; ilk düzeltmede aynı kavram iki kez listelendi | Tekilleştirilmiş kavram kartı (yalnızca öğrenme hedefinde) | `ux` (2 test) |
+
+Ayrıca demo betiğindeki altyazı katmanı uygulamanın DENEYSEL şeridini örtüyordu; altyazılar alta taşındı ve video yeniden kaydedildi.
+
+**Düzeltilmeyen (öneri olarak bırakılan):**
+- 10 px mono etiketler (tasarım dili; ekran başına 9–18).
+- Uzun brifing.
+- Uyarlamanın kullanıcıya tahmin edilemez olması.
+- Hızlı-yanılan oyuncu kör noktası (v2.1 ön kayıt adayı).
 
 ## Çalıştırılan komutlar
 
@@ -63,13 +85,19 @@ python train.py                                                            # ç�
 cd app && npx tsc --noEmit && npm run build
 cd tools/browser-e2e
 ./with-server.sh node run.mjs yollar kabul                                 # 19/19
-./with-server.sh node run.mjs adaptif model parite veri veriHatti          # 16/16
+./with-server.sh node run.mjs adaptif model parite veri veriHatti ux       # 22/22
 PROD=1 ./with-server.sh node run.mjs yollar kabul                          # 19/19
-PROD=1 ./with-server.sh node run.mjs adaptif model parite veri veriHatti   # 16/16
+PROD=1 ./with-server.sh node run.mjs adaptif model parite veri veriHatti ux  # 22/22
+./with-server.sh node ux-turu.mjs                                         # UX turu: 13 ekran + ölçümler
+./with-server.sh node demo.mjs                                            # 77 sn demo
+python analysis/profil_analizi.py                                          # profil bazlı teşhis
 python analysis/kok_neden.py                                               # teşhis + kalibrasyon
 ```
 
 ## Soruların cevapları
+
+**0. Bu turda ne değişti?**
+Gerçek uygulama, üç kullanıcı profiliyle gerçek tarayıcıda oynatıldı. 7 kullanılabilirlik sorunu bulunup düzeltildi ve testlendi; 6 yeni tarayıcı testi ve 5 Cypress testi eklendi. Profil bazlı model analizi yapıldı. Demo yeniden kaydedildi. README'ye simüle değerlendirme ile insan değerlendirmesi şablonu ayrı ayrı yazıldı.
 
 **1. Ödev gereksinimlerinin hangileri tamamlandı?**
 26 gereksinimin 21'i PASS, 3'ü BLOCKED, 1'i FAIL, 1'i insan eylemi gerektiriyor (tablodan otomatik sayıldı).
@@ -81,7 +109,7 @@ python analysis/kok_neden.py                                               # te�
 - 55 pytest testi
 - `tsc` ve `vite build`
 - Node ORT-web paritesi (39 girdi)
-- Gerçek Chromium'da 35 senaryo dev sunucusunda, 35 senaryo üretim derlemesinde
+- Gerçek Chromium'da 41 senaryo dev sunucusunda, 41 senaryo üretim derlemesinde (UX testleri dahil)
 - Temiz klonda README komutları
 - Dağıtım simülasyonu (pytest içinde)
 
@@ -104,12 +132,9 @@ Evet. Gerçek Chromium'da dev ve üretim derlemesinde, 5 referans ve 34 sınır 
 Evet. `docs/demo/kara-kutu-v2.0-demo.mp4`, 76 sn, gerçek uygulama ve gerçek çıkarımla. Uyarlama `?rollout=on` geliştirici geçersiz kılmasıyla gösteriliyor; bu, red statüsüyle birlikte videonun başında ve panelde belirtiliyor.
 
 **9. İnsan incelemesi gerektiren bölümler neler?**
-README'deki "Repo sahibinin kişisel incelemesi" maddeleri:
-- okunan ve onaylanan dosyalar
-- elle yapılan değişiklikler
-- telefonda `?veri=1` denemesi
-- demo videosunun dürüstlük notlarının onayı
-- CI'ın ilk koşu sonucu
+README'deki "Human Evaluation" şablonu.
+- Simüle UX değerlendirmesi doldurulmuş durumda, ama bir insanın deneyimi değil.
+- Doğrulanması gereken en önemli hipotezler: uyarlamanın tahmin edilemezliği kafa karıştırıyor mu, kavram özeti gerçekten öğretici mi, 10 px etiketler telefonda okunuyor mu?
 
 **10. Kullanıcının dışarıdan yapması gereken zorunlu işlem kaldı mı?**
 Evet, iki tane; ikisi de bu ortamdan yapılamaz.
@@ -117,7 +142,7 @@ Evet, iki tane; ikisi de bu ortamdan yapılamaz.
 - **Push ve CI:** Repoyu GitHub'a push edip CI'ın ilk koşusunu gözden geçirmek. Cypress ilk kez orada koşacak.
 
 İsteğe bağlı olanlar:
-- README'deki kişisel inceleme alanını doldurmak.
+- README'deki "Human Evaluation" şablonunu doldurmak (en az bir gerçek kişiyle).
 - Model kabul edilirse `HF_TOKEN` ile yayın yapmak.
 
 ## Başlatma
@@ -130,6 +155,7 @@ npm run dev        # http://localhost:3000   ·  ?debug=1 geliştirici paneli  �
 
 ## Dürüst sınırlamalar
 
+- UX değerlendirmesi betiklenmiş profillerle yapıldı; gerçek kullanıcı tepkisi ölçülmedi.
 - Tarayıcı testleri tek motorda (Chromium 153) koştu; Firefox, Safari ve gerçek bir telefonda dokunmatik kullanım denenmedi.
 - Google Fonts sandbox'ta yüklenemedi; testler ve video yedek yazı tipleriyle koştu.
 - Derleme ORT WASM dosyasını hem `assets/` hem `ort/` altına koyuyor (~14 MB yinelenen dağıtım boyutu). Tarayıcı yalnızca `ort/` kopyasını indiriyor.

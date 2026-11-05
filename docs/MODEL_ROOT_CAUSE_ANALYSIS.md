@@ -143,3 +143,50 @@ Bu alternatifin metrikleri **bilerek hesaplanmadı**. Önce hesaplayıp sonra se
 - Sonuçları gördükten sonra eşik, hedef veya özellik seçmek kabul kapısını anlamsızlaştırır (çoklu karşılaştırma, test kümesine uydurma).
 - Sentetik veride iyileşme, gerçek oyunculardaki başarıyı kanıtlamaz; üreticinin varsayımları değiştirilirse metrikler istenen her yere götürülebilir.
 - Uyarlamalı destek etiketleri etkiler (müdahale yanlılığı). Bu yüzden veri toplama gölge modda yapılır.
+
+## 8. Profil bazlı hata analizi (sentetik test kümesi)
+
+Kaynak: `analysis/profil_analizi.py` → `analysis/profil_analizi.json`. Yalnızca teşhis; tüm veriler **sentetik**, gerçek oyuncu davranışı hakkında bir şey kanıtlamaz.
+
+### Aşırı uyum yok, sinyal zayıf
+
+| | ROC-AUC | Dengeli doğruluk | Destek oranı |
+|---|---|---|---|
+| Eğitim | 0.658 | 0.555 | 0.140 |
+| Test | 0.651 | 0.527 | 0.136 |
+
+E�itim ile test arasındaki fark küçük. Sorun ezberleme değil, yetersiz uyum: 11 katsayılı lojistik modelde bu beklenen bir durum.
+
+### Modelin nerede doğru, nerede yanlış olduğu
+
+| Profil (test) | n | Sonraki karar riskli | Destek verildi | Kaçırılan destek (FN) | Gereksiz destek (FP) |
+|---|---|---|---|---|---|
+| Karar süresi < 15 sn | 116 | %25 | %2.6 | %96.6 | %2.3 |
+| Karar süresi ≥ 30 sn | 79 | %42 | %34 | %66.7 | %34.8 |
+| İpucu hiç kullanılmadı | 90 | %22 | %2.2 | %95 | %1.4 |
+| İpucu her kararda | 51 | %39 | %51 | %50 | %51.6 |
+| Bu karar güvenli | 174 | %25 | %2.3 | %100 | %3.1 |
+| Bu karar riskli | 134 | %46 | %28 | %71 | %27.8 |
+| Ardışık hata ≥ 2 | 38 | %58 | %32 | %63.6 | %25 |
+| Tekrar oyun (retry ≥ 1) | 116 | %33 | %9.5 | %86.8 | %7.7 |
+| Deneyimliyim | 106 | %33 | %15 | %74.3 | %9.9 |
+
+**Kör noktalar:**
+1. **Hızlı ama yanlış oyuncu.** Model büyük ölçüde süre ve ipucu kullanımına dayanıyor. Hızlı karar veren ve ipucu kullanmayan oyuncu sonraki kararda zorlansa bile neredeyse hiç destek almıyor (FN %96.6). Kendinden emin ama yanılan öğrenci tam da bu profile uyar.
+2. **İpucu kullanımı desteği kendi kendine çağırıyor.** Her kararda ipucu açanların yarısına destek veriliyor ve bunların yarısı gereksiz (FP %51.6). Yardım isteyen, ihtiyacı olmasa da daha çok yardım alıyor.
+3. **Zorlanma sürünce destek düşebilir.** Ardışık iki hatadan sonra bile destek oranı yalnızca %32. UX turunda bu, desteğin geri çekilmesi olarak görüldü. Ürün kuralıyla ele alındı (spec §14 madde 4); model değişmedi.
+
+### Örnekleme yanlılığı riskleri
+
+- Sentetik veride seviyeler neredeyse eşit dağılıyor (%32 / %32 / %36). Gerçek sınıfta "Yeni başladım" ve "Biraz deneyimim var" baskın olabilir.
+- Oturum başına ortalama 5.0 karar var; gerçek katılımcılar daha az tekrar oynayabilir. Bu, etiketli satır sayısını azaltır.
+- Tereddüt sayısı fareyle ölçülür. Telefonla oynayan katılımcılarda sistematik olarak düşük kalır; dağılım kayması yaratır.
+- 15 gerçek oturum yaklaşık 50–75 etiketli satır demektir. Bu boyutta 5 katlı gruplu değerlendirmenin güven aralığı çok geniş olur. 15, kabul için **alt sınırdır**, yeterlilik garantisi değil.
+
+### v2.1 için ek ön kayıt adayları (uygulanmadı)
+
+- "Hızlı ve riskli" etkileşim terimi.
+- `next_scene` özelliği.
+- İpucu kullanımının etiketten ayrıştırılması (ipucunu desteğin sonucu değil, isteği olarak modellemek).
+
+Hiçbiri gerçek veri görülmeden ve ön kayıt yapılmadan uygulanmaz.

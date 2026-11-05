@@ -258,7 +258,7 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
           data-testid="hint-btn"
           onClick={toggleHint}
           aria-expanded={isHintOpen}
-          className="w-full px-3.5 py-2.5 flex items-center justify-between bg-slate-900/90 hover:bg-slate-850 font-mono text-xs transition-colors cursor-pointer"
+          className="w-full min-h-[48px] px-3.5 py-2.5 flex items-center justify-between bg-slate-900/90 hover:bg-slate-850 font-mono text-xs transition-colors cursor-pointer"
         >
           <div className="flex items-center gap-2 text-sky-400">
             <Bot className="w-4 h-4" />
@@ -354,13 +354,13 @@ export const DecisionView: React.FC<DecisionViewProps> = ({
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Tutor'a sor…"
                 disabled={isLoading}
-                className="flex-1 bg-slate-900 border border-slate-700/80 focus:border-sky-500 rounded px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none font-body"
+                className="min-h-[44px] flex-1 bg-slate-900 border border-slate-700/80 focus:border-sky-500 rounded px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none font-body"
               />
               <button
                 data-testid="tutor-send"
                 type="submit"
                 disabled={isLoading || !inputText.trim()}
-                className="px-3.5 py-2 bg-sky-500 hover:bg-sky-400 disabled:opacity-40 text-slate-950 font-mono font-bold text-xs rounded flex items-center gap-1 transition-colors cursor-pointer shrink-0"
+                className="min-h-[44px] px-3.5 py-2 bg-sky-500 hover:bg-sky-400 disabled:opacity-40 text-slate-950 font-mono font-bold text-xs rounded flex items-center gap-1 transition-colors cursor-pointer shrink-0"
               >
                 <span>GÖNDER</span>
                 <Send className="w-3 h-3" />

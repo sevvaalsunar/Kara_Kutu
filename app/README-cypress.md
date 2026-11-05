@@ -36,8 +36,9 @@ Testleri tarayıcıda adım adım izlemek için `npx cypress open`.
 | `cypress/e2e/00-demo.cy.js` | Yaklaşık 60 saniyelik yavaş oynanış (demo videosu için) |
 | `cypress/e2e/adaptif.cy.js` | v2.0 KÖ6–KÖ7: zorlanan oyuncuya kavram özeti ve ek destek, akıcı oyuncuya standart akış, 90 sn sayaç, destek metinlerinin cevap vermemesi |
 | `cypress/e2e/model.cy.js` | v2.0 KÖ8: model yükleme, gölge mod, model indirilemezse oyunun bozulmaması, `?model=off`, aralık dışı girdinin reddi |
-| `cypress/e2e/parite.cy.js` | v2.0 KÖ9: `tests/parite.json`'daki 5 referans girdide tarayıcı ↔ Python farkı < 1e-4 |
+| `cypress/e2e/parite.cy.js` | v2.0 KÖ9: `tests/parite.json`'daki 5 referans ve `tests/parite_sinir.json`'daki 34 sınır girdisinde tarayıcı ↔ Python farkı < 1e-4 |
 | `cypress/e2e/veri.cy.js` | v2.0 veri toplama modu: onay, gölge mod, CSV dışa aktarma |
+| `cypress/e2e/ux.cy.js` | UX turu düzeltmeleri: KÖ10 destek sürekliliği, DENEYSEL şeridi, başlat ipucu, son ekran kavram kartı, ≥ 44 px kontroller |
 | `cypress/e2e/01-adaptif-demo.cy.js` | v2.0 demo: aynı sahnede iki oyuncu, iki farklı deneyim |
 
 **Cypress çalıştırılamayan ortamlar için:** aynı senaryoların gerçek Chromium üzerinde puppeteer portları `tools/browser-e2e/` altındadır (`./with-server.sh node run.mjs`). Bu portlar geliştirme ortamında koşturuldu; Cypress dosyalarının kendisi CI'da koşar.

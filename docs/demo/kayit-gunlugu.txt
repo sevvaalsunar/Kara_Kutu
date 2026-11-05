@@ -1,18 +1,18 @@
-  4.5 sn  kayıt başladı
-  4.5 sn  altyazı: KARA KUTU v2.0 · Adaptif Primer
-  8.5 sn  altyazı: Önemli: bu bir mekanizma gösterimidir
- 15.5 sn  altyazı: Oyuncu A · “Biraz deneyimim var”
- 21.1 sn  altyazı: Oyuncu A 40 saniye düşünüyor, ipucunu açıyor…
- 26.2 sn  altyazı: …ve riskli seçeneği (A) seçiyor
- 28.4 sn  Oyuncu A olasılığı p = 0.730345606803894
- 29.9 sn  altyazı: Model: p = 0.730 ≥ 0.65 → öğrenme desteği
- 36.5 sn  altyazı: Karar 2: tutor kendiliğinden açıldı
- 44.4 sn  altyazı: Oyuncu B · aynı sahne, aynı seviye
- 51.5 sn  altyazı: Oyuncu B 3 saniyede, ipucusuz B’yi seçiyor
- 54.4 sn  Oyuncu B olasılığı p = 0.29293033480644226
- 54.4 sn  altyazı: Model: p = 0.293 &lt; 0.65 → standart akış
- 61.7 sn  altyazı: Karar 2: ipucu kutusu kapalı (seviyenin varsayılanı)
- 67.2 sn  altyazı: Geliştirici paneli (?debug=1)
- 74.2 sn  altyazı: Doğrulama
- 81.5 sn  kayıt bitti: 1708 kare
- 91.8 sn  mp4 süresi 76.0 sn
+  2.5 sn  kayıt başladı
+  2.6 sn  altyazı: KARA KUTU v2.0 · Adaptif Primer
+  6.6 sn  altyazı: Önemli: bu bir mekanizma gösterimidir
+ 13.6 sn  altyazı: Oyuncu A · “Biraz deneyimim var”
+ 19.3 sn  altyazı: Oyuncu A 40 saniye düşünüyor, ipucunu açıyor…
+ 24.4 sn  altyazı: …ve riskli seçeneği (A) seçiyor
+ 26.6 sn  Oyuncu A olasılığı p = 0.730345606803894
+ 28.1 sn  altyazı: Model: p = 0.730 ≥ 0.65 → öğrenme desteği
+ 34.7 sn  altyazı: Karar 2: tutor kendiliğinden açıldı
+ 42.8 sn  altyazı: Oyuncu B · aynı sahne, aynı seviye
+ 49.9 sn  altyazı: Oyuncu B 3 saniyede, ipucusuz B’yi seçiyor
+ 52.9 sn  Oyuncu B olasılığı p = 0.29293033480644226
+ 52.9 sn  altyazı: Model: p = 0.293 &lt; 0.65 → standart akış
+ 60.2 sn  altyazı: Karar 2: ipucu kutusu kapalı (seviyenin varsayılanı)
+ 66.0 sn  altyazı: Geliştirici paneli (?debug=1)
+ 73.0 sn  altyazı: Doğrulama
+ 80.3 sn  kayıt bitti: 1495 kare
+ 90.4 sn  mp4 süresi 77.3 sn

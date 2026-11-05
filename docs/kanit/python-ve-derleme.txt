@@ -1,5 +1,5 @@
 ## pytest
-55 passed in 31.13s
+55 passed in 30.65s
 ## veri doğrulama
 GEÇERLİ   data/oturumlar.csv: 2010 satır, 0 gerçek oturum, 400 sentetik oturum
 ## sentetik tekrarlanabilirlik
@@ -15,9 +15,11 @@ YAYIN REDDEDİLDİ: model/ altında eksik dosya: ['model.onnx', 'config.json', '
 ## eğitim kapısı (bayraksız)
 çıkış=1 (1 beklenir)
 README.md config.schema.json egitim_ayarlari.json gelistirme 
+## eğitim tekrarlanabilirliği
+bayt bayt aynı
 ## tsc
 temiz
 ## vite build
 [sync-model] kara-kutu-destek 2.0.0 (reddedildi) ← /home/claude/Kara_Kutu/model/gelistirme
 [sync-model] ORT-web WASM dosyaları → public/ort/
-✓ built in 2.29s
+✓ built in 1.14s

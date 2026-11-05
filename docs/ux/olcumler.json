@@ -1,0 +1,353 @@
+{
+  "olasiliklar": [
+    {
+      "profil": "P1 hızlı",
+      "karar": "K1→1B",
+      "p": 0.33865976333618164
+    },
+    {
+      "profil": "P1 hızlı",
+      "karar": "K2_1B→2B1",
+      "p": 0.34424811601638794
+    },
+    {
+      "profil": "P1 hızlı",
+      "karar": "K3→A",
+      "p": 0.3420073986053467
+    },
+    {
+      "profil": "P2 düşünen",
+      "karar": "K1→1B (45 sn, tutor)",
+      "p": 0.4901603162288666
+    },
+    {
+      "profil": "P2 düşünen",
+      "karar": "K2_1B→2B1 (50 sn)",
+      "p": 0.4285238981246948
+    },
+    {
+      "profil": "P3 zorlanan",
+      "karar": "K1→1A (40 sn, ipucu)",
+      "p": 0.730345606803894
+    },
+    {
+      "profil": "P3 zorlanan",
+      "karar": "K2_1A→2A1 (30 sn)",
+      "p": 0.5781866312026978
+    },
+    {
+      "profil": "P3 zorlanan",
+      "karar": "K3→B (20 sn)",
+      "p": 0.4846996068954468
+    }
+  ],
+  "ekranlar": [
+    {
+      "ekran": "01-giris",
+      "kucukHedef": [
+        "debug-toggle:356×31"
+      ],
+      "kucukMetin": [
+        "10px:\"/\"",
+        "10px:\"·\"",
+        "10px:\"ICU-Net\"",
+        "10px:\"yanlış komutlar\"",
+        "10px:\"Son tarih\"",
+        "10px:\"15 dk kaldı\"",
+        "10px:\"kritik eşik\"",
+        "10px:\"DÜĞÜM: HASTANE_OMURGA_TR\"",
+        "10px:\"[TETİKTE]\"",
+        "10px:\"Tutor ipuçları açık, süre sı\"",
+        "10px:\"İpuçları butonla açılır, sür\"",
+        "10px:\"Butonla ipucu, 60s geri sayı\""
+      ],
+      "kucukMetinSayisi": 17,
+      "adsiz": [],
+      "yatayTasma": false,
+      "sayfaYuksekligi": 1482
+    },
+    {
+      "ekran": "02-karar1-deneyimli",
+      "kucukHedef": [
+        "debug-toggle:356×31"
+      ],
+      "kucukMetin": [
+        "10px:\"/\"",
+        "10px:\"·\"",
+        "10px:\"DÜĞÜM: HASTANE_OMURGA_TR\"",
+        "10px:\"ETKİLENEN HASTA: 300\"",
+        "10px:\"RİSK: YÜKSEK\"",
+        "10px:\"AKTİF\"",
+        "10px:\"Sistem günlüğü kaydediliyor.\"",
+        "10px:\"DEV\"",
+        "10px:\"HAZIR\""
+      ],
+      "kucukMetinSayisi": 9,
+      "adsiz": [],
+      "yatayTasma": false,
+      "sayfaYuksekligi": 844
+    },
+    {
+      "ekran": "03-sonuc-hizli",
+      "kucukHedef": [
+        "debug-toggle:356×31"
+      ],
+      "kucukMetin": [
+        "10px:\"/\"",
+        "10px:\"·\"",
+        "10px:\"// OLAY KAYIT ID: #KK-904-RE\"",
+        "10px:\"// YÜRÜTÜLEN MÜDAHALE PROTOK\"",
+        "10px:\"■ TAMAMLANDI\"",
+        "10px:\"// SAHA ANALİZİ · FAZ 01\"",
+        "10px:\"SYS.STAT: 200_OK\"",
+        "10px:\"// KÖK NEDEN TESPİTİ\"",
+        "10px:\"DIAG.CODE: 0x88F\"",
+        "10px:\"Sistem günlüğü güncellendi ·\"",
+        "10px:\"DEV\"",
+        "10px:\"HAZIR\""
+      ],
+      "kucukMetinSayisi": 12,
+      "adsiz": [],
+      "yatayTasma": false,
+      "sayfaYuksekligi": 907
+    },
+    {
+      "ekran": "04-son-iyi",
+      "kucukHedef": [
+        "debug-toggle:356×31"
+      ],
+      "kucukMetin": [
+        "10px:\"/\"",
+        "10px:\"·\"",
+        "10px:\"// PROTOKOL-SON: İNCELEME_RA\"",
+        "10px:\"[KOD-0] TAMAMLIK\"",
+        "9px:\"8 HASTA\"",
+        "10px:\"■ GÜVENDE\"",
+        "9px:\"SİSTEM\"",
+        "10px:\"■ MÜHÜRLENDİ\"",
+        "9px:\"KVKK\"",
+        "10px:\"■ SÜRESİNDE\"",
+        "10px:\"ONAY\"",
+        "10px:\"KARA KUTU ARŞİV KİMLİĞİ: #KK\""
+      ],
+      "kucukMetinSayisi": 14,
+      "adsiz": [],
+      "yatayTasma": false,
+      "sayfaYuksekligi": 917
+    },
+    {
+      "ekran": "05-karar1-yeni-tutor",
+      "kucukHedef": [
+        "debug-toggle:356×31"
+      ],
+      "kucukMetin": [
+        "10px:\"/\"",
+        "10px:\"·\"",
+        "10px:\"DÜĞÜM: HASTANE_OMURGA_TR\"",
+        "10px:\"ETKİLENEN HASTA: 300\"",
+        "10px:\"RİSK: YÜKSEK\"",
+        "10px:\"AKTİF\"",
+        "10px:\"TUTOR AI // REHBER\"",
+        "10px:\"Sistem günlüğü kaydediliyor.\"",
+        "10px:\"DEV\"",
+        "10px:\"HAZIR\""
+      ],
+      "kucukMetinSayisi": 10,
+      "adsiz": [],
+      "yatayTasma": false,
+      "sayfaYuksekligi": 1122
+    },
+    {
+      "ekran": "06-sonuc-dusunen",
+      "kucukHedef": [
+        "debug-toggle:356×31"
+      ],
+      "kucukMetin": [
+        "10px:\"/\"",
+        "10px:\"·\"",
+        "10px:\"// OLAY KAYIT ID: #KK-904-RE\"",
+        "10px:\"// YÜRÜTÜLEN MÜDAHALE PROTOK\"",
+        "10px:\"■ TAMAMLANDI\"",
+        "10px:\"// SAHA ANALİZİ · FAZ 01\"",
+        "10px:\"SYS.STAT: 200_OK\"",
+        "10px:\"// KÖK NEDEN TESPİTİ\"",
+        "10px:\"DIAG.CODE: 0x88F\"",
+        "10px:\"// ALTYAPI PROTOKOLÜ 4.2\"",
+        "10px:\"Sistem günlüğü güncellendi ·\"",
+        "10px:\"DEV\""
+      ],
+      "kucukMetinSayisi": 13,
+      "adsiz": [],
+      "yatayTasma": false,
+      "sayfaYuksekligi": 955
+    },
+    {
+      "ekran": "07-sonuc-zorlanan-ozet",
+      "kucukHedef": [
+        "debug-toggle:356×31"
+      ],
+      "kucukMetin": [
+        "10px:\"/\"",
+        "10px:\"·\"",
+        "10px:\"// OLAY KAYIT ID: #KK-904-RE\"",
+        "10px:\"// YÜRÜTÜLEN MÜDAHALE PROTOK\"",
+        "10px:\"■ TAMAMLANDI\"",
+        "10px:\"// SAHA ANALİZİ · FAZ 01\"",
+        "10px:\"SYS.STAT: 200_OK\"",
+        "10px:\"// KÖK NEDEN TESPİTİ\"",
+        "10px:\"DIAG.CODE: 0x88F\"",
+        "10px:\"// ALTYAPI PROTOKOLÜ 4.2\"",
+        "10px:\"Önceki kararlarına göre ek a\"",
+        "10px:\"Sistem günlüğü güncellendi ·\""
+      ],
+      "kucukMetinSayisi": 14,
+      "adsiz": [],
+      "yatayTasma": false,
+      "sayfaYuksekligi": 1196
+    },
+    {
+      "ekran": "08-karar2-ek-destek",
+      "kucukHedef": [
+        "debug-toggle:356×31"
+      ],
+      "kucukMetin": [
+        "10px:\"/\"",
+        "10px:\"·\"",
+        "10px:\"DÜĞÜM: HASTANE_OMURGA_TR\"",
+        "10px:\"ETKİLENEN HASTA: 300\"",
+        "10px:\"RİSK: YÜKSEK\"",
+        "10px:\"AKTİF\"",
+        "10px:\"TUTOR AI // REHBER\"",
+        "10px:\"TUTOR // EK DESTEK\"",
+        "10px:\"Önceki kararlarına göre ek a\"",
+        "10px:\"Sistem günlüğü kaydediliyor.\"",
+        "10px:\"DEV\"",
+        "10px:\"HAZIR\""
+      ],
+      "kucukMetinSayisi": 12,
+      "adsiz": [],
+      "yatayTasma": false,
+      "sayfaYuksekligi": 1125
+    },
+    {
+      "ekran": "09-son-kotu",
+      "kucukHedef": [
+        "debug-toggle:356×31"
+      ],
+      "kucukMetin": [
+        "10px:\"/\"",
+        "10px:\"·\"",
+        "10px:\"// PROTOKOL-SON: [KOD-ERR] İ\"",
+        "10px:\"TESPİTİ\"",
+        "10px:\"// ACİL SERVİS / TELEMETRİ K\"",
+        "10px:\"FATAL\"",
+        "10px:\"// NEDEN\"",
+        "10px:\"KRİTİK HATA\"",
+        "10px:\"KARA KUTU ARŞİV KİMLİĞİ: #KK\"",
+        "10px:\"DEV\"",
+        "10px:\"HAZIR\""
+      ],
+      "kucukMetinSayisi": 11,
+      "adsiz": [],
+      "yatayTasma": false,
+      "sayfaYuksekligi": 1023
+    },
+    {
+      "ekran": "10-debug-acik",
+      "kucukHedef": [
+        "debug-toggle:356×31",
+        "button:332×29"
+      ],
+      "kucukMetin": [
+        "10px:\"/\"",
+        "10px:\"·\"",
+        "10px:\"// PROTOKOL-SON: [KOD-ERR] İ\"",
+        "10px:\"TESPİTİ\"",
+        "10px:\"// ACİL SERVİS / TELEMETRİ K\"",
+        "10px:\"FATAL\"",
+        "10px:\"// NEDEN\"",
+        "10px:\"KRİTİK HATA\"",
+        "10px:\"KARA KUTU ARŞİV KİMLİĞİ: #KK\"",
+        "10px:\"GELİŞTİRİCİ // MODEL\"",
+        "10px:\"HAZIR\"",
+        "10px:\"sürüm\""
+      ],
+      "kucukMetinSayisi": 39,
+      "adsiz": [],
+      "yatayTasma": false,
+      "sayfaYuksekligi": 1568
+    },
+    {
+      "ekran": "11-veri-modu-onay",
+      "kucukHedef": [
+        "consent:13×16",
+        "debug-toggle:356×31"
+      ],
+      "kucukMetin": [
+        "10px:\"/\"",
+        "10px:\"·\"",
+        "10px:\"ICU-Net\"",
+        "10px:\"yanlış komutlar\"",
+        "10px:\"Son tarih\"",
+        "10px:\"15 dk kaldı\"",
+        "10px:\"kritik eşik\"",
+        "10px:\"DÜĞÜM: HASTANE_OMURGA_TR\"",
+        "10px:\"[TETİKTE]\"",
+        "10px:\"Tutor ipuçları açık, süre sı\"",
+        "10px:\"İpuçları butonla açılır, sür\"",
+        "10px:\"Butonla ipucu, 60s geri sayı\""
+      ],
+      "kucukMetinSayisi": 18,
+      "adsiz": [],
+      "yatayTasma": false,
+      "sayfaYuksekligi": 1695
+    },
+    {
+      "ekran": "12-360px-model-yok",
+      "kucukHedef": [
+        "debug-toggle:329×31"
+      ],
+      "kucukMetin": [
+        "10px:\"/\"",
+        "10px:\"·\"",
+        "10px:\"DÜĞÜM: HASTANE_OMURGA_TR\"",
+        "10px:\"ETKİLENEN HASTA: 300\"",
+        "10px:\"RİSK: YÜKSEK\"",
+        "10px:\"AKTİF\"",
+        "10px:\"Sistem günlüğü kaydediliyor.\"",
+        "10px:\"DEV\"",
+        "10px:\"DEVRE DIŞI\""
+      ],
+      "kucukMetinSayisi": 9,
+      "adsiz": [],
+      "yatayTasma": false,
+      "sayfaYuksekligi": 790
+    },
+    {
+      "ekran": "13-normal-kullanici-giris",
+      "kucukHedef": [],
+      "kucukMetin": [
+        "10px:\"/\"",
+        "10px:\"·\"",
+        "10px:\"ICU-Net\"",
+        "10px:\"yanlış komutlar\"",
+        "10px:\"Son tarih\"",
+        "10px:\"15 dk kaldı\"",
+        "10px:\"kritik eşik\"",
+        "10px:\"DÜĞÜM: HASTANE_OMURGA_TR\"",
+        "10px:\"[TETİKTE]\"",
+        "10px:\"Tutor ipuçları açık, süre sı\"",
+        "10px:\"İpuçları butonla açılır, sür\"",
+        "10px:\"Butonla ipucu, 60s geri sayı\""
+      ],
+      "kucukMetinSayisi": 15,
+      "adsiz": [],
+      "yatayTasma": false,
+      "sayfaYuksekligi": 1356
+    },
+    {
+      "ekran": "normal kullanıcı (parametresiz)",
+      "debugPaneliVar": false
+    }
+  ]
+}

@@ -3,6 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import { RECAP_BY_CONCEPT } from '../ml/adaptive';
+import { DECISIONS } from '../story';
 import React from 'react';
 import { RotateCcw, Download, CheckCircle2, AlertOctagon, ShieldCheck, ShieldAlert, Check, X } from 'lucide-react';
 import {
@@ -18,9 +20,11 @@ interface EndingViewProps {
   onRestart: () => void;
   /** v2.0: yalnızca veri toplama modunda (spec §15) */
   onExport?: () => void;
+  /** Kavram kartı yalnızca "Kavramları öğrenmek" hedefinde gösterilir (spec §4). */
+  goal?: 'learn' | 'test';
 }
 
-export const EndingView: React.FC<EndingViewProps> = ({ path, clock, onRestart, onExport }) => {
+export const EndingView: React.FC<EndingViewProps> = ({ path, clock, onRestart, onExport, goal = 'learn' }) => {
   const pathKey = path.join(' -> ');
   const isGood = pathKey === '1B -> 2B1 -> A';
   const endingType = isGood ? 'good' : 'bad';
@@ -220,6 +224,38 @@ export const EndingView: React.FC<EndingViewProps> = ({ path, clock, onRestart, 
           <RotateCcw className="w-4 h-4" />
           <span>BAŞTAN OYNA</span>
         </button>
+
+        {goal === 'learn' && (
+          <div data-testid="ending-concepts" className="p-4 rounded-lg bg-slate-900/80 border border-slate-800 space-y-2.5">
+            <h2 className="font-heading font-bold text-sm text-sky-300">Bu nöbette karşılaştığın kavramlar</h2>
+            <ul className="space-y-2">
+              {(() => {
+                // Aynı kavram birden fazla kararda geçebilir (ör. 1A ve 2A1); her kavram bir kez, herhangi bir hata varsa "TEKRAR ET".
+                const byConcept = new Map<string, boolean>();
+                decisionSummary.forEach((dec, i) => {
+                  const concept = Object.values(DECISIONS)
+                    .flatMap((d) => [d.choiceA, d.choiceB])
+                    .find((c) => c.id === path[i])?.concept;
+                  if (!concept) return;
+                  const ok = isGood || dec.isCorrectInGoodPath;
+                  byConcept.set(concept, (byConcept.get(concept) ?? true) && ok);
+                });
+                return [...byConcept].map(([concept, ok]) => (
+                  <li key={concept} className="font-body text-xs leading-relaxed text-slate-300">
+                    <span className={`font-mono text-[11px] font-bold mr-1.5 ${ok ? 'text-sky-400' : 'text-amber-400'}`}>
+                      {ok ? 'UYGULADIN' : 'TEKRAR ET'}
+                    </span>
+                    <span className="font-semibold text-slate-100">{concept}</span>
+                    {RECAP_BY_CONCEPT[concept] && <span className="text-slate-400"> · {RECAP_BY_CONCEPT[concept].title}</span>}
+                  </li>
+                ));
+              })()}
+            </ul>
+            <p className="font-body text-[11px] text-slate-500">
+              Farklı bir yol denemek için “Baştan oyna”ya bas; her karar farklı bir sonuca götürür.
+            </p>
+          </div>
+        )}
 
         {onExport && (
           <button

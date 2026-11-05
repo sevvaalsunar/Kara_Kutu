@@ -59,3 +59,7 @@ Tarih: 2026-11-04 · Bu belge, "son tamamlama ve doğrulama" aşamasının **ba�
 | 7 | `SINAV_TASARIMI.md` iki sayfaydı (613 kelime); ödev en fazla bir sayfa istiyor. | A4 / 10.5 pt PDF'e dökülüp sayfa sayısı ölçüldü | 343 kelimeye indirildi, zorunlu bölümler korundu; yeniden ölçüldü: 1 sayfa |
 | 8 | Doğrulayıcı özeti `kaynak=test` oturumlarını saymıyordu ("0 gerçek, 0 sentetik"). | Örnek test oturumu doğrulaması | Özet test oturumlarını "eğitime giremez" notuyla gösterir |
 | — | Bulgu (hata değil): model olasılıkları kalibre değil; Brier 0.236, sabit taban oran tahmincisi 0.225. | `analysis/kok_neden.py` kalibrasyon bölümü | Model değiştirilmedi; `MODEL_ROOT_CAUSE_ANALYSIS.md` Neden 5, v2.1 ön kayıt adayı |
+
+## Simüle UX turu (2026-11-05)
+
+Gerçek uygulama, gerçek tarayıcıda üç betiklenmiş profille oynatıldı (`tools/browser-e2e/ux-turu.mjs`). Bulunan 7 kullanılabilirlik sorunu (U1–U7) düzeltildi ve testlendi. Ayrıntı: [`UX_DEGERLENDIRME.md`](UX_DEGERLENDIRME.md), özet: [`FINAL_REPORT.md`](FINAL_REPORT.md). Bu bir insan değerlendirmesi değildir.

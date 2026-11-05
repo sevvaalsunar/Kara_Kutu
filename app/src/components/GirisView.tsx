@@ -129,7 +129,7 @@ export const GirisView: React.FC<GirisViewProps> = ({
                   key={item.id}
                   data-testid={item.testId}
                   onClick={() => setLevel(item.id as UserLevel)}
-                  className={`w-full text-left p-3 rounded-lg border transition-all flex items-center justify-between cursor-pointer ${
+                  className={`w-full min-h-[48px] text-left p-3 rounded-lg border transition-all flex items-center justify-between cursor-pointer ${
                     isSelected
                       ? 'bg-sky-500/10 border-sky-400 shadow-sm shadow-sky-500/20'
                       : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
@@ -179,7 +179,7 @@ export const GirisView: React.FC<GirisViewProps> = ({
                   key={item.id}
                   data-testid={item.testId}
                   onClick={() => setRole(item.id as UserRole)}
-                  className={`w-full text-left p-3 rounded-lg border transition-all flex items-center justify-between cursor-pointer ${
+                  className={`w-full min-h-[48px] text-left p-3 rounded-lg border transition-all flex items-center justify-between cursor-pointer ${
                     isSelected
                       ? 'bg-sky-500/10 border-sky-400 shadow-sm shadow-sky-500/20'
                       : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
@@ -223,7 +223,7 @@ export const GirisView: React.FC<GirisViewProps> = ({
                   key={item.id}
                   data-testid={item.testId}
                   onClick={() => setGoal(item.id as UserGoal)}
-                  className={`w-full text-left p-3 rounded-lg border transition-all flex items-center justify-between cursor-pointer ${
+                  className={`w-full min-h-[48px] text-left p-3 rounded-lg border transition-all flex items-center justify-between cursor-pointer ${
                     isSelected
                       ? 'bg-sky-500/10 border-sky-400 shadow-sm shadow-sky-500/20'
                       : 'bg-slate-900/60 border-slate-800 hover:border-slate-700'
@@ -300,6 +300,13 @@ export const GirisView: React.FC<GirisViewProps> = ({
           <ArrowRight className="w-4 h-4" />
         </button>
 
+        {!isReady && (
+          <p data-testid="start-hint" className="text-center font-body text-xs text-amber-300/90">
+            Devam etmek için {[!level && 'seviyeni', !role && 'rolünü', !goal && 'hedefini'].filter(Boolean).join(', ') || ''}
+            {(!level || !role || !goal) ? ' seç' : ''}
+            {requireConsent && !consent ? `${!level || !role || !goal ? ' ve ' : ''}gizlilik notunu onayla` : ''}.
+          </p>
+        )}
         <p className="text-center font-mono text-[10px] text-slate-500">
           • Sistem günlüğü kaydediliyor. Geri dönüş yoktur.
         </p>

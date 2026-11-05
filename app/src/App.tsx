@@ -117,7 +117,10 @@ export default function App() {
       features = computeFeatures(logRef.current.events, index);
       const { p, ms } = await predict(features);
       logRef.current.setModelP(index, p);
-      const applied = r.mode === 'on' && p >= st.config.support_threshold;
+      // spec §14 madde 4: destek verilmiş bir kararda yine riskli seçim yapıldıysa destek geri çekilmez
+      const ev = logRef.current.events[index];
+      const continued = ev.destek_verildi && (ev.zaman_asimi || ['1A', '2A1', '2B2', 'B'].includes(ev.secim_id));
+      const applied = r.mode === 'on' && (p >= st.config.support_threshold || continued);
       setLastPrediction({ index, sahne, p, ms, applied, features, error: null });
       if (applied) {
         if (currentIndexRef.current === index) setRecapIndex(index);
@@ -301,6 +304,16 @@ export default function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col justify-start">
+        {rollout.overridden && rollout.mode === 'on' && modelState.config && modelState.config.release_status !== 'kabul' && (
+          <div
+            data-testid="experimental-banner"
+            role="status"
+            className="mx-4 mt-3 px-3 py-2 rounded-md border border-amber-500/40 bg-amber-500/10 font-body text-[11px] leading-snug text-amber-200"
+          >
+            <strong className="font-mono tracking-wider">DENEYSEL MOD</strong> · Uyarlama geliştirici ayarıyla açık.
+            Model henüz kabul edilmedi; normal oyuncular bu uyarlamayı görmez.
+          </div>
+        )}
         {screen === 'GIRIS' && (
           <GirisView
             level={level}
@@ -351,6 +364,7 @@ export default function App() {
             clock={gameClock}
             onRestart={handleRestart}
             onExport={DATA_MODE ? () => logRef.current.download() : undefined}
+            goal={goal ?? 'learn'}
           />
         )}
       </main>

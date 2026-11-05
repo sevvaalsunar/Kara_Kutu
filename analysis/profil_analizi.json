@@ -1,0 +1,153 @@
+{
+  "asiri_uyum": {
+    "egitim": {
+      "auc": 0.6575,
+      "n": 1302,
+      "pozitif_oran": 0.391,
+      "ort_p": 0.492,
+      "destek_orani": 0.14,
+      "kacirilan_destek_FN_orani": 0.794,
+      "gereksiz_destek_FP_orani": 0.097,
+      "ba": 0.555
+    },
+    "test": {
+      "auc": 0.6512,
+      "n": 308,
+      "pozitif_oran": 0.341,
+      "ort_p": 0.491,
+      "destek_orani": 0.136,
+      "kacirilan_destek_FN_orani": 0.829,
+      "gereksiz_destek_FP_orani": 0.118,
+      "ba": 0.527
+    }
+  },
+  "profil_segmentleri_test": {
+    "seviye=Yeni başladım": {
+      "n": 78,
+      "pozitif_oran": 0.397,
+      "ort_p": 0.491,
+      "destek_orani": 0.128,
+      "kacirilan_destek_FN_orani": 0.871,
+      "gereksiz_destek_FP_orani": 0.128,
+      "ba": 0.501
+    },
+    "seviye=Biraz deneyimim var": {
+      "n": 124,
+      "pozitif_oran": 0.315,
+      "ort_p": 0.501,
+      "destek_orani": 0.129,
+      "kacirilan_destek_FN_orani": 0.872,
+      "gereksiz_destek_FP_orani": 0.129,
+      "ba": 0.499
+    },
+    "seviye=Deneyimliyim": {
+      "n": 106,
+      "pozitif_oran": 0.33,
+      "ort_p": 0.478,
+      "destek_orani": 0.151,
+      "kacirilan_destek_FN_orani": 0.743,
+      "gereksiz_destek_FP_orani": 0.099,
+      "ba": 0.579
+    },
+    "ilk oyun": {
+      "n": 192,
+      "pozitif_oran": 0.349,
+      "ort_p": 0.514,
+      "destek_orani": 0.161,
+      "kacirilan_destek_FN_orani": 0.806,
+      "gereksiz_destek_FP_orani": 0.144,
+      "ba": 0.525
+    },
+    "tekrar oyun (retry ≥ 1)": {
+      "n": 116,
+      "pozitif_oran": 0.328,
+      "ort_p": 0.451,
+      "destek_orani": 0.095,
+      "kacirilan_destek_FN_orani": 0.868,
+      "gereksiz_destek_FP_orani": 0.077,
+      "ba": 0.527
+    },
+    "bu karar riskli": {
+      "n": 134,
+      "pozitif_oran": 0.463,
+      "ort_p": 0.58,
+      "destek_orani": 0.284,
+      "kacirilan_destek_FN_orani": 0.71,
+      "gereksiz_destek_FP_orani": 0.278,
+      "ba": 0.506
+    },
+    "bu karar güvenli": {
+      "n": 174,
+      "pozitif_oran": 0.247,
+      "ort_p": 0.422,
+      "destek_orani": 0.023,
+      "kacirilan_destek_FN_orani": 1.0,
+      "gereksiz_destek_FP_orani": 0.031,
+      "ba": 0.485
+    },
+    "karar süresi < 15 sn": {
+      "n": 116,
+      "pozitif_oran": 0.25,
+      "ort_p": 0.41,
+      "destek_orani": 0.026,
+      "kacirilan_destek_FN_orani": 0.966,
+      "gereksiz_destek_FP_orani": 0.023,
+      "ba": 0.506
+    },
+    "karar süresi ≥ 30 sn": {
+      "n": 79,
+      "pozitif_oran": 0.418,
+      "ort_p": 0.583,
+      "destek_orani": 0.342,
+      "kacirilan_destek_FN_orani": 0.667,
+      "gereksiz_destek_FP_orani": 0.348,
+      "ba": 0.493
+    },
+    "ipucu hiç kullanılmadı": {
+      "n": 90,
+      "pozitif_oran": 0.222,
+      "ort_p": 0.422,
+      "destek_orani": 0.022,
+      "kacirilan_destek_FN_orani": 0.95,
+      "gereksiz_destek_FP_orani": 0.014,
+      "ba": 0.518
+    },
+    "ipucu her kararda": {
+      "n": 51,
+      "pozitif_oran": 0.392,
+      "ort_p": 0.646,
+      "destek_orani": 0.51,
+      "kacirilan_destek_FN_orani": 0.5,
+      "gereksiz_destek_FP_orani": 0.516,
+      "ba": 0.492
+    },
+    "ardışık hata ≥ 2": {
+      "n": 38,
+      "pozitif_oran": 0.579,
+      "ort_p": 0.59,
+      "destek_orani": 0.316,
+      "kacirilan_destek_FN_orani": 0.636,
+      "gereksiz_destek_FP_orani": 0.25,
+      "ba": 0.557
+    },
+    "zaman aşımı": {
+      "n": 15,
+      "pozitif_oran": 0.4,
+      "ort_p": 0.643,
+      "destek_orani": 0.533,
+      "kacirilan_destek_FN_orani": 0.333,
+      "gereksiz_destek_FP_orani": 0.444,
+      "ba": 0.611
+    }
+  },
+  "orneklem": {
+    "seviye_dagilimi": {
+      "0.0": 0.322,
+      "1.0": 0.317,
+      "2.0": 0.361
+    },
+    "oturum_basina_karar_ort": 5.03,
+    "test_oturum": 76,
+    "test_satir": 308
+  }
+}

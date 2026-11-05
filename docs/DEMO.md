@@ -1,6 +1,8 @@
 # Demo videosu — KAYDEDİLDİ
 
-**Dosya:** [`docs/demo/kara-kutu-v2.0-demo.mp4`](demo/kara-kutu-v2.0-demo.mp4) · 76 sn · 390×844 · H.264 · 30 fps
+**Dosya:** [`docs/demo/kara-kutu-v2.0-demo.mp4`](demo/kara-kutu-v2.0-demo.mp4) · 77 sn · 390×844 · H.264 · 30 fps
+
+Simüle UX turundaki düzeltmelerden sonra (DENEYSEL MOD şeridi, yeni uyarlama notu, sayfa akışındaki geliştirici paneli) **yeniden kaydedildi**. Altyazılar ekranın altındadır; uygulamanın üstteki DENEYSEL MOD şeridini kapatmaz.
 **Kayıt günlüğü:** [`docs/demo/kayit-gunlugu.txt`](demo/kayit-gunlugu.txt)
 
 ## Nasıl kaydedildi
@@ -21,14 +23,14 @@ Videodaki iki dürüstlük noktası:
 | Zaman | Ekranda |
 |---|---|
 | 0–4 sn | Açılış: gerçek uygulama, gerçek tarayıcı, gerçek ONNX |
-| 4–11 sn | **Açıklama:** model kabul kapılarını geçmedi (0.527 < 0.70, yalnızca sentetik veri); uyarlama `?rollout=on` geliştirici geçersiz kılmasıyla gösteriliyor; üretimde yalnızca gölge |
-| 11–24 sn | Oyuncu A (Biraz deneyimim var) Karar 1'de bekler, ipucunu açar, A'yı seçer |
-| 24–32 sn | Model p = 0.730 ≥ 0.65 → sonuç ekranında Kavram özeti |
+| 4–11 sn | **Açıklama altyazısı** + uygulamanın kendi **DENEYSEL MOD** şeridi: model kabul kapılarını geçmedi (0.527 < 0.70, yalnızca sentetik veri); uyarlama `?rollout=on` geliştirici geçersiz kılmasıyla; üretimde yalnızca gölge |
+| 11–24 sn | Oyuncu A (Biraz deneyimim var) Karar 1'de bekler (saat ilerletildi, altyazıda belirtilir), ipucunu açar, A'yı seçer |
+| 24–32 sn | Model p = 0.730 ≥ 0.65 → sonuç ekranında Kavram özeti ve dayanağını açıklayan not |
 | 32–40 sn | Karar 2: tutor kendiliğinden açık, "Ek destek" sorusu |
-| 40–57 sn | Oyuncu B, aynı sahne, 3 sn'de ipucusuz B; p = 0.293 → standart akış, kavram özeti yok |
-| 57–63 sn | Oyuncu B Karar 2: ipucu kutusu kapalı |
-| 63–70 sn | Geliştirici paneli: sürüm, statü **reddedildi**, geçersiz kılma, olasılık, gecikme, DENEYSEL uyarısı |
-| 70–76 sn | Doğrulama özeti: parite 5/5 fark 0, gerçek tarayıcıda v1 regresyonu 19/19, model yayınlanmadı |
+| 40–58 sn | Oyuncu B, aynı sahne, 3 sn'de ipucusuz B; p = 0.293 → standart akış, kavram özeti yok |
+| 58–64 sn | Oyuncu B Karar 2: ipucu kutusu kapalı |
+| 64–71 sn | Geliştirici paneli: sürüm, statü **reddedildi**, sha256, "uyarlama: AÇIK · geçersiz kılma", olasılık, gecikme |
+| 71–77 sn | Doğrulama özeti: 5 referans + 34 sınır girdisinde parite < 1e-4, gerçek tarayıcıda v1 regresyonu 19/19, model yayınlanmadı |
 
 ## Gösterilen ve gösterilmeyen
 

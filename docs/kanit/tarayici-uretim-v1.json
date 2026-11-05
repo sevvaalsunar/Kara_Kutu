@@ -1,5 +1,5 @@
 {
-  "tarih": "2026-11-05T19:06:56.719Z",
+  "tarih": "2026-11-05T19:40:27.944Z",
   "tarayici": "@sparticuz/chromium",
   "gecen": 19,
   "toplam": 19,
@@ -8,115 +8,115 @@
       "suite": "yollar",
       "title": "1A → 2A1 → A → KÖTÜ son",
       "ok": true,
-      "ms": 2547
+      "ms": 2839
     },
     {
       "suite": "yollar",
       "title": "1A → 2A1 → B → KÖTÜ son",
       "ok": true,
-      "ms": 2199
+      "ms": 2217
     },
     {
       "suite": "yollar",
       "title": "1A → 2A2 → A → KÖTÜ son",
       "ok": true,
-      "ms": 2176
+      "ms": 1950
     },
     {
       "suite": "yollar",
       "title": "1A → 2A2 → B → KÖTÜ son",
       "ok": true,
-      "ms": 1852
+      "ms": 1935
     },
     {
       "suite": "yollar",
       "title": "1B → 2B1 → A → İYİ son",
       "ok": true,
-      "ms": 2168
+      "ms": 965
     },
     {
       "suite": "yollar",
       "title": "1B → 2B1 → B → KÖTÜ son",
       "ok": true,
-      "ms": 2124
+      "ms": 2068
     },
     {
       "suite": "yollar",
       "title": "1B → 2B2 → A → KÖTÜ son",
       "ok": true,
-      "ms": 2196
+      "ms": 2444
     },
     {
       "suite": "yollar",
       "title": "1B → 2B2 → B → KÖTÜ son",
       "ok": true,
-      "ms": 1894
+      "ms": 2641
     },
     {
       "suite": "yollar",
       "title": "Baştan oyna giriş ekranına döner ve seçimleri sıfırlar",
       "ok": true,
-      "ms": 1964
+      "ms": 2042
     },
     {
       "suite": "kabul",
       "title": "KÖ1: Yeni başlayan oyuncuda ipucu kutusu açık gelir, geri sayım yoktur",
       "ok": true,
-      "ms": 1752
+      "ms": 1753
     },
     {
       "suite": "kabul",
       "title": "KÖ2: Deneyimli oyuncuda süre dolarsa ICU-Net 1A seçer (gerçek 60 sn)",
       "ok": true,
-      "ms": 60714
+      "ms": 60811
     },
     {
       "suite": "kabul",
       "title": "KÖ3: Tek iyi yol 03:28’de iyi sona gider",
       "ok": true,
-      "ms": 2408
+      "ms": 2568
     },
     {
       "suite": "kabul",
       "title": "KÖ4: Doğru yolda son anda kısayol kötü sona gider",
       "ok": true,
-      "ms": 1677
+      "ms": 912
     },
     {
       "suite": "kabul",
       "title": "KÖ5 (mekanik): Tutor mesajı gönderilir ve cevap gelir",
       "ok": true,
-      "ms": 1808
+      "ms": 1008
     },
     {
       "suite": "kabul",
       "title": "Üç soru cevaplanmadan başla butonu pasiftir",
       "ok": true,
-      "ms": 516
+      "ms": 476
     },
     {
       "suite": "kabul",
       "title": "\"Biraz deneyimim var\": ipucu kapalı gelir, butonla açılır",
       "ok": true,
-      "ms": 2003
+      "ms": 768
     },
     {
       "suite": "kabul",
       "title": "\"Kavramları öğrenmek\" kavram etiketini gösterir",
       "ok": true,
-      "ms": 811
+      "ms": 813
     },
     {
       "suite": "kabul",
       "title": "\"Kendimi sınamak\" kavram etiketini gizler",
       "ok": true,
-      "ms": 931
+      "ms": 881
     },
     {
       "suite": "kabul",
       "title": "Saat kararlarla ilerler ve kalan süreyi gösterir",
       "ok": true,
-      "ms": 1784
+      "ms": 1965
     }
   ],
   "parite": []

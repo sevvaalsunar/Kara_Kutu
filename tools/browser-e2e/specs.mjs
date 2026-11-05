@@ -359,3 +359,67 @@ export const veriHatti = [
 export const veriHattiSonucu = [];
 
 export const SUITES = { yollar, kabul, adaptif, model, parite, veri, veriHatti };
+
+// ------------------------------------------------------------------ ux (UX turu düzeltmeleri; spec §14 m.4–5, KÖ10)
+export const ux = [
+  ['KÖ10: Zorlanmaya devam eden oyuncudan destek çekilmez', async (p) => {
+    await baslaUrl(p, '/?test=1&debug=1&rollout=on', 'mid');
+    await tick(p, 40000); await click(p, 'hint-btn'); await click(p, 'choice-a');
+    await waitVisible(p, 'adaptive-recap'); await click(p, 'next-btn');
+    await waitVisible(p, 'adaptive-support');
+    await tick(p, 30000); await click(p, 'choice-a'); await waitVisible(p, 'result-what');
+    await waitFor(p, () => !isNaN(parseFloat(document.querySelector('[data-cy="p"]')?.textContent)), 'p');
+    const p2 = await sonP(p);
+    expect(p2 < 0.65, `bu senaryoda model eşiğin altında olmalı (p=${p2})`);
+    await click(p, 'next-btn');
+    await waitVisible(p, 'adaptive-support');
+  }, FROZEN],
+  ['Kabul edilmemiş model geçersiz kılmayla açıkken DENEYSEL şeridi görünür; normal ve gölgede görünmez', async (p) => {
+    await visit(p, '/?test=1&debug=1&rollout=on'); await modelHazir(p);
+    await waitVisible(p, 'experimental-banner');
+    await visit(p, '/?test=1&debug=1'); await modelHazir(p);
+    expect(!(await exists(p, 'experimental-banner')), 'gölgede şerit yok');
+    await visit(p, '/'); await sleep(1500);
+    expect(!(await exists(p, 'experimental-banner')) && !(await exists(p, 'debug-panel')), 'normal kullanıcıda şerit ve panel yok');
+  }],
+  ['Başlat pasifken eksik adım yazılır', async (p) => {
+    await visit(p, '/?test=1&veri=1');
+    expect((await text(p, 'start-hint')).includes('seviyeni'), 'eksik seviye');
+    await click(p, 'level-mid'); await click(p, 'role-dev'); await click(p, 'goal-learn');
+    expect((await text(p, 'start-hint')).includes('gizlilik notunu onayla'), 'eksik onay');
+    await click(p, 'consent');
+    expect(!(await exists(p, 'start-hint')), 'hazırken ipucu yok');
+  }],
+  ['Son ekranda kavram kartı yalnızca “Kavramları öğrenmek” hedefinde', async (p) => {
+    await basla(p, 'mid', 'dev', 'learn'); await oyna(p, ['a', 'a', 'b']);
+    await waitText(p, 'ending-concepts', /TEKRAR ET/);
+    await basla(p, 'mid', 'dev', 'test'); await oyna(p, ['a', 'a', 'b']);
+    await waitVisible(p, 'ending');
+    expect(!(await exists(p, 'ending-concepts')), 'sınama hedefinde gizli');
+  }],
+  ['Oyun kontrolleri ≥ 44 px ve debug paneli hiçbir kontrolü örtmez', async (p) => {
+    await baslaUrl(p, '/?test=1&debug=1&rollout=on', 'new');
+    const r = await p.evaluate(() => {
+      const ids = ['hint-btn', 'tutor-input', 'tutor-send', 'choice-a', 'choice-b'];
+      const small = ids.map((id) => [id, document.querySelector(`[data-testid="${id}"]`).getBoundingClientRect()])
+        .filter(([, b]) => b.height < 44).map(([id, b]) => `${id}:${Math.round(b.height)}`);
+      const panel = document.querySelector('[data-testid="debug-panel"]').getBoundingClientRect();
+      const covered = [...document.querySelectorAll('main button, main input')].filter((e) => {
+        const b = e.getBoundingClientRect();
+        return b.bottom > panel.top && b.top < panel.bottom && b.right > panel.left && b.left < panel.right;
+      }).map((e) => e.dataset.testid || e.tagName);
+      return { small, covered, fixed: getComputedStyle(document.querySelector('[data-testid="debug-panel"]')).position };
+    });
+    expect(r.small.length === 0, `44 px altı: ${r.small}`);
+    expect(r.covered.length === 0 && r.fixed !== 'fixed', `örtülen: ${r.covered} (${r.fixed})`);
+  }],
+];
+SUITES.ux = ux;
+ux.push(['Kavram kartında her kavram bir kez listelenir', async (p) => {
+  await basla(p, 'mid', 'dev', 'learn'); await oyna(p, ['a', 'a', 'b']); // 1A ve 2A1 ikisi de "Olay müdahalesi"
+  await waitVisible(p, 'ending-concepts');
+  const items = await p.$$eval('[data-testid="ending-concepts"] li', (ls) => ls.map((l) => l.textContent));
+  const names = items.map((t) => t.replace(/^(TEKRAR ET|UYGULADIN)/, '').split('·')[0].trim());
+  expect(new Set(names).size === names.length, `tekrar eden kavram: ${names}`);
+  expect(names.length === 2, `beklenen 2 kavram (Olay müdahalesi, KVKK): ${names}`);
+}]);

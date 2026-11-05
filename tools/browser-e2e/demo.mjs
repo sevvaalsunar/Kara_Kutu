@@ -65,7 +65,7 @@ async function caption(page, main, sub = '', tone = 'info') {
     if (!el) {
       el = document.createElement('div');
       el.id = '__demo_caption';
-      el.style.cssText = 'position:fixed;left:8px;right:8px;top:8px;z-index:9999;pointer-events:none;' +
+      el.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;z-index:9999;pointer-events:none;' +
         'background:rgba(2,6,23,.94);border:1px solid #334155;border-radius:8px;padding:8px 10px;' +
         'font:600 13px/1.35 system-ui,sans-serif;color:#F8FAFC;box-shadow:0 8px 24px rgba(0,0,0,.5)';
       document.body.appendChild(el);
@@ -91,7 +91,7 @@ mark('kayıt başladı');
 // --- Açılış
 await caption(page, 'KARA KUTU v2.0 · Adaptif Primer', 'Gerçek uygulama · gerçek tarayıcı (Chromium) · gerçek ONNX çıkarımı (onnxruntime-web)');
 await sleep(4000);
-await caption(page, 'Önemli: bu bir mekanizma gösterimidir', DISCLOSURE, 'warn');
+await caption(page, 'Önemli: bu bir mekanizma gösterimidir', DISCLOSURE + ' Uygulama da bunu oyunun üstündeki “DENEYSEL MOD” şeridiyle gösterir.', 'warn');
 await sleep(7000);
 
 // --- Oyuncu A
@@ -114,7 +114,7 @@ const pA = await sonP(page);
 mark(`Oyuncu A olasılığı p = ${pA}`);
 await sleep(1500);
 await page.$eval('[data-testid="adaptive-recap"]', (e) => e.scrollIntoView({ block: 'center' }));
-await caption(page, `Model: p = ${pA.toFixed(3)} ≥ 0.65 → öğrenme desteği`, 'Sonuç ekranına “Kavram özeti” eklendi. Oyuncu yalnızca “Önceki kararlarına göre ek açıklama eklendi.” notunu görür.', 'ok');
+await caption(page, `Model: p = ${pA.toFixed(3)} ≥ 0.65 → öğrenme desteği`, 'Sonuç ekranına “Kavram özeti” eklendi. Not, neye dayandığını ve bunun bir not/değerlendirme olmadığını söyler.', 'ok');
 await sleep(6500);
 await click(page, 'next-btn');
 await waitVisible(page, 'adaptive-support');
@@ -150,10 +150,12 @@ await sleep(5000);
 
 // --- Geliştirici paneli ve teknik kapanış
 await click(page, 'debug-toggle');
+await sleep(300);
+await page.$eval('[data-testid="debug-panel"]', (e) => e.scrollIntoView({ block: 'end' }));
 await sleep(400);
 await caption(page, 'Geliştirici paneli (?debug=1)', 'Sürüm 2.0.0 · statü: reddedildi · kol: on (geliştirici geçersiz kılması) · son olasılık ve gecikme', 'warn');
 await sleep(7000);
-await caption(page, 'Doğrulama', 'Python ↔ tarayıcı paritesi: 5/5 referansta fark 0 · gerçek tarayıcıda v1 regresyonu 19/19 · ' +
+await caption(page, 'Doğrulama', 'Python ↔ tarayıcı paritesi: 5 referans + 34 sınır girdisi < 1e-4 · gerçek tarayıcıda v1 regresyonu 19/19 · ' +
   'model yayınlanmadı: gerçek veri 0/15 ve metrik kapıları geçmedi', 'warn');
 await sleep(7000);
 

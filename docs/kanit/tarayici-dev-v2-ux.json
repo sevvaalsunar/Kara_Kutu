@@ -1,104 +1,140 @@
 {
-  "tarih": "2026-11-05T19:04:30.170Z",
+  "tarih": "2026-11-05T19:38:03.863Z",
   "tarayici": "@sparticuz/chromium",
-  "gecen": 16,
-  "toplam": 16,
+  "gecen": 22,
+  "toplam": 22,
   "sonuclar": [
     {
       "suite": "adaptif",
       "title": "KÖ6: Zorlanan oyuncu kavram özeti ve sonraki kararda ek destek alır",
       "ok": true,
-      "ms": 3252
+      "ms": 4187
     },
     {
       "suite": "adaptif",
       "title": "KÖ7: Akıcı oyuncu standart akışta kalır",
       "ok": true,
-      "ms": 1910
+      "ms": 1774
     },
     {
       "suite": "adaptif",
       "title": "Destek alan deneyimli oyuncunun sonraki geri sayımı 90 sn olur",
       "ok": true,
-      "ms": 1972
+      "ms": 1921
     },
     {
       "suite": "adaptif",
       "title": "Destek soruları seçenek adı veya harfi önermez (§7)",
       "ok": true,
-      "ms": 1855
+      "ms": 1674
     },
     {
       "suite": "model",
       "title": "Model yüklenir; sürüm ve statü debug panelinde görünür",
       "ok": true,
-      "ms": 1823
+      "ms": 1877
     },
     {
       "suite": "model",
       "title": "Kabul edilmemiş model varsayılan olarak yalnızca gölgede çalışır",
       "ok": true,
-      "ms": 754
+      "ms": 997
     },
     {
       "suite": "model",
       "title": "Gölge modda olasılık hesaplanır ama oyun değişmez",
       "ok": true,
-      "ms": 2316
+      "ms": 2086
     },
     {
       "suite": "model",
       "title": "KÖ8: Model indirilemezse oyun v1 kurallarıyla sonuna kadar oynanır",
       "ok": true,
-      "ms": 2199
+      "ms": 2146
     },
     {
       "suite": "model",
       "title": "?model=off modeli hiç yüklemez",
       "ok": true,
-      "ms": 1855
+      "ms": 2081
     },
     {
       "suite": "model",
       "title": "Aralık dışı özellikle çıkarım reddedilir (sahte olasılık üretilmez)",
       "ok": true,
-      "ms": 689
+      "ms": 692
     },
     {
       "suite": "parite",
       "title": "5 referans girdinin hepsinde |p_python − p_tarayıcı| < 1e-4",
       "ok": true,
-      "ms": 1951
+      "ms": 2270
     },
     {
       "suite": "parite",
       "title": "Sınır/normal/uç değer kümesi (34 girdi): |p_python − p_tarayıcı| < 1e-4",
       "ok": true,
-      "ms": 1503
+      "ms": 1498
     },
     {
       "suite": "parite",
       "title": "Tarayıcıdaki model dosyası parite.json ile aynı model",
       "ok": true,
-      "ms": 389
+      "ms": 334
     },
     {
       "suite": "veri",
       "title": "Onay verilmeden nöbet devralınamaz; mod her zaman gölgededir",
       "ok": true,
-      "ms": 2318
+      "ms": 2714
     },
     {
       "suite": "veri",
       "title": "Son ekranında oturum CSV dışa aktarma düğmesi vardır; normal modda yoktur",
       "ok": true,
-      "ms": 4748
+      "ms": 5259
     },
     {
       "suite": "veriHatti",
       "title": "Üç test katılımcısı: CSV indirilir, doğrulanır; birleştirici kaynak=test olduğu için reddeder",
       "ok": true,
-      "ms": 14681
+      "ms": 13854
+    },
+    {
+      "suite": "ux",
+      "title": "KÖ10: Zorlanmaya devam eden oyuncudan destek çekilmez",
+      "ok": true,
+      "ms": 3740
+    },
+    {
+      "suite": "ux",
+      "title": "Kabul edilmemiş model geçersiz kılmayla açıkken DENEYSEL şeridi görünür; normal ve gölgede görünmez",
+      "ok": true,
+      "ms": 3465
+    },
+    {
+      "suite": "ux",
+      "title": "Başlat pasifken eksik adım yazılır",
+      "ok": true,
+      "ms": 1754
+    },
+    {
+      "suite": "ux",
+      "title": "Son ekranda kavram kartı yalnızca “Kavramları öğrenmek” hedefinde",
+      "ok": true,
+      "ms": 5073
+    },
+    {
+      "suite": "ux",
+      "title": "Oyun kontrolleri ≥ 44 px ve debug paneli hiçbir kontrolü örtmez",
+      "ok": true,
+      "ms": 1485
+    },
+    {
+      "suite": "ux",
+      "title": "Kavram kartında her kavram bir kez listelenir",
+      "ok": true,
+      "ms": 2064
     }
   ],
   "parite": [

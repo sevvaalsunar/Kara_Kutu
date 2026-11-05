@@ -319,7 +319,10 @@ Risk puanları: `1A` 1.0, `1B` 0.2, `2A1` 1.0, `2A2` 0.8, `2B1` 0.1, `2B2` 1.0, 
 2. Bir sonraki karar ekranında tutor paneli seviye ne olursa olsun açık gelir ve başlangıç ipucunun ardından karara özel ek bir destek sorusu gösterir (`adaptive-support`). Destek sorusu da §7 kurallarına uyar: doğru seçeneği söylemez, soruyla biter.
 3. "Deneyimliyim" seviyesinde bir sonraki kararın geri sayımı 60 yerine **90** saniyedir. (§4'ün tek istisnası. Oturumun ilk kararında henüz tahmin olmadığı için ilk oyunun K1'i her zaman 60 saniyedir; "Baştan oyna" sonrası K1, önceki oyunun K3'ündeki tahmine göre 90 olabilir.)
 
-p < 0.65 ise oyun §4 kurallarıyla devam eder. Oyuncuya "model", "olasılık" gibi terimler gösterilmez; yalnızca "Önceki kararlarına göre ek açıklama eklendi." notu görünür. Teknik bilgi `?debug=1` panelindedir.
+4. **Destek sürekliliği (UX turu sonrası eklendi, 2026-11-05):** Destek gösterilen bir kararda oyuncu yine riskli seçim yaparsa, model olasılığı eşiğin altına düşse bile bir sonraki kararda destek sürer. Gerekçe: UX turunda zorlanmaya devam eden oyuncudan desteğin geri çekildiği görüldü (`docs/UX_DEGERLENDIRME.md`). Bu bir ürün kuralıdır; model, eşik ve kabul kapıları değişmez.
+5. **Deneysel mod görünürlüğü:** Kabul edilmemiş bir model geliştirici geçersiz kılmasıyla (`?rollout=on`) oyunu değiştiriyorsa oyunun üstünde "DENEYSEL MOD" şeridi gösterilir (`experimental-banner`).
+
+p < 0.65 ise (ve madde 4 uygulanmıyorsa) oyun §4 kurallarıyla devam eder. Oyuncuya "model", "olasılık" gibi terimler gösterilmez; yalnızca "Önceki kararlarına göre ek açıklama eklendi." notu görünür. Teknik bilgi `?debug=1` panelindedir.
 
 ## 15. Veri toplama ve gizlilik
 
@@ -387,4 +390,9 @@ Metrik kapılarından biri geçmezse `train.py` sıfır olmayan kodla çıkar ve
    *Olduğunda:* Tarayıcıdaki model bu girdilerle çalıştırılır.
    *Beklenen:* Her girdi için `|p_python − p_tarayıcı| < 1e-4`.
 
-Yeni test kancaları: `adaptive-recap`, `adaptive-support`, `adaptive-note`, `consent`, `export-btn`, `debug-panel`, `model-status`, ve olasılık için `data-cy="p"`.
+10. **Zorlanmaya devam eden oyuncudan destek çekilmez**
+   *Verilen:* KÖ6'daki oyuncu Karar 2'de ek destek aldı.
+   *Olduğunda:* Karar 2'de 30 sn bekleyip yine riskli seçeneği (2A1) seçer; model olasılığı 0.65'in altına düşer.
+   *Beklenen:* Karar 3'te ek destek (`adaptive-support`) yine gösterilir.
+
+Yeni test kancaları: `adaptive-recap`, `experimental-banner`, `ending-concepts`, `start-hint`, `adaptive-support`, `adaptive-note`, `consent`, `export-btn`, `debug-panel`, `model-status`, ve olasılık için `data-cy="p"`.

@@ -15,7 +15,7 @@ Saat 03:14. Yapay zekâ destekli yoğun bakım ağı ICU-Net siber saldırı alt
 - **Canlı uygulama (GitHub Pages):** [KARA KUTU](https://sevvaalsunar.github.io/Kara_Kutu/) · veri toplama: `?veri=1` · geliştirici paneli: `?debug=1`
 - **AI Studio sürümü:** [KARA KUTU — AI Studio](https://ai.studio/apps/0d3c42eb-7942-4398-a0f7-80546707e3c9)
 - **v1 demo videosu (60 sn):** [app/cypress/videos/00-demo.cy.js.mp4](app/cypress/videos/00-demo.cy.js.mp4)
-- **v2.0 demo videosu (76 sn):** [docs/demo/kara-kutu-v2.0-demo.mp4](docs/demo/kara-kutu-v2.0-demo.mp4). Uyarlama, geliştirici geçersiz kılmasıyla gösterilir; videoda açıkça belirtilir ([`docs/DEMO.md`](docs/DEMO.md)).
+- **v2.0 demo videosu (77 sn):** [docs/demo/kara-kutu-v2.0-demo.mp4](docs/demo/kara-kutu-v2.0-demo.mp4). Uyarlama, geliştirici geçersiz kılmasıyla gösterilir; videoda açıkça belirtilir ([`docs/DEMO.md`](docs/DEMO.md)).
 - **Katılımcı yönergesi:** [`docs/KATILIMCI.md`](docs/KATILIMCI.md)
 - **Hugging Face:** henüz yayınlanmadı (bkz. RELEASE.md)
 
@@ -99,7 +99,7 @@ Dağıtım kolları: `?model=off`, gölge, canary (oturum kovası), açık. Kabu
 ```bash
 python -m pytest -q tests                  # 55 test: birim, kapılar, eğitim sağlamlığı, birleştirici, TS↔Python sözleşmesi, ORT-web paritesi, dağıtım simülasyonu
 cd app && npm run lint && npm run build
-cd tools/browser-e2e && npm install && ./with-server.sh node run.mjs              # gerçek Chromium: 35 test (dev sunucusu)
+cd tools/browser-e2e && npm install && ./with-server.sh node run.mjs              # gerçek Chromium: 41 test (dev sunucusu; üretim için PROD=1)
 PROD=1 ./with-server.sh node run.mjs parite adaptif model                        # üretim derlemesi (dist/)
 cd app && npx cypress run                  # Cypress (uygulama çalışırken; app/README-cypress.md)
 ```
@@ -138,7 +138,7 @@ Google Stitch (tasarım) → Google AI Studio (v1 uygulaması) → Cypress (E2E)
   - Kabul edilmemiş modelin yalnızca gölgede çalışması; kapı geçmeyince eşiğin, hedefin ve üreticinin değiştirilmemesi.
 - **Gerçekten çalıştırılan doğrulamalar:** pytest, `tsc`, `vite build`, gerçek headless Chromium'da Cypress senaryolarının puppeteer portları (dev ve üretim derlemesi), Python ↔ tarayıcı paritesi ve demo kaydı. Sayılar ve kanıtlar: `docs/FINAL_REPORT.md`, `docs/kanit/`.
 - **Çalıştırılamayanlar:** Cypress dosyalarının kendisi (ikili indirilemedi; CI'da koşacak), Hugging Face yayını (kabul edilmiş model yok) ve gerçek kullanıcı oturumları (0/15).
-- **Doğrulama sırasında bulunan hatalar:** 8 hata bulundu ve düzeltildi; liste `docs/FINAL_AUDIT.md` ve `docs/FINAL_REPORT.md`'de.
+- **Doğrulama sırasında bulunan hatalar:** 8 teknik hata ve simüle UX turunda 7 kullanılabilirlik sorunu bulundu ve düzeltildi; listeler `docs/FINAL_AUDIT.md` ve `docs/UX_DEGERLENDIRME.md`'de.
 
 ## İnceleme kaydı
 
@@ -152,12 +152,81 @@ Google Stitch (tasarım) → Google AI Studio (v1 uygulaması) → Cypress (E2E)
 - [x] Gizli anahtar taraması: repoda token veya API anahtarı yok.
 - [x] Mobil düzen: 390 px ekranda oyun kontrollerinin örtülmediği gerçek tarayıcıda doğrulandı (hata #1 düzeltildi).
 
-### Repo sahibinin kişisel incelemesi (yalnızca Şevval Sunar doldurabilir)
+## Simulated User Experience Evaluation
 
-Bu maddeler bilerek boş bırakıldı; araç kimin neyi incelediğini bilemez ve bunu uydurmaz.
+> **Uyarı:** Bu bölüm, kodlama aracı (Claude) tarafından yapılmış **senaryo tabanlı, simüle** bir değerlendirmedir. Gerçek bir kullanıcının ya da repo sahibinin deneyimi değildir.
+>
+> - Gerçek uygulama, gerçek tarayıcıda üç betiklenmiş profille oynatıldı (`tools/browser-e2e/ux-turu.mjs`).
+> - Model **reddedildi** statüsünde; uyarlama `?rollout=on` geliştirici geçersiz kılmasıyla gözlendi.
+> - Gerçek kullanıcı testi yapılmadı; gerçek kullanıcı verisi yok (0/15).
+>
+> Ayrıntılar, ölçümler ve önce/sonra ekranları: [`docs/UX_DEGERLENDIRME.md`](docs/UX_DEGERLENDIRME.md).
 
-- [ ] Okuyup onayladığım dosyalar/bölümler: …
-- [ ] Elle değiştirdiğim veya geri aldığım yerler: …
-- [ ] Kendi telefonumda `?veri=1` ile oynayıp kontrol ettiğim akışlar: …
-- [ ] Demo videosunu izledim ve dürüstlük notlarının yeterli olduğunu onaylıyorum: …
-- [ ] CI'ın ilk koşu sonucu (Cypress dahil): …
+**Profiller:**
+- **P1 (hızlı, ipucusuz):** p = 0.34, standart akış.
+- **P2 (uzun düşünen, tutor kullanan):** p = 0.49, ek destek yok.
+- **P3 (zorlanan, riskli seçen):** p = 0.73 → 0.58 → 0.48; kavram özeti ve ek destek.
+
+### Strengths
+- Kriz anlatısı, oyun saati ve geri alınamaz seçimler, karar baskısını inandırıcı biçimde kuruyor.
+- "Ne oldu / Neden oldu" ayrımı ve kavram etiketleri her seçimi bir yazılım mühendisliği ilkesine bağlıyor.
+- Ek destek soruları cevabı söylemiyor, soruyla bitiyor (§7; otomatik test).
+- Normal kullanıcı, kabul edilmemiş modelden hiç etkilenmiyor (gölge mod; test edildi).
+- 360 px'te yatay taşma yok; model yüklenemezse oyun v1 kurallarıyla sorunsuz sürüyor.
+
+### Weaknesses
+- **Uyarlama tahmin edilemez.** 45 sn düşünüp tutor'a soru soran P2 destek almadı, P3 aldı. Kullanıcı açısından kural görünmez.
+- **Model kör noktaları.** Hızlı ama yanılan oyuncuya neredeyse hiç destek verilmiyor; her kararda ipucu açanların yaklaşık yarısına gereksiz destek veriliyor (sentetik analiz, `MODEL_ROOT_CAUSE_ANALYSIS.md` §8).
+- **Olasılıklar kalibre değil.** Panelde görünen p bir yüzde değil, bir sıralama puanı.
+- **Brifing uzun.** 390 px'te sorular ekranın altında kalıyor.
+- **Küçük metin.** Ekran başına 9–18 metin 11 px'in altında (tasarımın 10 px mono etiketleri).
+
+### Usability Findings
+
+Bu turda bulunan ve düzeltilen sorunlar (testlerle doğrulandı):
+1. Debug çipi tutor'un gönder butonunu ve içeriği örtüyordu → panel sayfa akışına alındı.
+2. Seçenek ve tutor kontrolleri 34–42 px'ti (`DESIGN.md` ≥ 44 px istiyor) → 44–48 px.
+3. "Nöbeti devral" pasifken nedeni yazmıyordu → eksik adım gösteriliyor.
+4. Zorlanmaya devam eden oyuncudan destek geri çekiliyordu → destek sürekliliği kuralı (spec §14 madde 4, KÖ10).
+5. Geliştirici geçersiz kılması yalnızca panelde görünüyordu → oyunun üstünde "DENEYSEL MOD" şeridi.
+
+### Learning Experience
+- Kavram özeti, hatanın hemen ardından ilkeyi açıklıyor; zamanlama öğrenme için doğru.
+- Son ekran önceden yalnızca "KRİTİK HATA" listesi gösteriyordu. Artık "Kavramları öğrenmek" hedefinde kavram kartı var (UYGULADIN / TEKRAR ET); "Kendimi sınamak" hedefinde spec §4 gereği gizli.
+- Doğru yolu son ekranda açıklamamak tekrar oynamayı teşvik ediyor. Ancak iki-üç denemede doğru yolu bulamayan öğrenci için bir çıkış yolu yok.
+- Uygulamanın bir yazılım mühendisliği öğrenme deneyimi olduğu girişte açıkça söylenmiyor; yalnızca hedef sorusundan anlaşılıyor.
+
+### Accessibility and Clarity
+- Bütün oyuncu kontrolleri ≥ 44 px. Onay kutusunun kendisi küçük, ama 48 px'lik etiketinin tamamı tıklanabilir.
+- Erişilebilir adı olmayan buton yok; ipucu butonu `aria-expanded` taşıyor; DENEYSEL şeridi `role="status"`.
+- Uyarlama notu artık neye dayandığını ve bunun bir not olmadığını söylüyor.
+- **Değerlendirilmedi:** ekran okuyucu, klavye ile gezinme, renk kontrastı ölçümü, gerçek dokunmatik.
+
+### Recommended Improvements
+1. Giriş ekranına uygulamanın amacını ve (model kabul edilirse) oyunun davranışa göre uyarlandığını söyleyen bir cümle eklemek.
+2. 10 px mono etiketleri en az 11–12 px'e çıkarmak, brifingi kısaltmak ya da katlanabilir yapmak.
+3. İki başarısız denemeden sonra isteğe bağlı "doğru yolu göster" seçeneği.
+4. v2.1 ön kaydı: hızlı-riskli etkileşimi, `next_scene`, kalibre olasılıklar (`MODEL_ROOT_CAUSE_ANALYSIS.md` §6, §8).
+5. Gerçek kullanıcı testi: sesli düşünme protokolü, kısa SUS anketi; telefon, ekran okuyucu ve klavye ile.
+
+### Evaluation Limitations
+- Betiklenmiş profiller insan değil; okuma, kafa karışıklığı, motivasyon ve öğrenme ölçülmedi.
+- Karar süreleri saat ilerletilerek simüle edildi.
+- Tek tarayıcı motoru (Chromium 153); gerçek telefon, ekran okuyucu ve klavye ile denenmedi.
+- Google Fonts yüklenemedi.
+- Tutor test modunda sabit cevap verdi.
+- Model sentetik veriyle eğitildi ve reddedildi. Uyarlama yalnızca geliştirici geçersiz kılmasıyla görüldü; normal kullanıcı bu deneyimi yaşamıyor.
+
+## Human Evaluation
+
+> Bu bölüm **yalnızca gerçek bir kişi** tarafından doldurulabilir. Araç burada hiçbir görüş, onay veya imza uydurmaz. Gerçek kullanıcı değerlendirmesi henüz yapılmadı.
+
+| Alan | Doldurulacak |
+|---|---|
+| Değerlendiren / tarih / cihaz | … |
+| Oynanan yol(lar) ve seviye | … |
+| İlk açılışta ne yapacağımı anladım mı? (1–5) | … |
+| Kavram özeti ve ek destek işe yaradı mı? (1–5, kısa not) | … |
+| Kafamı karıştıran yer | … |
+| Simüle değerlendirmeyle uyuşmayan bulgu | … |
+| Repo sahibinin onayı: okuduğum ve onayladığım bölümler | … |

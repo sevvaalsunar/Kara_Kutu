@@ -105,6 +105,7 @@ jobs:
             cypress/e2e/model.cy.js
             cypress/e2e/parite.cy.js
             cypress/e2e/veri.cy.js
+            cypress/e2e/ux.cy.js
       - uses: actions/upload-artifact@v4
         if: always()
         with:

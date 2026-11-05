@@ -2,7 +2,8 @@
  * Uyarlama metinleri (spec.md §14). Destek soruları tutor kurallarına (§7) uyar:
  * doğru seçeneği söylemez, seçenekleri sıralamaz, soruyla biter.
  */
-export const ADAPTIVE_NOTE = 'Önceki kararlarına göre ek açıklama eklendi.';
+export const ADAPTIVE_NOTE =
+  'Önceki kararlarına göre ek açıklama eklendi: karar süren, ipucu kullanımın ve seçimlerin dikkate alındı. Bu bir not veya değerlendirme değil.';
 
 export const SUPPORT_BY_DECISION: Record<string, string> = {
   K1: 'Bu karar saldırıyı sınırlamak ile onu anlamak arasında. Her seçenekte ilk dakikalarda hastalar için hangi risk açık kalır?',
