@@ -6,14 +6,17 @@ Saat 03:14. Yapay zekâ destekli yoğun bakım ağı ICU-Net siber saldırı alt
 
 **v2.0** buna davranışa duyarlı bir katman ekler. Oyuncunun karar süresi, tereddüdü, ipucu kullanımı ve önceki seçimleri küçük bir tablo modeline verilir. Model, oyuncunun bir sonraki kararda zorlanma olasılığını tahmin eder. Olasılık eşiği geçerse oyun kavram özeti ekler, tutor'u kendiliğinden açar ve süre baskısını azaltır.
 
-> **Durum (dürüst özet):** v2.0 altyapısı çalışıyor ve test edildi, ancak eğitilen model **kabul kapılarını geçmedi** (dengeli doğruluk 0.527 < 0.70) ve yalnızca sentetik veriyle eğitildi; 0/15 gerçek oturum toplandı. Model bu yüzden yayınlanmadı ve uygulamada varsayılan olarak yalnızca **gölge modda** çalışır. Ayrıntılar ve tavan analizi: [`RELEASE.md`](RELEASE.md).
+> **Durum (dürüst özet):** v2.0 altyapısı çalışıyor ve gerçek tarayıcıda doğrulandı. Ancak eğitilen model **kabul kapılarını geçmedi** (dengeli doğruluk 0.527 < 0.70) ve yalnızca sentetik veriyle eğitildi; 0/15 gerçek oturum toplandı. Model bu yüzden yayınlanmadı ve uygulamada varsayılan olarak yalnızca **gölge modda** çalışır.
+>
+> Ayrıntılar: [`docs/FINAL_REPORT.md`](docs/FINAL_REPORT.md) · [`docs/MODEL_ROOT_CAUSE_ANALYSIS.md`](docs/MODEL_ROOT_CAUSE_ANALYSIS.md) · [`RELEASE.md`](RELEASE.md)
 
 ## Linkler
 
 - **Canlı uygulama (GitHub Pages):** [KARA KUTU](https://sevvaalsunar.github.io/Kara_Kutu/) · veri toplama: `?veri=1` · geliştirici paneli: `?debug=1`
 - **AI Studio sürümü:** [KARA KUTU — AI Studio](https://ai.studio/apps/0d3c42eb-7942-4398-a0f7-80546707e3c9)
 - **v1 demo videosu (60 sn):** [app/cypress/videos/00-demo.cy.js.mp4](app/cypress/videos/00-demo.cy.js.mp4)
-- **v2.0 demo:** henüz kaydedilmedi; betik [`docs/DEMO.md`](docs/DEMO.md)
+- **v2.0 demo videosu (76 sn):** [docs/demo/kara-kutu-v2.0-demo.mp4](docs/demo/kara-kutu-v2.0-demo.mp4). Uyarlama, geliştirici geçersiz kılmasıyla gösterilir; videoda açıkça belirtilir ([`docs/DEMO.md`](docs/DEMO.md)).
+- **Katılımcı yönergesi:** [`docs/KATILIMCI.md`](docs/KATILIMCI.md)
 - **Hugging Face:** henüz yayınlanmadı (bkz. RELEASE.md)
 
 ## Kurulum ve çalıştırma
@@ -56,6 +59,9 @@ Python tarafı: data/ (şema, doğrulama, sentetik üretim) ─► train.py (kap
 | `tests/` | `parite.py` (Python Oracle), `parite.json`, `unit/`, `integration/` |
 | `app/src/ml/` | Tarayıcı: özellikler, model çalışma zamanı, dağıtım kolu, oturum kaydı, uyarlama metinleri |
 | `app/cypress/` | v1 regresyon testleri (değişmedi) + v2.0 testleri |
+| `tools/browser-e2e/` | Cypress senaryolarının gerçek Chromium (puppeteer) portları, veri hattı uçtan uca testi, demo kaydı |
+| `analysis/` | Kök neden teşhis analizi (kapıları değiştirmez) |
+| `docs/` | Denetim, son rapor, kök neden analizi, demo, katılımcı yönergesi |
 | `scripts/publish_hf.py` | Commit'e sabitli Hugging Face yayını |
 | `RELEASE.md` | Sürüm notları, metrikler, dağıtım ödünleşim matrisi, güvenli dağıtım, geri dönüş |
 | `SINAV_TASARIMI.md` | Vize için özgün kapalı kitap sorusu |
@@ -91,11 +97,14 @@ Dağıtım kolları: `?model=off`, gölge, canary (oturum kovası), açık. Kabu
 ## Testler
 
 ```bash
-python -m pytest -q tests                  # 31 test: birim, kapılar, TS↔Python sözleşmesi, ORT-web paritesi, dağıtım simülasyonu
-python tests/parite.py --model model/gelistirme/model.onnx
+python -m pytest -q tests                  # 43 test: birim, kapılar, eğitim sağlamlığı, birleştirici, TS↔Python sözleşmesi, ORT-web paritesi, dağıtım simülasyonu
 cd app && npm run lint && npm run build
-npx cypress run                            # uygulama çalışırken (app/README-cypress.md)
+cd tools/browser-e2e && npm install && ./with-server.sh node run.mjs              # gerçek Chromium: 34 test (dev sunucusu)
+PROD=1 ./with-server.sh node run.mjs parite adaptif model                        # üretim derlemesi (dist/)
+cd app && npx cypress run                  # Cypress (uygulama çalışırken; app/README-cypress.md)
 ```
+
+Son doğrulama sonuçları ve kanıtlar: [`docs/FINAL_REPORT.md`](docs/FINAL_REPORT.md).
 
 ## Ürün kararı: yapmadığım 3 özellik (v1)
 
@@ -113,7 +122,7 @@ Toplanan tek veri oyun içi sayısal olaylardır: süre, tereddüt sayısı, se�
 - Gerçek veri yok; tüm metrikler sentetik üreticinin varsayımlarını yansıtır.
 - Tereddüt fareyle ölçülür; dokunmatik ekranda düşük kalır.
 - Başka sekmede beklemek karar süresini şişirir.
-- Cypress testleri ve tarayıcı paritesi geliştirme ortamında koşturulamadı; CI iş akışı (`.github/workflows/test.yml`) bunları çalıştırmak üzere hazır.
+- Cypress ikilisi geliştirme ortamında indirilemediği için `app/cypress/*.cy.js` dosyalarının kendisi koşturulmadı. Aynı senaryoların puppeteer portları gerçek Chromium'da geçti. Cypress dosyaları ilk kez CI'da (`.github/workflows/test.yml`) koşacak.
 - `onnxruntime-web` WASM dosyası ilk yüklemede ~3.7 MB (gzip) indirilir.
 
 ## Araçlar
@@ -122,12 +131,25 @@ Google Stitch (tasarım) → Google AI Studio (v1 uygulaması) → Cypress (E2E)
 
 ## Kodlama aracı beyanı (v2.0)
 
-- **Kullanılan araç:** v2.0 kodu, Claude (Anthropic, Claude Opus 5.5) ile claude.ai sohbet arayüzündeki kod çalıştırma ortamında yazıldı.
-- **Aracın yaptıkları:** Repo denetimi, spec §11–§20 taslağı, veri şeması, sentetik üretici, `train.py`, ONNX dönüşümü, tarayıcı entegrasyonu, Python Oracle, testler ve belgeler.
+- **Kullanılan araç:** v2.0 kodu, Claude (Anthropic) ile claude.ai sohbet arayüzündeki kod çalıştırma ortamında yazıldı ve hata ayıklandı.
+- **Aracın yaptıkları:**
+  - Repo denetimi; spec §11–§20 taslağı.
+  - Veri şeması, sentetik üretici, birleştirici; `train.py`, ONNX dönüşümü.
+  - Tarayıcı entegrasyonu, Python Oracle, testler, tarayıcı test portları.
+  - Demo kaydı, kök neden analizi, belgeler.
 - **Araç tarafından verilen mühendislik kararları:**
-  - Etiket tanımı, özellik seti, 0.65 eşiği ve kabul kapıları.
-  - Tarayıcı içi çıkarım.
+  - Etiket tanımı, özellik seti, 0.65 eşiği ve kabul kapıları; tarayıcı içi çıkarım.
   - Kabul edilmemiş modelin yalnızca gölgede çalışması.
-  - Kapı geçmeyince eşiğin veya üreticinin değiştirilmemesi.
-- **Gerçekten çalıştırılan testler:** 31 pytest testi, TS↔Python özellik sözleşmesi, Node üzerinde ORT-web paritesi, dağıtım simülasyonu, `tsc` ve `vite build`. Cypress testleri yazıldı ama araç ortamında Cypress ikilisi indirilemediği için **koşturulmadı**.
-- **İnsan incelemesi:** _[Şevval Sunar: hangi dosyaları inceleyip neleri değiştirdiğini buraya kendin yaz.]_
+  - Kapı geçmeyince eşiğin, hedefin veya üreticinin değiştirilmemesi.
+  - `?test=1` oturumlarının `kaynak=test` olarak ayrılması.
+- **Otomatik olarak gerçekten çalıştırılan doğrulamalar:**
+  - 43 pytest testi; `tsc` ve `vite build`.
+  - Gerçek headless Chromium 153'te 34 tarayıcı testi (v1 regresyonu 19/19 dahil) ve üretim derlemesinde 12 test.
+  - Python ↔ tarayıcı paritesi: 5/5, fark 0.
+  - Kanıtlar `docs/FINAL_REPORT.md`'de.
+- **Doğrulama sırasında bulunan ve düzeltilen hatalar:** 5 hata; liste `docs/FINAL_AUDIT.md`'de.
+- **İnsan incelemesi:** _Repo sahibi tarafından doldurulacak._ Bu alan bilerek boş bırakıldı; araç, kimin neyi incelediğini bilemez ve uydurmaz. Doldurulacaklar:
+  - [ ] Hangi dosyaları/bölümleri okudum ve onayladım: …
+  - [ ] Elle değiştirdiğim veya geri aldığım yerler: …
+  - [ ] Kendi cihazımda oynayıp kontrol ettiğim akışlar (ör. telefonda `?veri=1`): …
+  - [ ] Cypress'in CI'daki ilk koşu sonucu: …

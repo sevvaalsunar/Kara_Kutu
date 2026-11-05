@@ -40,6 +40,8 @@ Testleri tarayıcıda adım adım izlemek için `npx cypress open`.
 | `cypress/e2e/veri.cy.js` | v2.0 veri toplama modu: onay, gölge mod, CSV dışa aktarma |
 | `cypress/e2e/01-adaptif-demo.cy.js` | v2.0 demo: aynı sahnede iki oyuncu, iki farklı deneyim |
 
+**Cypress çalıştırılamayan ortamlar için:** aynı senaryoların gerçek Chromium üzerinde puppeteer portları `tools/browser-e2e/` altındadır (`./with-server.sh node run.mjs`). Bu portlar geliştirme ortamında koşturuldu; Cypress dosyalarının kendisi CI'da koşar.
+
 v2.0 testleri model yüklenmesini debug panelinden (`?debug=1`) bekler. `npm run dev` model dosyalarını `public/model/` altına otomatik kopyalar (`scripts/sync-model.mjs`).
 
 ## Demo videosu

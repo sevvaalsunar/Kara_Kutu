@@ -28,6 +28,6 @@ Her satır bir karardır. Ayrıntılı formüller: `spec.md` §12–§13; çalı
 | `destek_verildi` | 0/1 | | hayır | Bu karar ekranında uyarlamalı destek gösterildi mi |
 | `model_p` | ondalık / boş | 0–1 | hayır | Bu karar için modelin olasılığı (gölge modda da yazılır); model çalışmadıysa boş |
 | `needs_learning_support` | 0/1 / boş | | **etiket** | Aynı oturumdaki bir sonraki karar riskli ise 1; sonraki karar yoksa boş (eğitime girmez) |
-| `kaynak` | metin | `gercek`, `sentetik` | hayır | Satırın kökeni |
+| `kaynak` | metin | `gercek`, `sentetik`, `test` | hayır | Satırın kökeni. `test`: `?test=1` ile oynanmış doğrulama oturumu; birleştirici ve eğitim reddeder. |
 
 **Kaydedilmeyenler:** ad, e-posta, cihaz kimliği, IP, konum, parola, tarayıcı parmak izi, tutor'a yazılan mesajların metni, zaman damgası.

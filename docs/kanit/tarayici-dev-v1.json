@@ -1,0 +1,123 @@
+{
+  "tarih": "2026-11-05T10:39:53.673Z",
+  "tarayici": "@sparticuz/chromium",
+  "gecen": 19,
+  "toplam": 19,
+  "sonuclar": [
+    {
+      "suite": "yollar",
+      "title": "1A → 2A1 → A → KÖTÜ son",
+      "ok": true,
+      "ms": 3868
+    },
+    {
+      "suite": "yollar",
+      "title": "1A → 2A1 → B → KÖTÜ son",
+      "ok": true,
+      "ms": 1947
+    },
+    {
+      "suite": "yollar",
+      "title": "1A → 2A2 → A → KÖTÜ son",
+      "ok": true,
+      "ms": 2246
+    },
+    {
+      "suite": "yollar",
+      "title": "1A → 2A2 → B → KÖTÜ son",
+      "ok": true,
+      "ms": 1844
+    },
+    {
+      "suite": "yollar",
+      "title": "1B → 2B1 → A → İYİ son",
+      "ok": true,
+      "ms": 1907
+    },
+    {
+      "suite": "yollar",
+      "title": "1B → 2B1 → B → KÖTÜ son",
+      "ok": true,
+      "ms": 2021
+    },
+    {
+      "suite": "yollar",
+      "title": "1B → 2B2 → A → KÖTÜ son",
+      "ok": true,
+      "ms": 2389
+    },
+    {
+      "suite": "yollar",
+      "title": "1B → 2B2 → B → KÖTÜ son",
+      "ok": true,
+      "ms": 1940
+    },
+    {
+      "suite": "yollar",
+      "title": "Baştan oyna giriş ekranına döner ve seçimleri sıfırlar",
+      "ok": true,
+      "ms": 2026
+    },
+    {
+      "suite": "kabul",
+      "title": "KÖ1: Yeni başlayan oyuncuda ipucu kutusu açık gelir, geri sayım yoktur",
+      "ok": true,
+      "ms": 1782
+    },
+    {
+      "suite": "kabul",
+      "title": "KÖ2: Deneyimli oyuncuda süre dolarsa ICU-Net 1A seçer (gerçek 60 sn)",
+      "ok": true,
+      "ms": 60878
+    },
+    {
+      "suite": "kabul",
+      "title": "KÖ3: Tek iyi yol 03:28’de iyi sona gider",
+      "ok": true,
+      "ms": 2090
+    },
+    {
+      "suite": "kabul",
+      "title": "KÖ4: Doğru yolda son anda kısayol kötü sona gider",
+      "ok": true,
+      "ms": 2587
+    },
+    {
+      "suite": "kabul",
+      "title": "KÖ5 (mekanik): Tutor mesajı gönderilir ve cevap gelir",
+      "ok": true,
+      "ms": 2102
+    },
+    {
+      "suite": "kabul",
+      "title": "Üç soru cevaplanmadan başla butonu pasiftir",
+      "ok": true,
+      "ms": 789
+    },
+    {
+      "suite": "kabul",
+      "title": "\"Biraz deneyimim var\": ipucu kapalı gelir, butonla açılır",
+      "ok": true,
+      "ms": 845
+    },
+    {
+      "suite": "kabul",
+      "title": "\"Kavramları öğrenmek\" kavram etiketini gösterir",
+      "ok": true,
+      "ms": 943
+    },
+    {
+      "suite": "kabul",
+      "title": "\"Kendimi sınamak\" kavram etiketini gizler",
+      "ok": true,
+      "ms": 1627
+    },
+    {
+      "suite": "kabul",
+      "title": "Saat kararlarla ilerler ve kalan süreyi gösterir",
+      "ok": true,
+      "ms": 2073
+    }
+  ],
+  "parite": []
+}

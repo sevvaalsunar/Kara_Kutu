@@ -1,22 +1,62 @@
-// v2.0 demo videosu: gerçek uygulama, gerçek Chromium, gerçek ONNX çıkarımı; ekran kaydı (puppeteer screencast + ffmpeg).
+// v2.0 demo videosu: gerçek uygulama, gerçek Chromium, gerçek ONNX çıkarımı.
+// Kayıt: CDP Page.startScreencast kareleri zaman damgalarıyla JPEG olarak yazılır; kodlama (H.264) kayıttan sonra ffmpeg ile yapılır.
+// (puppeteer'ın page.screencast'i gerçek zamanlı VP9 kodladığı için yavaş ortamlarda kayıt hızını düşürüyordu.)
 // Altyazılar sayfaya enjekte edilen bir katmandır (uygulamanın parçası değildir).
 // Kullanım: ./with-server.sh node demo.mjs   → ../../docs/demo/kara-kutu-v2.0-demo.mp4
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { launch, newPage, visit, click, modelHazir, tick, sleep, waitVisible, sonP, text } from './lib.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = join(HERE, '..', '..', 'docs', 'demo');
-const WEBM = join(OUT_DIR, 'ham.webm');
+const FRAMES = join(tmpdir(), 'kk-demo-kareler');
 const MP4 = join(OUT_DIR, 'kara-kutu-v2.0-demo.mp4');
 const URL = '/?test=1&debug=1&rollout=on';
 mkdirSync(OUT_DIR, { recursive: true });
 
 const log = [];
 const t0 = Date.now();
-const mark = (s) => log.push(`${((Date.now() - t0) / 1000).toFixed(1).padStart(5)} sn  ${s}`);
+const mark = (s) => { const l = `${((Date.now() - t0) / 1000).toFixed(1).padStart(5)} sn  ${s}`; log.push(l); console.log(l); };
+
+/** CDP ekran yayını: her kare zaman damgasıyla diske yazılır. */
+async function startRecorder(page) {
+  rmSync(FRAMES, { recursive: true, force: true });
+  mkdirSync(FRAMES, { recursive: true });
+  const cdp = await page.createCDPSession();
+  const frames = [];
+  cdp.on('Page.screencastFrame', async ({ data, metadata, sessionId }) => {
+    const f = join(FRAMES, `${String(frames.length).padStart(5, '0')}.jpg`);
+    writeFileSync(f, Buffer.from(data, 'base64'));
+    frames.push({ f, ts: metadata.timestamp });
+    await cdp.send('Page.screencastFrameAck', { sessionId }).catch(() => {});
+  });
+  await cdp.send('Page.startScreencast', { format: 'jpeg', quality: 85, maxWidth: 780, maxHeight: 1688, everyNthFrame: 1 });
+  return {
+    async stop() {
+      await cdp.send('Page.stopScreencast');
+      await sleep(300);
+      return frames;
+    },
+  };
+}
+
+/** Kareleri gerçek zaman damgalarına göre süreli concat listesiyle mp4'e çevirir. */
+function encode(frames, endTs) {
+  const lines = ['ffconcat version 1.0'];
+  frames.forEach((fr, i) => {
+    const next = i + 1 < frames.length ? frames[i + 1].ts : endTs;
+    lines.push(`file '${fr.f}'`, `duration ${Math.max(next - fr.ts, 0.001).toFixed(4)}`);
+  });
+  lines.push(`file '${frames.at(-1).f}'`);
+  const list = join(FRAMES, 'liste.txt');
+  writeFileSync(list, lines.join('\n') + '\n');
+  execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'concat', '-safe', '0', '-i', list,
+    '-vf', 'scale=390:-2:flags=lanczos,fps=30', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '22',
+    '-pix_fmt', 'yuv420p', '-movflags', '+faststart', MP4]);
+}
 
 async function caption(page, main, sub = '', tone = 'info') {
   const colors = { info: '#0EA5E9', warn: '#F59E0B', ok: '#22C55E' };
@@ -45,7 +85,7 @@ const page = await newPage(browser, { freezeDate: true });
 await page.setViewport({ width: 390, height: 844 });
 await visit(page, URL);
 await modelHazir(page);
-const recorder = await page.screencast({ path: WEBM });
+const recorder = await startRecorder(page);
 mark('kayıt başladı');
 
 // --- Açılış
@@ -117,14 +157,15 @@ await caption(page, 'Doğrulama', 'Python ↔ tarayıcı paritesi: 5/5 referanst
   'model yayınlanmadı: gerçek veri 0/15 ve metrik kapıları geçmedi', 'warn');
 await sleep(7000);
 
-await recorder.stop();
-mark('kayıt bitti');
+const endTs = Date.now() / 1000;
+const frames = await recorder.stop();
+mark(`kayıt bitti: ${frames.length} kare`);
+// CDP zaman damgaları saniye cinsinden duvar saatidir; son karenin süresi kaydın bitişine kadar uzatılır.
+const lastTs = Math.max(frames.at(-1).ts, endTs);
 await browser.close();
-
-execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', WEBM, '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '23',
-  '-movflags', '+faststart', '-vf', 'scale=trunc(iw/2)*2:trunc(ih/2)*2', MP4]);
-rmSync(WEBM);
+encode(frames, lastTs);
+rmSync(FRAMES, { recursive: true, force: true });
 const dur = execFileSync('ffprobe', ['-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', MP4], { encoding: 'utf8' }).trim();
 mark(`mp4 süresi ${Number(dur).toFixed(1)} sn`);
 writeFileSync(join(OUT_DIR, 'kayit-gunlugu.txt'), log.join('\n') + '\n');
-console.log(log.join('\n'));
+

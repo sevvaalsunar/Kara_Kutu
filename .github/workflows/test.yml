@@ -36,6 +36,39 @@ jobs:
         working-directory: app
         run: npm run lint && npm run build
 
+  tarayici-e2e:
+    # Cypress senaryolarının puppeteer portları + veri hattı; sistem Chrome'u ile (sahte çıkarım yok).
+    runs-on: ubuntu-latest
+    needs: python-ve-sozlesme
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pip install -r requirements.txt
+      - name: Uygulama bağımlılıkları
+        working-directory: app
+        run: npm ci
+        env:
+          CYPRESS_INSTALL_BINARY: 0
+      - name: Tarayıcı test bağımlılıkları
+        working-directory: tools/browser-e2e
+        run: npm ci --omit=optional
+      - name: Dev sunucusu, tüm paketler (v1 regresyon, adaptif, model, parite, veri, veri hattı)
+        working-directory: tools/browser-e2e
+        run: CHROME_PATH="$(which google-chrome)" ./with-server.sh node run.mjs
+      - name: Üretim derlemesi (dist/), parite + adaptif + model
+        working-directory: tools/browser-e2e
+        run: PROD=1 CHROME_PATH="$(which google-chrome)" ./with-server.sh node run.mjs parite adaptif model
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tarayici-e2e-sonuclari
+          path: tools/browser-e2e/sonuclar.json
+
   cypress:
     runs-on: ubuntu-latest
     needs: python-ve-sozlesme

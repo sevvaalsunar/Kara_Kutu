@@ -328,7 +328,7 @@ p < 0.65 ise oyun §4 kurallarıyla devam eder. Oyuncuya "model", "olasılık" g
 - Kaydedilmez: ad, e-posta, cihaz kimliği, IP, konum, parola, serbest metin (tutor'a yazılan mesajların içeriği dahil).
 - Veri yalnızca bellekte tutulur; sunucuya gönderilmez, tarayıcı depolamasına yazılmaz. Oyuncu son ekranındaki "Oturum verisini indir" (`export-btn`) ile CSV'yi kendisi indirir ve araştırmacıya verir.
 - Veri toplama modunda uyarlama **gölge** modda çalışır: olasılık `model_p` sütununa yazılır, oyun değişmez.
-- `kaynak` sütunu `gercek` veya `sentetik`tir. Sentetik satır hiçbir koşulda `gercek` olarak etiketlenmez.
+- `kaynak` sütunu `gercek`, `sentetik` veya `test`tir. Sentetik satır hiçbir koşulda `gercek` olarak etiketlenmez. `?test=1` ile oynanan doğrulama oturumları `test` yazar; birleştirici ve eğitim bu satırları reddeder (son aşamada eklendi, `docs/FINAL_AUDIT.md` hata #3).
 
 ## 16. Veri seti ve değerlendirme
 

@@ -1,0 +1,130 @@
+{
+  "tarih": "2026-11-05T10:40:54.469Z",
+  "tarayici": "@sparticuz/chromium",
+  "gecen": 15,
+  "toplam": 15,
+  "sonuclar": [
+    {
+      "suite": "adaptif",
+      "title": "KÖ6: Zorlanan oyuncu kavram özeti ve sonraki kararda ek destek alır",
+      "ok": true,
+      "ms": 2706
+    },
+    {
+      "suite": "adaptif",
+      "title": "KÖ7: Akıcı oyuncu standart akışta kalır",
+      "ok": true,
+      "ms": 1618
+    },
+    {
+      "suite": "adaptif",
+      "title": "Destek alan deneyimli oyuncunun sonraki geri sayımı 90 sn olur",
+      "ok": true,
+      "ms": 1799
+    },
+    {
+      "suite": "adaptif",
+      "title": "Destek soruları seçenek adı veya harfi önermez (§7)",
+      "ok": true,
+      "ms": 1887
+    },
+    {
+      "suite": "model",
+      "title": "Model yüklenir; sürüm ve statü debug panelinde görünür",
+      "ok": true,
+      "ms": 1647
+    },
+    {
+      "suite": "model",
+      "title": "Kabul edilmemiş model varsayılan olarak yalnızca gölgede çalışır",
+      "ok": true,
+      "ms": 608
+    },
+    {
+      "suite": "model",
+      "title": "Gölge modda olasılık hesaplanır ama oyun değişmez",
+      "ok": true,
+      "ms": 2007
+    },
+    {
+      "suite": "model",
+      "title": "KÖ8: Model indirilemezse oyun v1 kurallarıyla sonuna kadar oynanır",
+      "ok": true,
+      "ms": 2130
+    },
+    {
+      "suite": "model",
+      "title": "?model=off modeli hiç yüklemez",
+      "ok": true,
+      "ms": 1823
+    },
+    {
+      "suite": "model",
+      "title": "Aralık dışı özellikle çıkarım reddedilir (sahte olasılık üretilmez)",
+      "ok": true,
+      "ms": 558
+    },
+    {
+      "suite": "parite",
+      "title": "5 referans girdinin hepsinde |p_python − p_tarayıcı| < 1e-4",
+      "ok": true,
+      "ms": 1678
+    },
+    {
+      "suite": "parite",
+      "title": "Tarayıcıdaki model dosyası parite.json ile aynı model",
+      "ok": true,
+      "ms": 312
+    },
+    {
+      "suite": "veri",
+      "title": "Onay verilmeden nöbet devralınamaz; mod her zaman gölgededir",
+      "ok": true,
+      "ms": 1839
+    },
+    {
+      "suite": "veri",
+      "title": "Son ekranında oturum CSV dışa aktarma düğmesi vardır; normal modda yoktur",
+      "ok": true,
+      "ms": 3555
+    },
+    {
+      "suite": "veriHatti",
+      "title": "Üç test katılımcısı: CSV indirilir, doğrulanır; birleştirici kaynak=test olduğu için reddeder",
+      "ok": true,
+      "ms": 12688
+    }
+  ],
+  "parite": [
+    {
+      "ad": "akici_ilk_karar",
+      "python": 0.29293033480644226,
+      "tarayici": 0.29293033480644226,
+      "fark": 0
+    },
+    {
+      "ad": "zorlanan_ilk_karar",
+      "python": 0.730345606803894,
+      "tarayici": 0.730345606803894,
+      "fark": 0
+    },
+    {
+      "ad": "ikinci_oyunda_toparlanan",
+      "python": 0.3948200047016144,
+      "tarayici": 0.3948200047016144,
+      "fark": 0
+    },
+    {
+      "ad": "deneyimli_zaman_asimi",
+      "python": 0.6738961935043335,
+      "tarayici": 0.6738961935043335,
+      "fark": 0
+    },
+    {
+      "ad": "uc_deger",
+      "python": 0.9999377131462097,
+      "tarayici": 0.9999377131462097,
+      "fark": 0
+    }
+  ]
+}

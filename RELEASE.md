@@ -20,6 +20,18 @@
 - Deterministik sentetik üretici, kapılı eğitim hattı, Python Oracle, diferansiyel parite testleri, debug paneli.
 - 8 yol, 2 son ve v1'in tüm `data-testid` sözleşmesi değişmedi.
 
+### Doğrulama durumu (son aşama)
+
+| | |
+|---|---|
+| Gerçek tarayıcıda çıkarım | Doğrulandı: headless Chromium 153, dev sunucusu, üretim derlemesi ve GitHub Pages alt yolu (`/Kara_Kutu/`) |
+| Python ↔ tarayıcı paritesi | 5/5 referansta fark 0 (tolerans 1e-4) |
+| v1 regresyonu (gerçek tarayıcı) | 19/19 |
+| Cypress dosyalarının kendisi | Koşturulmadı (ikili indirilemedi); CI'da koşacak |
+| Demo videosu | Kaydedildi: `docs/demo/kara-kutu-v2.0-demo.mp4` (76 sn). Uyarlama geliştirici geçersiz kılmasıyla gösterilir ve videoda belirtilir. |
+| Kök neden analizi | `docs/MODEL_ROOT_CAUSE_ANALYSIS.md` |
+| Ayrıntılı kanıtlar | `docs/FINAL_REPORT.md` |
+
 ### Model ve eğitim yapılandırması
 
 `StandardScaler` + `LogisticRegression(C=1.0, class_weight="balanced")`. 11 float32 özellik (sıra `model/gelistirme/config.json`). Tohum 20261104. Oturum gruplu, katmanlı 5 kat (ilk kat test: 308 satır / 76 oturum). ONNX opset 17, ai.onnx.ml 3. Tüm ayarlar eğitimden önce `model/egitim_ayarlari.json` dosyasına yazıldı ve `6ffaaeb` commit'inde spec ile birlikte sabitlendi.
@@ -38,6 +50,8 @@
 | Tek özellik AUC (en yüksek) | 0.605 | ≤ 0.98 | GEÇTİ |
 | ONNX paritesi (2308 girdi) | 2.6e-7 | < 1e-4 | GEÇTİ |
 | Gerçek oturum | 0 | ≥ 15 | GEÇMEDİ |
+
+**Kök neden analizi** ayrıntıları `docs/MODEL_ROOT_CAUSE_ANALYSIS.md`'dedir. Özet: veri miktarı (400 → 6400 oturumda AUC 0.669 → 0.671) ve model sınıfı (gradient boosting 0.682) neden değildir; ana neden hedefin tek bir gürültülü olay olmasıdır.
 
 **Tavan analizi** (`data/tavan_analizi.py`, `data/tavan_analizi.json`): Üreticinin gizli zorlanma değişkenini kusursuz bilen Bayes-optimal tahminci bile eşik 0.65'te dengeli doğruluk 0.586, F1 0.330, recall 0.210'a ulaşıyor; en iyi eşikte (0.37) bile 0.676. Bu etiket tanımı ve üretici varsayımlarıyla kapılar erişilemez. Modelin ROC-AUC'si 0.651, tavan 0.736.
 
@@ -69,7 +83,7 @@ cd app && npx cypress run --spec cypress/e2e/parite.cy.js   # gerçek tarayıcı
 |---|---|---|---|
 | İnternet gereksinimi | Yalnızca ilk yükleme; sonra çevrimdışı çalışır | Kurulumdan sonra yok | Her tahminde gerekli |
 | Ağ gecikmesi | Yok (yerel) | Yok | Her karar için bir tur (~50–300 ms) |
-| Soğuk başlangıç | WASM ~14 MB (gzip ~3.7 MB) + model 912 bayt; bir kez | Uygulama kurulumu | Sunucu uyanma süresi (ücretsiz katmanda saniyeler) |
+| Soğuk başlangıç | WASM ~14 MB (gzip ~3.7 MB) + model 912 bayt; bir kez. Ölçülen yükleme (headless Chromium, yerel sunucu): 461 ms – 2.1 s | Uygulama kurulumu | Sunucu uyanma süresi (ücretsiz katmanda saniyeler) |
 | Çıkarım süresi | < 1 ms (11 özellik, lineer model) | < 1 ms | < 1 ms + ağ |
 | Veri gizliliği | Oyuncu verisi cihazdan çıkmaz | Cihazdan çıkmaz | Her karar sunucuya gider; KVKK yükümlülüğü doğar |
 | Model görünürlüğü | Model herkese açık indirilebilir | Paket içinden çıkarılabilir | Gizli kalabilir |

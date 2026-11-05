@@ -1,0 +1,112 @@
+{
+  "tarih": "2026-11-05T10:41:53.921Z",
+  "tarayici": "@sparticuz/chromium",
+  "gecen": 12,
+  "toplam": 12,
+  "sonuclar": [
+    {
+      "suite": "parite",
+      "title": "5 referans girdinin hepsinde |p_python − p_tarayıcı| < 1e-4",
+      "ok": true,
+      "ms": 863
+    },
+    {
+      "suite": "parite",
+      "title": "Tarayıcıdaki model dosyası parite.json ile aynı model",
+      "ok": true,
+      "ms": 159
+    },
+    {
+      "suite": "adaptif",
+      "title": "KÖ6: Zorlanan oyuncu kavram özeti ve sonraki kararda ek destek alır",
+      "ok": true,
+      "ms": 2263
+    },
+    {
+      "suite": "adaptif",
+      "title": "KÖ7: Akıcı oyuncu standart akışta kalır",
+      "ok": true,
+      "ms": 749
+    },
+    {
+      "suite": "adaptif",
+      "title": "Destek alan deneyimli oyuncunun sonraki geri sayımı 90 sn olur",
+      "ok": true,
+      "ms": 1911
+    },
+    {
+      "suite": "adaptif",
+      "title": "Destek soruları seçenek adı veya harfi önermez (§7)",
+      "ok": true,
+      "ms": 962
+    },
+    {
+      "suite": "model",
+      "title": "Model yüklenir; sürüm ve statü debug panelinde görünür",
+      "ok": true,
+      "ms": 755
+    },
+    {
+      "suite": "model",
+      "title": "Kabul edilmemiş model varsayılan olarak yalnızca gölgede çalışır",
+      "ok": true,
+      "ms": 437
+    },
+    {
+      "suite": "model",
+      "title": "Gölge modda olasılık hesaplanır ama oyun değişmez",
+      "ok": true,
+      "ms": 1575
+    },
+    {
+      "suite": "model",
+      "title": "KÖ8: Model indirilemezse oyun v1 kurallarıyla sonuna kadar oynanır",
+      "ok": true,
+      "ms": 776
+    },
+    {
+      "suite": "model",
+      "title": "?model=off modeli hiç yüklemez",
+      "ok": true,
+      "ms": 1656
+    },
+    {
+      "suite": "model",
+      "title": "Aralık dışı özellikle çıkarım reddedilir (sahte olasılık üretilmez)",
+      "ok": true,
+      "ms": 312
+    }
+  ],
+  "parite": [
+    {
+      "ad": "akici_ilk_karar",
+      "python": 0.29293033480644226,
+      "tarayici": 0.29293033480644226,
+      "fark": 0
+    },
+    {
+      "ad": "zorlanan_ilk_karar",
+      "python": 0.730345606803894,
+      "tarayici": 0.730345606803894,
+      "fark": 0
+    },
+    {
+      "ad": "ikinci_oyunda_toparlanan",
+      "python": 0.3948200047016144,
+      "tarayici": 0.3948200047016144,
+      "fark": 0
+    },
+    {
+      "ad": "deneyimli_zaman_asimi",
+      "python": 0.6738961935043335,
+      "tarayici": 0.6738961935043335,
+      "fark": 0
+    },
+    {
+      "ad": "uc_deger",
+      "python": 0.9999377131462097,
+      "tarayici": 0.9999377131462097,
+      "fark": 0
+    }
+  ]
+}

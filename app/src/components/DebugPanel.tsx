@@ -74,6 +74,10 @@ export const DebugPanel: React.FC<Props> = ({ model, rollout, last, sessionId, d
             </dd>
             <dt className="text-slate-500">kaynak</dt>
             <dd>{model.source === 'huggingface' ? `HF @ ${cfg?.source.hf_commit?.slice(0, 7)}` : model.source ?? '—'}</dd>
+            <dt className="text-slate-500">sha256</dt>
+            <dd data-testid="model-sha" title={cfg?.artifact.sha256}>{cfg ? `${cfg.artifact.sha256.slice(0, 12)}… (doğrulandı)` : '—'}</dd>
+            <dt className="text-slate-500">uyarlama</dt>
+            <dd data-testid="adaptation-enabled">{rollout.mode === 'on' ? 'AÇIK' : rollout.mode === 'shadow' ? 'gölge (oyun değişmez)' : 'kapalı'}{rollout.overridden ? ' · geçersiz kılma' : ''}</dd>
             <dt className="text-slate-500">yükleme</dt>
             <dd>{model.loadMs !== null ? `${model.loadMs} ms` : '—'}</dd>
             <dt className="text-slate-500">kol</dt>
